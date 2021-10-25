@@ -30,7 +30,8 @@
       "path": "pages/personal/personal",
       "style": {
         "navigationBarTitleText": "个人中心",
-        "enablePullDownRefresh": false
+        "enablePullDownRefresh": false,
+        "navigationStyle": "custom"
       }
     },
     {
