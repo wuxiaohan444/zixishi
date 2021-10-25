@@ -39,6 +39,13 @@
         "navigationBarTitleText": "门店选择",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/seat/seat",
+      "style": {
+        "navigationBarTitleText": "选择座位",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {

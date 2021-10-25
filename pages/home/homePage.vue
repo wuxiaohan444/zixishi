@@ -48,7 +48,7 @@
         <view class="seat-top_right u-font-28">查看平面图</view>
       </view>
       <view class="seat-box u-flex u-flex-wrap">
-        <view class="seat-box_item" v-for="(item,index) in 12">
+        <view class="seat-box_item" v-for="(item,index) in 12" @click="chooseSeat">
           <image src="../../static/images/home/seat_yes_icon.png" class="seat_icon"></image>
           <view class="u-font-28 u-black-color">{{index+1}}</view>
         </view>
@@ -127,9 +127,13 @@ export default {
       this.current = index;
     },
     changeStore(){
-      console.log(1);
       uni.navigateTo({
         url: '../store/storeChange'
+      });
+    },
+    chooseSeat(){
+      uni.navigateTo({
+        url: '../seat/seat'
       });
     }
   }
