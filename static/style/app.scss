@@ -87,3 +87,9 @@
 .u-bold {
 	font-weight: bold;
 }
+
+.u-ellipsis{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}

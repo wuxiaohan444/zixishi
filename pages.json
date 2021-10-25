@@ -32,6 +32,13 @@
         "navigationBarTitleText": "个人中心",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/store/storeChange",
+      "style": {
+        "navigationBarTitleText": "门店选择",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {
