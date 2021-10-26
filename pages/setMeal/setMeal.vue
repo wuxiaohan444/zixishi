@@ -1,11 +1,17 @@
 <template>
   <view class="container">
-    <u-tabs :list="list" :is-scroll="false" :current="current" @change="change" active-color="#2487FF" :bar-style="barStyle"></u-tabs>
+    <u-tabs :list="list" :is-scroll="false" :current="current" @change="change" active-color="#2487FF"
+            :bar-style="barStyle"></u-tabs>
     <view class="setMeal-box">
-      <view class="setMeal-box_item">
-        <image src="https://cdn.uviewui.com/uview/swiper/2.jpg" class="item-img" :lazy-load="true" mode="aspectFill"></image>
-        <view class="item-top">
-          <view class="store-name">大摩店</view>
+      <view class="setMeal-box_item" v-for="(item,index) in timeCardList" :key="index">
+        <image :src="item.img" class="item-img" :lazy-load="true" mode="aspectFill"></image>
+        <view class="item-top u-flex">
+          <view class="store-name">{{ item.storeName }}</view>
+          <view class="card-name">{{ item.cardName }}</view>
+        </view>
+        <view class="item-bottom u-flex u-row-right">
+          <view class="old-price">¥{{ item.oldPrice }}</view>
+          <view class="new-price u-red-color">¥{{ item.newPrice }}</view>
         </view>
       </view>
     </view>
@@ -30,7 +36,35 @@ export default {
         height: '8rpx',
         background: '#2487FF',
         borderRadius: '4rpx'
-      }
+      },
+      timeCardList: [
+        {
+          img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
+          storeName: '大摩店',
+          cardName: '17小时读书日卡(56小时)',
+          oldPrice: '20',
+          newPrice: '5'
+        },
+        {
+          img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
+          storeName: '大摩店',
+          cardName: '17小时读书日卡(56小时)',
+          oldPrice: '20',
+          newPrice: '5'
+        },  {
+          img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
+          storeName: '大摩店',
+          cardName: '17小时读书日卡(56小时)',
+          oldPrice: '20',
+          newPrice: '5'
+        },  {
+          img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
+          storeName: '大摩店',
+          cardName: '17小时读书日卡(56小时)',
+          oldPrice: '20',
+          newPrice: '5'
+        }
+      ]
     }
   },
   methods: {
@@ -38,41 +72,81 @@ export default {
       this.current = index;
     },
     // 下拉刷新
-    onPullDownRefresh(){
+    onPullDownRefresh() {
       setTimeout(function () {
         uni.stopPullDownRefresh()
       }, 1000)
     },
     //上拉加载
-    onReachBottom(){
-
+    onReachBottom() {
+     this.timeCardList.push({
+       img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
+       storeName: '大摩店',
+       cardName: '17小时读书日卡(56小时)',
+       oldPrice: '20',
+       newPrice: '5'
+     })
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
-.setMeal-box{
+<style lang="scss">
+page {
+  background: #F5F5F5;
+}
+
+.setMeal-box {
   padding: 30rpx 30rpx 0 30rpx;
-  &_item{
+
+  &_item {
     width: 690rpx;
-    height: 314rpx;
     border-radius: 13rpx;
     margin-bottom: 30rpx;
     overflow: hidden;
-    .item-img{
+    background: #FFFFFF;
+
+    .item-img {
       width: 100%;
       height: 219rpx;
     }
-    .item-top{
+
+    .item-top {
       padding: 5rpx 20rpx;
-      .store-name{
+
+      .store-name {
         height: 37rpx;
         background: #2487FF;
         border-radius: 5rpx;
         color: #FFFFFF;
         font-size: 24rpx;
         line-height: 37rpx;
+        padding: 0 15rpx;
+      }
+
+      .card-name {
+        font-size: 31rpx;
+        font-weight: 500;
+        color: #010101;
+        margin-left: 22rpx;
+      }
+    }
+
+    .item-bottom {
+      padding-right: 30rpx;
+      padding-bottom: 10rpx;
+
+      .old-price {
+        font-size: 31rpx;
+        font-weight: 500;
+        text-decoration: line-through;
+        color: #D2D2D2;
+        margin-right: 22rpx;
+      }
+
+      .new-price {
+        font-size: 34rpx;
+        font-weight: 500;
       }
     }
   }
