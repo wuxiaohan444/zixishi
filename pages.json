@@ -16,7 +16,7 @@
       "path": "pages/setMeal/setMeal",
       "style": {
         "navigationBarTitleText": "套餐预定",
-        "enablePullDownRefresh": false
+        "enablePullDownRefresh": true
       }
     },
     {
