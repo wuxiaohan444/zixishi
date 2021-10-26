@@ -47,6 +47,13 @@
         "navigationBarTitleText": "选择座位",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/pay/paySuccess",
+      "style": {
+        "navigationBarTitleText": "支付成功",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {
