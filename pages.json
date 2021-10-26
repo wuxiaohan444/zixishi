@@ -82,42 +82,42 @@
 		}
 		
 	}
-        ,{
-            "path" : "pages/mt_card/mt_card",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/my_seat/my_seat",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/bill/bill",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/recharge/recharge",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
+	,{
+		"path" : "pages/mt_card/mt_card",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "美团兑券",
+			"enablePullDownRefresh": false
+		}
+		
+	}
+	,{
+		"path" : "pages/my_seat/my_seat",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+		
+	}
+	,{
+		"path" : "pages/bill/bill",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+		
+	}
+	,{
+		"path" : "pages/recharge/recharge",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+		
+	}
     ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

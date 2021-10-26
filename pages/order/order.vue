@@ -29,8 +29,9 @@
 								</view>
 								<view class="price u-font-31">总计: <text>¥3.0</text></view>
 							</view>
-							
 						</view>
+						
+						<!-- <u-empty text="暂无订单，快去逛逛吧~" mode="list"></u-empty> -->
 					</scroll-view>
 				</swiper-item>
 			</swiper>
