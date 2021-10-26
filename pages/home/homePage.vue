@@ -1,15 +1,5 @@
 <template>
   <view class="container" :style="{'padding-top':statusBarHeight+'px'}">
-    <!--    自定义头部-->
-   <!-- <view class="my-navigation" :style="{'height': customBarH+'px'}">
-      <view>
-        <view class="store-change u-black-color u-flex" :style="{'padding-top':marginTop+'px'}" @click="changeStore">
-          <text class="u-font-31" @click>门店切换</text>
-          <image src="../../static/images/home/change.png" class="change-icon"></image>
-        </view>
-        <view class="navigation-text u-black-color u-font-31 u-bold" :style="{'top':marginTop+'px'}">春深读书堂</view>
-      </view>
-    </view> -->
 	<!--    自定义头部-->
 	<view class="my-navigation" :style="{'top': statusBarHeight+'px','height': navBarHeight+'px'}">
 		<view class="store-change" :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}">

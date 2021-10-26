@@ -54,8 +54,71 @@
         "navigationBarTitleText": "支付成功",
         "enablePullDownRefresh": false
       }
-    }
-  ],
+    },
+	{
+		"path" : "pages/order/order",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "我的订单",
+			"enablePullDownRefresh": false
+		}
+		
+	},
+	{
+		"path" : "pages/order/detail/detail",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "我的订单详情 ",
+			"enablePullDownRefresh": false
+		}
+		
+	}
+	,{
+		"path" : "pages/my_card/my_card",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "我的卡卷",
+			"enablePullDownRefresh": false
+		}
+		
+	}
+        ,{
+            "path" : "pages/mt_card/mt_card",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/my_seat/my_seat",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/bill/bill",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/recharge/recharge",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "",
