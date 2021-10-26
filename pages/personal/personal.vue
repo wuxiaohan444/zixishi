@@ -50,30 +50,20 @@
 </template>
 
 <script>
+const app = getApp();	
 export default {
   name: "personal",
   data() {
     return {
-      statusBarHeight: 0, // 状态栏高度
-      navBarHeight: 0, // 导航栏高度
-      navBarLeft: 0, // 导航栏左边宽度(去掉胶囊宽度)
+      statusBarHeight: app.globalData.statusBarHeight, // 状态栏高度
+      navBarHeight: app.globalData.navBarHeight, // 导航栏高度
     }
   },
   onLoad() {
-    this.getNavigationHeight()
+	  
   },
   methods: {
-    // 获取自定义
-    getNavigationHeight() {
-      const systemInfo = uni.getSystemInfoSync();
-      const statusBarHeight = systemInfo.statusBarHeight;
-      this.statusBarHeight = statusBarHeight;
-      // 胶囊按钮位置信息
-      const menuButtonInfo = uni.getMenuButtonBoundingClientRect();
-      this.navBarLeft = menuButtonInfo.left;
-      // (胶囊底部高度 - 状态栏的高度) + (胶囊顶部高度 - 状态栏内的高度) = 导航栏的高度（不包括状态栏高度）
-      this.navBarHeight = (menuButtonInfo.bottom - statusBarHeight) + (menuButtonInfo.top - statusBarHeight);
-    },
+
   }
 
 }

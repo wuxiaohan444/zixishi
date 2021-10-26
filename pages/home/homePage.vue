@@ -1,7 +1,7 @@
 <template>
-  <view class="container" :style="{'padding-top':customBarH+'px'}">
+  <view class="container" :style="{'padding-top':statusBarHeight+'px'}">
     <!--    自定义头部-->
-    <view class="my-navigation" :style="{'height': customBarH+'px'}">
+   <!-- <view class="my-navigation" :style="{'height': customBarH+'px'}">
       <view>
         <view class="store-change u-black-color u-flex" :style="{'padding-top':marginTop+'px'}" @click="changeStore">
           <text class="u-font-31" @click>门店切换</text>
@@ -9,7 +9,16 @@
         </view>
         <view class="navigation-text u-black-color u-font-31 u-bold" :style="{'top':marginTop+'px'}">春深读书堂</view>
       </view>
-    </view>
+    </view> -->
+	<!--    自定义头部-->
+	<view class="my-navigation" :style="{'top': statusBarHeight+'px','height': navBarHeight+'px'}">
+		<view class="store-change" :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}">
+			<text class="u-font-31" @click>门店切换</text>
+			<image src="../../static/images/home/change.png" class="change-icon"></image>
+		</view>
+		<view :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}" class="navigation-text u-black-color u-font-31 u-bold">春深读书堂</view>
+	</view>
+	<view :style="{'height':navBarHeight+'px'}"></view>
     <!--    门店信息-->
     <view class="room-header">
       <view class="room-header_top u-flex u-row-between">
@@ -58,12 +67,13 @@
 </template>
 
 <script>
+const app = getApp();	
 export default {
   name: "homePage",
   data() {
     return {
-      customBarH: '',
-      marginTop: '',
+      statusBarHeight: app.globalData.statusBarHeight, // 状态栏高度
+      navBarHeight: app.globalData.navBarHeight, // 导航栏高度
       list: [{
         image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
         title: '昨夜星辰昨夜风，画楼西畔桂堂东'
@@ -98,31 +108,9 @@ export default {
     }
   },
   onLoad() {
-    this.getNavigationHeight()
+    
   },
   methods: {
-    // 获取自定义
-    getNavigationHeight() {
-      uni.getSystemInfo({
-        success: (systemInfo) => {
-          let custom = wx.getMenuButtonBoundingClientRect();
-          let gap;
-          if (systemInfo.platform === 'android') {
-            gap = 8;
-          } else if (systemInfo.platform === 'devtools') {
-            if (systemInfo.platform === 'ios') {
-              gap = 5.5; //开发工具中ios手机
-            } else {
-              gap = 7.5; //开发工具中android和其他手机
-            }
-          } else {
-            gap = 4;
-          }
-          this.customBarH = custom.bottom + custom.top - systemInfo.statusBarHeight;
-          this.marginTop = custom.top + gap;
-        }
-      })
-    },
     change(index) {
       this.current = index;
     },
@@ -143,12 +131,12 @@ export default {
 <style scoped lang="scss">
 .my-navigation {
   position: fixed;
-  top: 0;
   left: 0;
   width: 100%;
 
   .store-change {
-    padding-left: 31rpx;
+    position: absolute;
+    left: 31rpx;
 
     .change-icon {
       width: 21rpx;
@@ -158,8 +146,6 @@ export default {
   }
 
   .navigation-text {
-    position: absolute;
-    left: 0;
     text-align: center;
     width: 100%;
     z-index: -1;
