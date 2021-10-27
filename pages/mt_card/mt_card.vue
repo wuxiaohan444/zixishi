@@ -6,7 +6,7 @@
 				<u-input :border="true" :height="92" placeholder-style="color: #A1A3A6" type="text" value="" placeholder="输入美团券码验券" />
 				<image src="/static/images/personal/scan.png" @tap.stop="scan($event)"></image>
 			</view>
-			<button>提交</button>
+			<u-button :custom-style="customStyle" shape="circle" type="primary">提交</u-button>
 		</view>
 	</view>
 </template>
@@ -15,7 +15,9 @@
 	export default {
 		data() {
 			return {
-				
+				customStyle:{
+					marginTop: '42rpx'
+				}
 			}
 		},
 		methods: {
@@ -59,16 +61,6 @@
 			z-index: 9;
 		}
 		
-	}
-	
-	button{
-		margin-top: 42rpx;
-		height: 92rpx;
-		line-height: 92rpx;
-		background: #2487FF;
-		border-radius: 46rpx;
-		font-size: 32rpx;
-		color: #FFFFFF;
 	}
 }
 </style>

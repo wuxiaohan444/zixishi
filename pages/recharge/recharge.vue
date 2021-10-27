@@ -10,7 +10,7 @@
 		</view>
 		<view class="doc">
 			<view class="current-price u-font-24">当前余额：¥356.0</view>
-			<button type="default">去支付</button>
+			<u-button :custom-style="customStyle" shape="circle" type="primary">去支付</u-button>
 			<view class="activity-doc">
 				<view>充值活动：</view>
 				<view>·充值每满¥100送¥100 </view>
@@ -26,6 +26,9 @@
 		data() {
 			return {
 				winHeight:app.globalData.winHeight,
+				customStyle:{
+					marginTop: '62rpx'
+				}
 			}
 		},
 		methods: {
@@ -76,17 +79,6 @@
 	}
 	.doc{
 		padding: 19rpx 30rpx;
-		
-		button{
-			width: 624rpx;
-			height: 92rpx;
-			line-height: 92rpx;
-			background: #2487FF;
-			border-radius: 46rpx;
-			color: #FFFFFF;
-			font-size: 31rpx;
-			margin-top: 62rpx;
-		}
 		
 		.activity-doc{
 			padding: 48rpx 78rpx;

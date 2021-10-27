@@ -9,7 +9,7 @@
 				<swiper-item class="swiper-item" v-for="(item, index) in 5" :key="index" >
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="onreachBottom">
 						<view class="order-list">
-							<view class="list-item" @click="toDetailes">
+							<view class="list-item" @click="toDetailes('1')">
 								<view class="top">
 									<view class="store">
 										<text class="u-font-31 u-bold">夏日流星限定贩卖</text>
@@ -66,7 +66,6 @@
 				current: 0, // tabs组件的current值，表示当前活动的tab选项
 				swiperCurrent: 0, // swiper组件的current值，表示当前那个swiper-item是活动的
 				winHeight:app.globalData.winHeight,
-				id:0
 			}
 		},
 		onLoad(){
@@ -95,9 +94,9 @@
 			onreachBottom() {
 				console.log(2)
 			},
-			toDetailes(){
+			toDetailes(id){
 				uni.navigateTo({
-					url:`/pages/order/detail/detail?id=${this.id}`
+					url:`/pages/order/detail/detail?id=${id}`
 				})
 			}
 		}

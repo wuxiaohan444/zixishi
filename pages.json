@@ -146,6 +146,15 @@
 		}
 
 	}
+	,{
+		"path" : "pages/my_seat/detail/detail",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "座位详情",
+			"enablePullDownRefresh": false
+		}
+		
+	}
     ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

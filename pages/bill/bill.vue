@@ -5,7 +5,7 @@
 				<view class="u-font-26">账户余额</view>
 				<view class="price">356.0<text class="u-font-26">元</text></view>
 			</view>
-			<button type="default" @click="recharge">立即充值</button>
+			<u-button :custom-style="customStyle" shape="circle" size="mini"  @click="recharge">立即充值</u-button>
 		</view>
 		<view class="detailed">
 			<view class="titles">
@@ -68,7 +68,14 @@
 	export default {
 		data() {
 			return {
-				current: 0
+				current: 0,
+				customStyle:{
+					height: '78rpx',
+					marginTop:'35rpx',
+					width: '173rpx',
+					color: '#3470FF',
+					fontSize: '26rpx'
+				}
 			}
 		},
 		methods: {
@@ -105,16 +112,6 @@
 					margin-left: 15rpx;
 				}
 			}
-		}
-	
-		button{
-			width: 173rpx;
-			height: 78rpx;
-			background: #FFFFFF;
-			border-radius: 38rpx;
-			font-size: 26rpx;
-			color: #3470FF;
-			margin: 35rpx 0 0 0;
 		}
 	}
 	.detailed{
