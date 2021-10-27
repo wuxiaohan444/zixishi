@@ -2,7 +2,7 @@
   <view class="payType">
     <u-mask :show="show"  @click="close">
       <view class="warp">
-        <view class="rect" @tap.stop>
+        <view class="rect">
           <image src="../../static/images/pay/close.png" class="close-icon"></image>
           <view class="price">¥15.0</view>
           <view class="pay-type">
@@ -32,7 +32,7 @@
               </view>
             </view>
           </view>
-          <u-button shape="circle" :custom-style="customStyle">确认支付</u-button>
+          <view class="my-button"  @click="pay">确认支付</view>
         </view>
       </view>
     </u-mask>
@@ -47,19 +47,10 @@ export default {
     return{
       balanceChoose:false,
       wxChoose:false,
-      customStyle:{
-        width: '319rpx',
-        height: '92rpx',
-        background: '#2487FF',
-        color:'#ffffff',
-        fontSize:'31rpx',
-        marginTop:'40rpx'
-      }
     }
   },
   methods:{
     close(){
-      console.log(1);
       this.$emit('close')
     },
     chooseType(number){
@@ -69,6 +60,10 @@ export default {
       if(number===1){
         this.wxChoose=!this.wxChoose;
       }
+    },
+    pay(){
+      console.log(1);
+      this.$emit('pay')
     }
   }
 }
@@ -139,6 +134,17 @@ export default {
           }
         }
       }
+    }
+    .my-button{
+      width: 319rpx;
+      height: 92rpx;
+      background: #2487FF;
+      border-radius: 46rpx;
+      color: #FFFFFF;
+      font-size: 31rpx;
+      text-align: center;
+      line-height: 92rpx;
+      margin: 40rpx auto;
     }
   }
 }

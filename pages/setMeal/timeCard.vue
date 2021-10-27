@@ -39,8 +39,8 @@
       </view>
       <view class="line"></view>
     </view>
-    <u-button shape="circle" :custom-style="customStyle" @click="payShow">1.5元</u-button>
-    <pay-type :show="payModalShow" @close="payModalShow=false"></pay-type>
+    <u-button shape="circle" :custom-style="customStyle" @click="payShow">支付：1.5元</u-button>
+    <pay-type :show="payModalShow" @close="payModalShow=false" @pay="pay"></pay-type>
   </view>
 </template>
 
@@ -65,6 +65,12 @@ export default {
   methods: {
     payShow() {
       this.payModalShow = true;
+    },
+    pay(){
+      this.payModalShow = false;
+      uni.navigateTo({
+        url: 'paySuccess'
+      });
     }
   }
 }

@@ -24,7 +24,7 @@
 		data() {
 			return {
 				tdStyle: {
-					
+
 				}
 			}
 		},
@@ -36,7 +36,11 @@
 			if (this.parent) {
 				// 将父组件的相关参数，合并到本组件
 				let style = {};
-				if (this.width != "auto") style.flex = `0 0 ${this.width}`;
+				if (this.width) {
+          style.width = `${this.width}`;
+        }else{
+          style.flex = `0 0 ${this.width}`;
+        }
 				style.textAlign = this.parent.align;
 				style.fontSize = this.parent.fontSize + 'rpx';
 				style.padding = this.parent.padding;

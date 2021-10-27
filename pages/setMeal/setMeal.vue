@@ -89,7 +89,7 @@ export default {
     },
     skip(){
       uni.navigateTo({
-        url: 'timeCard'
+        url: 'reservationCard'
       });
     }
   }
