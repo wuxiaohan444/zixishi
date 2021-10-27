@@ -134,7 +134,7 @@
 		"path" : "pages/recharge/recharge",
 		"style" :
 		{
-			"navigationBarTitleText": "",
+			"navigationBarTitleText": "充值",
 			"enablePullDownRefresh": false
 		}
 

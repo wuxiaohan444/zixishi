@@ -12,6 +12,54 @@
 				<text :class="current==0?'active':''" @click="change(0)">充值明细</text>
 				<text :class="current==1?'active':''" @click="change(1)">使用明细</text>
 			</view>
+			<view class="detailed-info" v-show="current==0">
+				<view>
+					<text>吧台充值</text>
+					<text>2021-09-23      21:21:21</text>
+				</view>
+				<view>
+					<text>充值前余额</text>
+					<text>¥3.0</text>
+				</view>
+				<view>
+					<text>充值金额</text>
+					<text>¥300.0</text>
+				</view>
+				<view>
+					<text>赠送金额</text>
+					<text>¥30.0</text>
+				</view>
+				<view>
+					<text>充值门店</text>
+					<text>门店名</text>
+				</view>
+				<view>
+					<text>状态</text>
+					<text>正常</text>
+				</view>
+			</view>
+			<view class="detailed-info" v-show="current==1">
+				<view>
+					<text>使用时间</text>
+					<text>2021-09-23      21:21:21</text>
+				</view>
+				<view>
+					<text>使用前余额</text>
+					<text>¥300.0</text>
+				</view>
+				<view>
+					<text>使用余额</text>
+					<text>¥30.0</text>
+				</view>
+				<view>
+					<text>使用门店</text>
+					<text>门店名</text>
+				</view>
+				<view>
+					<text>状态</text>
+					<text>正常</text>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -20,11 +68,6 @@
 	export default {
 		data() {
 			return {
-				list: [{
-					name: '充值明细'
-				}, {
-					name: '使用明细'
-				}],
 				current: 0
 			}
 		},
@@ -82,23 +125,7 @@
 		.titles{
 			border-bottom: 2rpx dashed #A3A3A3;
 			padding-bottom: 34rpx;
-			position: relative;
-			overflow: hidden;
-			
-			// &::after,
-			// &::before{
-			// 	content: '';
-			// 	// background-color: #FFFFFF;
-			// 	box-shadow: 0 0 20rpx 0 rgba(0, 0, 0, 0.1);
-			// 	background-color: #DBF1E1;
-			// 	position: absolute;
-			// }
-			// &::after{
-				
-			// }
-			// &::before{
-				
-			// }
+		
 			text{
 				margin-right: 74rpx;
 				font-size: 31rpx;
@@ -121,7 +148,20 @@
 				height: 8rpx;
 			}
 		}
-		
+		.detailed-info{
+			padding-top: 37rpx;
+			view{
+				display: flex;
+				justify-content: space-between;
+				font-size: 28rpx;
+				color: #010101;
+				margin-bottom: 22rpx;
+				
+				>text:first-child{
+					color: #8D8D8D;
+				}
+			}
+		}
 	}
 
 </style>
