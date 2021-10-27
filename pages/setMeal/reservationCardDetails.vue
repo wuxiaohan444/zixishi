@@ -15,7 +15,7 @@
       <u-td width="122rpx">22</u-td>
       <u-td width="127rpx">22</u-td>
     </u-tr>
-    <u-tr>
+    <u-tr style="background:#F4F3F5">
       <u-td width="178rpx">20201-09-08</u-td>
       <u-td width="99rpx">1</u-td>
       <u-td width="160rpx">20</u-td>
