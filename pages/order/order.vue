@@ -28,6 +28,10 @@
 									</view>
 								</view>
 								<view class="price u-font-31">总计: <text>¥3.0</text></view>
+								<view class="list-botton">
+									<view class="u-font-28"  @tap.stop="cancel($event,'21323')">取消订单</view>
+									<view class="u-font-28 consumption" @tap.stop="toPay($event,'21323')">立即支付</view>
+								</view>
 							</view>
 						</view>
 						
@@ -98,6 +102,16 @@
 				uni.navigateTo({
 					url:`/pages/order/detail/detail?id=${id}`
 				})
+			},
+			cancel(e){
+				e.preventDefault();
+				console.log('取消订单')
+			},
+			toPay(e,orderId){
+				e.preventDefault();
+				uni.navigateTo({
+					url:`/pages/order/pay/pay?orderId=${orderId}`
+				})
 			}
 		}
 	}
@@ -155,6 +169,34 @@
 			
 			text{
 				color: #FC1716;
+			}
+		}
+		.list-botton{
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			color: #666666;
+			padding-top: 10rpx;
+			view{
+				margin-left: 23rpx;
+				width: 144rpx;
+				height: 54rpx;
+				line-height: 52rpx;
+				background: #FFFFFF;
+				border: 2rpx solid #B2B2B2;
+				border-radius: 27rpx;
+				text-align: center;
+				color: #010101;
+			}
+			view.over{
+				background-color: #D04D52;
+				color: #FFFFFF;
+				border-color: #D04D52;
+			}
+			view.consumption{
+				background-color: #2487FF;
+				color: #FFFFFF;
+				border-color: #2487FF;
 			}
 		}
 	}
