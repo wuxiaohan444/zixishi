@@ -49,6 +49,13 @@
       }
     },
     {
+      "path": "pages/setMeal/paySuccess",
+      "style": {
+        "navigationBarTitleText": "支付成功",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/setMeal/reservationCardDetails",
       "style": {
         "navigationBarTitleText": "座位详情",
@@ -116,7 +123,7 @@
 		"path" : "pages/my_seat/my_seat",
 		"style" :
 		{
-			"navigationBarTitleText": "",
+			"navigationBarTitleText": "我的定座",
 			"enablePullDownRefresh": false
 		}
 
