@@ -19,7 +19,11 @@
 			width: {
 				type: [Number, String],
 				default: 'auto'
-			}
+			},
+      background: {
+        type: [String],
+        default: ''
+      }
 		},
 		data() {
 			return {
@@ -40,6 +44,9 @@
           style.width = `${this.width}`;
         }else{
           style.flex = `0 0 ${this.width}`;
+        }
+        if(this.background){
+          style.background = this.background;
         }
 				style.textAlign = this.parent.align;
 				style.fontSize = this.parent.fontSize + 'rpx';

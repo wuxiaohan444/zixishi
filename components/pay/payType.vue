@@ -2,7 +2,7 @@
   <view class="payType">
     <u-mask :show="show"  @click="close">
       <view class="warp">
-        <view class="rect">
+        <view class="rect" @click.stop>
           <image src="../../static/images/pay/close.png" class="close-icon"></image>
           <view class="price">¥15.0</view>
           <view class="pay-type">
