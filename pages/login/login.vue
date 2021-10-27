@@ -1,32 +1,32 @@
 <template>
 	<view class="container" :style="{'height':winHeight+'rpx'}">
 		<view class="header">
-		    <view style="height:{{statusBarHeight}}px"></view>
-		    <view style="height:{{navBarHeight}}px" class="header-navbar">
-		      <image src="../../static/images/pay/close.png" bind:tap="navToBackLastPage"/>
+		    <view :style="{'height':statusBarHeight+'px'}"></view>
+		    <view :style="{'height':navBarHeight+'px'}" class="header-navbar">
+		      <image src="../../static/images/pay/close.png" @click="navToBackLastPage"/>
 		    </view>
 		  </view>
-		
+
 		  <view class="top">
 		    <image src="../../static/images/rider.png" />
 		    <view>这是我的描述</view>
 		  </view>
-		
-		
-		  <view wx:if="{{!tokenStatus}}">
+
+
+		  <view v-if="!tokenStatus">
 		    <button class="btn" @click="getUserProfile">
 		      <image src="../../static/images/wx.png" />
 		      <text>微信账号一键登录</text>
 		    </button>
 		  </view>
-		
-		  <view wx:if="{{tokenStatus && !telStatus}}">
+
+		  <view v-if="tokenStatus && !telStatus">
 		    <button class="btn" open-type="getPhoneNumber" @click="getPhoneNumber">
 		      <image src="../../static/images/personal/card-i.png" />
 		      <text>授权手机号</text>
 		    </button>
 		  </view>
-		
+
 		  <view class="bottom" bindtap="protocolTap">
 		    <text>登录即代表您同意</text>
 		    <text>《这是服务服务协议》</text>
@@ -83,7 +83,7 @@
 	  left: 0;
 	  width: 100vw;
 	}
-	
+
 	.header-navbar {
 	  display: flex;
 	  align-items: center;
@@ -93,7 +93,7 @@
 	  width:48rpx;
 	  height:48rpx;
 	}
-	
+
 	.container {
 	  display: flex;
 	  top: 0;
@@ -113,7 +113,7 @@
 	  -o-background-size: cover;
 	  background-position: center 0;
 	}
-	
+
 	.top {
 	  display: flex;
 	  flex-direction: column;
@@ -121,13 +121,13 @@
 	  margin-top: 280rpx;
 	  font-size: 32rpx;
 	}
-	
+
 	.top image {
 	  width: 284rpx;
 	  height: 92rpx;
 	  margin-bottom: 30rpx;
 	}
-	
+
 	button {
 	  display: flex;
 	  justify-content: center;
@@ -140,23 +140,23 @@
 	  font-size: 36rpx !important;
 	  font-weight: normal !important;
 	  color: #fff;
-	  
+
 	  text{
 		  align-self: center;
 	  }
 	}
-	
+
 	.btn image {
 	  width: 48rpx;
 	  height: 48rpx;
 	  margin-right: 20rpx;
 	}
-	
+
 	.bottom {
 	  margin-top: 540rpx;
 	  font-size: 24rpx;
 	}
-	
+
 	.bottom text:first-child {
 	  color: #ccc;
 	}

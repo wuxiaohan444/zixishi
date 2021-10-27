@@ -12,7 +12,7 @@
     <!--    通知-->
     <u-notice-bar mode="horizontal" :list="content" bg-color="#FCF8E3"></u-notice-bar>
     <view class="seat-time-box u-flex u-flex-wrap">
-      <view class="seat-time-item" v-for="(item,index) in today" :key="index">{{ item.time }}</view>
+      <view class="seat-time-item" v-for="(item,index) in seatData" :key="index">{{ item.time }}</view>
     </view>
     <!--    底部按钮-->
     <view class="operation-btn u-flex u-row-between">
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import {getWeek, behindDate} from '../../utils/timeFunc'
+import {getWeek, behindDate, getBusiness} from '../../utils/timeFunc'
 import {allTimeInt, allTimeHalf} from '../../static/data/allTime'
 
 export default {
@@ -103,9 +103,10 @@ export default {
       today: [],//今天
       tomorrow: [],//明天
       acquired: [],//后天
-      businessHours: ['08:00', '18:00'],//营业时间
+      businessHours: ['08:00', '20:00'],//营业时间
       intervalType: 0,//0代表30分钟 1代表60分钟
       allData: [],
+      seatData: []
     }
   },
   onLoad() {
@@ -114,23 +115,15 @@ export default {
     } else {
       this.allData = allTimeInt
     }
-    let startIndex, endIndex;
-    this.allData.map((item, index) => {
-      if (item.split('-')[0] == this.businessHours[0]) {
-        startIndex = index
-      }
-      if (item.split('-')[1] == this.businessHours[1]) {
-        endIndex = index
-      }
-    })
-    this.allData.map((item, index) => {
-      if (index >= startIndex && index <= endIndex) {
-        this.today.push({
-          time: item
-        })
+    let today = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
+    this.tomorrow = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
+    this.acquired = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
+    today.map((item, index) => {
+      if (this.bjDate(item.time.split('-')[0], this.getTime()) === 1) {
+        this.today.push(item)
       }
     })
-    console.log(this.today);
+    this.seatData = this.today;
   },
   methods: {
     choosePay(index) {
@@ -160,16 +153,37 @@ export default {
     },
     chooseTime(index) {
       this.timeIndex = index;
+      switch (index) {
+        case 0:
+          this.seatData = this.today;
+          break;
+        case 1:
+          this.seatData = this.tomorrow;
+          break;
+        case 2:
+          this.seatData = this.acquired;
+      }
+    },
+    getTime() {
+      var myDate = new Date();
+      let hours = this.addZero(myDate.getHours());       //获取当前小时数(0-23)
+      let minutes = this.addZero(myDate.getMinutes());     //获取当前分钟数(0-59)
+      return hours + ':' + minutes
     },
     addZero(item) {
       if (item > 9) {
-        if (item == 24) {
-          return '00'
-        } else {
-          return item
-        }
+        return item
       } else {
         return '0' + item
+      }
+    },
+    bjDate(date, date1) {
+      var date = new Date('2021-10-01 ' + date);
+      var date1 = new Date('2021-10-01 ' + date1);
+      if (date.getTime() - date1.getTime() < 0) {
+        return 2;
+      } else {
+        return 1;
       }
     }
   }

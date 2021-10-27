@@ -54,3 +54,26 @@ export function behindDate(number) {
     var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
     return currentdate
 }
+
+// 营业时间算上
+export function getBusiness(allData,start,end){
+    let startIndex, endIndex;
+    let today =[];
+    let data = allData;
+    data.map((item, index) => {
+        if (item.split('-')[0] == start) {
+            startIndex = index
+        }
+        if (item.split('-')[1] == end) {
+            endIndex = index
+        }
+    })
+    data.map((item, index) => {
+        if (index >= startIndex && index <= endIndex) {
+            today.push({
+                time: item
+            })
+        }
+    })
+    return today
+}
