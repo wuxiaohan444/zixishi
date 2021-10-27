@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" :style="{'height':winHeight+'rpx'}">
 		<view class="card-box">
 			<view class="card-list">
 				<view class="info">
@@ -58,12 +58,14 @@
 </template>
 
 <script>
+const app = getApp();
 export default {
   name: "reserve",
   data() {
   	return {
   		current:0,
-		popupTipStatus:false
+		popupTipStatus:false,
+		winHeight:app.globalData.winHeight,
   	}
   },
   methods: {
@@ -81,7 +83,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.container{
+	.container,
+	.card-box{
 		background-color: #F5F5F5;
 	}
 	.card-box{

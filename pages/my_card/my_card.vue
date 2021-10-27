@@ -1,11 +1,65 @@
 <template>
-	<view class="container">
-		<view class="titles">
-			<text :class="current==0?'active':''" @click="change(0)">订座套餐卡</text>
-			<text :class="current==1?'active':''" @click="change(1)">预订时长卡</text>
-		</view>
+	<view class="container" :style="{'height':winHeight+'rpx'}">
+		<u-tabs :list="list" :is-scroll="false" :current="current" @change="change" active-color="#2487FF"
+		        :bar-style="barStyle"></u-tabs>
 		<view class="card-box" v-show="current==0">
 			<view class="card-list" @click="toDetails('2')">
+				<text class="tag u-font-23">春深券</text>
+				<view class="info">
+					<view class="u-font-32 u-bold">两小时免费自习体验券</view>
+					<view class="u-font-24 data">2021年09月15日到期</view>
+				</view>
+				<view class="times">
+					<view class="u-font-24">剩余：3小时0分钟（1天）</view>
+					<view class="use u-font-23">去使用</view>
+				</view>
+			</view>
+			<view class="card-list">
+				<text class="tag u-font-23">春深券</text>
+				<view class="info">
+					<view class="u-font-32 u-bold">两小时免费自习体验券</view>
+					<view class="u-font-24 data">2021年09月15日到期</view>
+				</view>
+				<view class="times">
+					<view class="u-font-24">剩余：3小时0分钟（1天）</view>
+					<view class="use u-font-23">去使用</view>
+				</view>
+			</view>
+			
+			<view class="card-list">
+				<text class="tag u-font-23">春深券</text>
+				<view class="info">
+					<view class="u-font-32 u-bold">两小时免费自习体验券</view>
+					<view class="u-font-24 data">2021年09月15日到期</view>
+				</view>
+				<view class="times">
+					<view class="u-font-24">剩余：3小时0分钟（1天）</view>
+					<view class="use u-font-23">去使用</view>
+				</view>
+			</view>
+			<view class="card-list">
+				<text class="tag u-font-23">春深券</text>
+				<view class="info">
+					<view class="u-font-32 u-bold">两小时免费自习体验券</view>
+					<view class="u-font-24 data">2021年09月15日到期</view>
+				</view>
+				<view class="times">
+					<view class="u-font-24">剩余：3小时0分钟（1天）</view>
+					<view class="use u-font-23">去使用</view>
+				</view>
+			</view>
+			<view class="card-list">
+				<text class="tag u-font-23">春深券</text>
+				<view class="info">
+					<view class="u-font-32 u-bold">两小时免费自习体验券</view>
+					<view class="u-font-24 data">2021年09月15日到期</view>
+				</view>
+				<view class="times">
+					<view class="u-font-24">剩余：3小时0分钟（1天）</view>
+					<view class="use u-font-23">去使用</view>
+				</view>
+			</view>
+			<view class="card-list">
 				<text class="tag u-font-23">春深券</text>
 				<view class="info">
 					<view class="u-font-32 u-bold">两小时免费自习体验券</view>
@@ -45,10 +99,19 @@
 </template>
 
 <script>
+	const app = getApp();
 	export default {
 		data() {
 			return {
-				current:0
+				winHeight:app.globalData.winHeight,
+				current:0,
+				list: [
+				  {
+				    name: '订座套餐卡'
+				  }, {
+				    name: '预订时长卡'
+				  }
+				],
 			}
 		},
 		methods: {
@@ -65,35 +128,9 @@
 </script>
 
 <style scoped lang="scss">
-	.container{
+	.container,
+	.card-box{
 		background-color: #F5F5F5;
-	}
-	.titles{
-		background-color: #FFFFFF;
-		display: flex;
-		justify-content: space-evenly;
-		padding: 78rpx 0 32rpx 0;
-				
-		text{
-			font-size: 31rpx;
-			color: #010101;
-		}
-		text.active{
-			position: relative;
-			color: #2487FF;
-		}
-		text.active::before{
-			content: '';
-			display: inline-block;
-			position: absolute;
-			bottom: -15rpx;
-			left: 50%;
-			transform: translateX(-50%);
-			background-color: #2487FF;
-			border-radius: 4rpx;
-			width: 48rpx;
-			height: 8rpx;
-		}
 	}
 	.card-box{
 		padding: 26rpx 30rpx;
