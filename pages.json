@@ -155,6 +155,15 @@
 		}
 		
 	}
+	,{
+		"path" : "pages/my_card/detail/detail",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "明细",
+			"enablePullDownRefresh": false
+		}
+		
+	}
     ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

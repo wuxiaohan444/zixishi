@@ -5,7 +5,7 @@
 			<text :class="current==1?'active':''" @click="change(1)">预订时长卡</text>
 		</view>
 		<view class="card-box" v-show="current==0">
-			<view class="card-list">
+			<view class="card-list" @click="toDetails('2')">
 				<text class="tag u-font-23">春深券</text>
 				<view class="info">
 					<view class="u-font-32 u-bold">两小时免费自习体验券</view>
@@ -54,6 +54,11 @@
 		methods: {
 			change(index){
 				this.current = index;
+			},
+			toDetails(id){
+				uni.navigateTo({
+					url:`/pages/my_card/detail/detail?id=${id}`
+				})
 			}
 		}
 	}
