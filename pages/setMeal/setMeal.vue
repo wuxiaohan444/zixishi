@@ -3,7 +3,7 @@
     <u-tabs :list="list" :is-scroll="false" :current="current" @change="change" active-color="#2487FF"
             :bar-style="barStyle"></u-tabs>
     <view class="setMeal-box">
-      <view class="setMeal-box_item" v-for="(item,index) in timeCardList" :key="index">
+      <view class="setMeal-box_item" v-for="(item,index) in timeCardList" :key="index" @click="skip">
         <image :src="item.img" class="item-img" :lazy-load="true" mode="aspectFill"></image>
         <view class="item-top u-flex">
           <view class="store-name">{{ item.storeName }}</view>
@@ -86,6 +86,11 @@ export default {
        oldPrice: '20',
        newPrice: '5'
      })
+    },
+    skip(){
+      uni.navigateTo({
+        url: 'timeCard'
+      });
     }
   }
 }
