@@ -42,7 +42,7 @@
     </view>
     <view class="operation u-flex u-row-between">
       <u-button shape="circle" :custom-style="customStyle1">再来一单</u-button>
-      <u-button shape="circle" :custom-style="customStyle2">前去使用</u-button>
+      <u-button shape="circle" :custom-style="customStyle2" @click="usage">前去使用</u-button>
     </view>
   </view>
 </template>
@@ -66,6 +66,13 @@ export default {
         color: '#ffffff',
         fontSize:'31rpx'
       }
+    }
+  },
+  methods:{
+    usage(){
+      uni.switchTab({
+        url: '../reserve/reserve'
+      });
     }
   }
 }

@@ -28,17 +28,17 @@
 					<view class="table">
 						<u-table :font-size="23">
 							<u-tr>
-								<u-th>开始使用时间</u-th>
-								<u-th>结束使用时间</u-th>
-								<u-th>消费时长</u-th>
-								<u-th>消费后剩余时长</u-th>
+								<u-th fontSize="23rpx">开始使用时间</u-th>
+								<u-th fontSize="23rpx">结束使用时间</u-th>
+								<u-th fontSize="23rpx">消费时长</u-th>
+								<u-th fontSize="23rpx" width="178rpx">消费后剩余时长</u-th>
 							</u-tr>
 							<block v-for="item in list">
 								<u-tr>
 									<u-td>{{item.data}}</u-td>
 									<u-td>{{item.number}}</u-td>
 									<u-td>{{item.time}}</u-td>
-									<u-td>{{item.duration}}小时</u-td>
+									<u-td width="178rpx">{{item.duration}}小时</u-td>
 								</u-tr>
 							</block>
 						</u-table>
@@ -75,7 +75,7 @@
 			}
 		},
 		methods: {
-			
+
 		}
 	}
 </script>
@@ -84,23 +84,23 @@
 	.container{
 		padding: 30rpx;
 	}
-	
+
 	.seat-list{
 		padding: 15rpx;
 		background-color: #FFFFFF;
 		border-radius: 19rpx;
 		clear:both;
 		margin-bottom: 33rpx;
-		
+
 		image{
 			width: 100%;
 		}
-		
+
 		.content{
 			padding: 35rpx 0;
 			color: #010101;
 			border-bottom: 2rpx solid #B2B2B2;
-			
+
 			.doc,
 			.doc-i,
 			.doc-i view{
@@ -118,9 +118,9 @@
 					color: #8D8D8D;
 				}
 			}
-			
+
 			.doc{
-				
+
 				>view:first-child{
 					color: #8D8D8D;
 				}
@@ -131,7 +131,7 @@
 			.title{
 				position: relative;
 				padding-left: 18rpx;
-				
+
 				&::after{
 					content: '';
 					width: 8rpx;

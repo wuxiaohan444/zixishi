@@ -23,6 +23,10 @@ export default {
     background: {
       type: [String],
       default: ''
+    },
+    fontSize: {
+      type: [String],
+      default: ''
     }
   },
   data() {
@@ -45,6 +49,9 @@ export default {
       }
       if(this.background){
         style.background = this.background;
+      }
+      if(this.fontSize){
+        style.fontSize = this.fontSize;
       }
       style.textAlign = this.parent.align;
       style.padding = this.parent.padding;

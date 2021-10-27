@@ -3,7 +3,7 @@
 	<!--    自定义头部-->
 	<view class="my-navigation" :style="{'top': statusBarHeight+'px','height': navBarHeight+'px'}">
 		<view class="store-change" :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}">
-			<text class="u-font-31" @click>门店切换</text>
+			<text class="u-font-31" @click="changeStore">门店切换</text>
 			<image src="../../static/images/home/change.png" class="change-icon"></image>
 		</view>
 		<view :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}" class="navigation-text u-black-color u-font-31 u-bold">春深读书堂</view>
@@ -47,7 +47,7 @@
         <view class="seat-top_right u-font-28">查看平面图</view>
       </view>
       <view class="seat-box u-flex u-flex-wrap">
-        <view class="seat-box_item" v-for="(item,index) in 12" @click="chooseSeat">
+        <view class="seat-box_item" v-for="(item,index) in 12" @click="chooseSeat" :key="index">
           <image src="../../static/images/home/seat_yes_icon.png" class="seat_icon"></image>
           <view class="u-font-28 u-black-color">{{index+1}}</view>
         </view>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-const app = getApp();	
+const app = getApp();
 export default {
   name: "homePage",
   data() {
@@ -98,7 +98,7 @@ export default {
     }
   },
   onLoad() {
-    
+
   },
   methods: {
     change(index) {
