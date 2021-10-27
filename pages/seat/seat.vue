@@ -3,7 +3,8 @@
     <u-image height="334rpx" src="https://cdn.uviewui.com/uview/swiper/1.jpg" :lazy-load="true"></u-image>
     <view class="room-name u-font-32 u-bold u-black-color">天庆大厦店自习室</view>
     <view class="chooseDate u-flex u-row-around">
-      <view :class="timeIndex===index?'chooseDate-item active':'chooseDate-item'" v-for="(item,index) in timeData" :key="index" @click="chooseTime(index)">
+      <view :class="timeIndex===index?'chooseDate-item active':'chooseDate-item'" v-for="(item,index) in timeData"
+            :key="index" @click="chooseTime(index)">
         <view>{{ item.week }}</view>
         <view>{{ item.date }}</view>
       </view>
@@ -11,7 +12,7 @@
     <!--    通知-->
     <u-notice-bar mode="horizontal" :list="content" bg-color="#FCF8E3"></u-notice-bar>
     <view class="seat-time-box u-flex u-flex-wrap">
-      <view class="seat-time-item" v-for="(item,index) in allData" :key="index">{{item}}</view>
+      <view class="seat-time-item" v-for="(item,index) in today" :key="index">{{ item.time }}</view>
     </view>
     <!--    底部按钮-->
     <view class="operation-btn u-flex u-row-between">
@@ -64,6 +65,7 @@
 
 <script>
 import {getWeek, behindDate} from '../../utils/timeFunc'
+import {allTimeInt, allTimeHalf} from '../../static/data/allTime'
 
 export default {
   name: "seat",
@@ -97,32 +99,38 @@ export default {
         marginTop: '42rpx'
       },
       ticketNumber: 1,
-      timeIndex:0,
-      today:[],//今天
-      tomorrow:[],//明天
-      acquired:[],//后天
-      businessHours:['08:00','18:00'],//营业时间
-      intervalType:0,//0代表30分钟 1代表60分钟
-      allData:[],
+      timeIndex: 0,
+      today: [],//今天
+      tomorrow: [],//明天
+      acquired: [],//后天
+      businessHours: ['08:00', '18:00'],//营业时间
+      intervalType: 0,//0代表30分钟 1代表60分钟
+      allData: [],
     }
   },
   onLoad() {
-    for (let i=0;i<24;i++){
-      if(this.intervalType===1){
-        this.allData.push(this.addZero(i) + ':00' + '-' +this.addZero(i + 1) +':00')
-      }
-      if(this.intervalType===0){
-        this.allData.push(this.addZero(i) + ':30' + '-' +this.addZero(i+1) +':00')
-        if(i!==23){
-          this.allData.push(this.addZero(i+1) + ':00' + '-' +this.addZero(i+1) +':30')
-        }
-      }
+    if (this.intervalType === 0) {
+      this.allData = allTimeHalf
+    } else {
+      this.allData = allTimeInt
     }
-    this.allData.map((item)=>{
-      if(item==businessHours[0]){
-
+    let startIndex, endIndex;
+    this.allData.map((item, index) => {
+      if (item.split('-')[0] == this.businessHours[0]) {
+        startIndex = index
+      }
+      if (item.split('-')[1] == this.businessHours[1]) {
+        endIndex = index
       }
     })
+    this.allData.map((item, index) => {
+      if (index >= startIndex && index <= endIndex) {
+        this.today.push({
+          time: item
+        })
+      }
+    })
+    console.log(this.today);
   },
   methods: {
     choosePay(index) {
@@ -150,18 +158,18 @@ export default {
         }
       });
     },
-    chooseTime(index){
+    chooseTime(index) {
       this.timeIndex = index;
     },
-    addZero(item){
-      if(item>9){
-        if(item==24){
+    addZero(item) {
+      if (item > 9) {
+        if (item == 24) {
           return '00'
-        }else{
+        } else {
           return item
         }
-      }else{
-        return '0'+item
+      } else {
+        return '0' + item
       }
     }
   }
@@ -190,7 +198,8 @@ export default {
     font-size: 28rpx;
     color: #010101;
   }
-  .chooseDate-item.active{
+
+  .chooseDate-item.active {
     color: #2487FF;
   }
 }
@@ -218,7 +227,8 @@ export default {
     background: #2487FF;
     border: 1rpx solid #2487FF;
   }
-  .seat-time-item.disabled{
+
+  .seat-time-item.disabled {
     background: #EEEEEF;
   }
 }
