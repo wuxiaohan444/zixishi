@@ -35,6 +35,27 @@
       }
     },
     {
+      "path": "pages/setMeal/timeCard",
+      "style": {
+        "navigationBarTitleText": "预定时长卡",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/setMeal/reservationCard",
+      "style": {
+        "navigationBarTitleText": "套餐定座卡",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/setMeal/reservationCardDetails",
+      "style": {
+        "navigationBarTitleText": "座位详情",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/store/storeChange",
       "style": {
         "navigationBarTitleText": "门店选择",
@@ -57,66 +78,66 @@
     },
 	{
 		"path" : "pages/order/order",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "我的订单",
 			"enablePullDownRefresh": false
 		}
-		
+
 	},
 	{
 		"path" : "pages/order/detail/detail",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "我的订单详情 ",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
 	,{
 		"path" : "pages/my_card/my_card",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "我的卡卷",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
 	,{
 		"path" : "pages/mt_card/mt_card",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "美团兑券",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
 	,{
 		"path" : "pages/my_seat/my_seat",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
 	,{
 		"path" : "pages/bill/bill",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "我的账单",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
 	,{
 		"path" : "pages/recharge/recharge",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
     ],
   "globalStyle": {
