@@ -123,6 +123,7 @@ export default {
         this.today.push(item)
       }
     })
+
     this.today.unshift({time:this.getTime()+'-' +this.today[0].time.split('-')[0]})
     this.seatData = this.today;
   },
