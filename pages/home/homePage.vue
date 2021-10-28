@@ -2,8 +2,8 @@
   <view class="container" :style="{'padding-top':statusBarHeight+'px'}">
 	<!--    自定义头部-->
 	<view class="my-navigation" :style="{'top': statusBarHeight+'px','height': navBarHeight+'px'}">
-		<view class="store-change" :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}">
-			<text class="u-font-31" @click="changeStore">门店切换</text>
+		<view class="store-change" :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}" @click="changeStore">
+			<text class="u-font-31">门店切换</text>
 			<image src="../../static/images/home/change.png" class="change-icon"></image>
 		</view>
 		<view :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}" class="navigation-text u-black-color u-font-31 u-bold">春深读书堂</view>

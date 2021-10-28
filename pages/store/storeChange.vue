@@ -1,41 +1,22 @@
 <template>
   <view class="container">
     <view class="store-box">
-      <view class="store-item">
+      <view class="store-item" v-for="(item,index) in list" :key="index" @click="change(item.id)">
         <view class="store-item-info">
           <view class="store-item-info_top u-flex u-row-between">
             <view class="u-flex">
-              <view class="store-name u-font-24">春深读书堂</view>
-              <view class="u-ellipsis u-font-32">宝利丰广场平安国金店</view>
+              <view class="store-name u-font-24">{{item.parentName}}</view>
+              <view class="u-ellipsis u-font-32">{{item.fullName}}</view>
             </view>
-            <view class="u-font-26">5.8km</view>
+<!--            <view class="u-font-26">5.8km</view>-->
           </view>
-          <view class="store-item-info_middle u-flex">
-            <image src="../../static/images/store/time.png" class="time_icon"></image>
-            <text class="u-font-24">10:00-22:00</text>
-          </view>
+<!--          <view class="store-item-info_middle u-flex">-->
+<!--            <image src="../../static/images/store/time.png" class="time_icon"></image>-->
+<!--            <text class="u-font-24">10:00-22:00</text>-->
+<!--          </view>-->
           <view class="store-item-info_bottom u-flex">
             <image src="../../static/images/store/address.png" class="address_icon"></image>
-            <text class="u-font-24 u-ellipsis">包河区徽州大道838号平安国际金融中心大堂</text>
-          </view>
-        </view>
-      </view>
-      <view class="store-item">
-        <view class="store-item-info">
-          <view class="store-item-info_top u-flex u-row-between">
-            <view class="u-flex">
-              <view class="store-name u-font-24">春深读书堂</view>
-              <view class="u-ellipsis u-font-32">宝利丰广场平安国金店</view>
-            </view>
-            <view class="u-font-26">5.8km</view>
-          </view>
-          <view class="store-item-info_middle u-flex">
-            <image src="../../static/images/store/time.png" class="time_icon"></image>
-            <text class="u-font-24">10:00-22:00</text>
-          </view>
-          <view class="store-item-info_bottom u-flex">
-            <image src="../../static/images/store/address.png" class="address_icon"></image>
-            <text class="u-font-24 u-ellipsis">包河区徽州大道838号平安国际金融中心大堂</text>
+            <text class="u-font-24 u-ellipsis">{{item.address}}</text>
           </view>
         </view>
       </view>
@@ -47,7 +28,7 @@
       </view>
       <view class="operating-item">
         <image src="../../static/images/store/money.png" class="money_icon"></image>
-        <view class="text u-font-24">续费 </view>
+        <view class="text u-font-24">续费</view>
       </view>
       <view class="operating-item">
         <image src="../../static/images/store/order.png" class="order_icon"></image>
@@ -58,16 +39,51 @@
 </template>
 
 <script>
+import toast from "../../uview-ui/libs/function/toast";
+
 export default {
-  name: "storeChange"
+  name: "storeChange",
+  data() {
+    return {
+      list: [],
+    }
+  },
+  onLoad() {
+    this.storeList()
+  },
+  methods: {
+    storeList() {
+      this.$u.api.storeList().then((res) => {
+        console.log(res);
+        if (res.code == 200) {
+          this.list = this.$u.deepClone(res.data);
+        } else {
+          this.$u.toast(res.msg)
+        }
+      })
+    },
+    change(id){
+      this.$u.api.changeStore({id:id}).then((res)=>{
+        if(res.code==200){
+          uni.setStorageSync('storeInfo', res.data);
+          uni.switchTab({
+            url: '../home/homePage'
+          });
+        }else{
+          this.$u.toast(res.msg)
+        }
+      })
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
-.container{
+.container {
   padding: 36rpx 30rpx;
-  .store-box{
-    .store-item{
+
+  .store-box {
+    .store-item {
       width: 690rpx;
       height: 344rpx;
       border-radius: 13rpx;
@@ -76,18 +92,21 @@ export default {
       overflow: hidden;
       position: relative;
       margin-bottom: 34rpx;
-      .store-item-info{
+
+      .store-item-info {
         width: 100%;
         height: 126rpx;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         position: absolute;
         bottom: 0;
         left: 0;
         padding: 0 16rpx;
         color: #FFFFFF;
-        &_top{
+
+        &_top {
           margin-top: 11rpx;
-          .store-name{
+
+          .store-name {
             height: 37rpx;
             background: #2487FF;
             border-radius: 5rpx;
@@ -96,15 +115,18 @@ export default {
             line-height: 37rpx;
           }
         }
-        &_middle{
-          .time_icon{
+
+        &_middle {
+          .time_icon {
             width: 21rpx;
             height: 21rpx;
             margin-right: 5rpx;
           }
         }
-        &_bottom{
-          .address_icon{
+
+        &_bottom {
+          height: 70rpx;
+          .address_icon {
             width: 20rpx;
             height: 22rpx;
             margin-right: 5rpx;
@@ -113,11 +135,13 @@ export default {
       }
     }
   }
-  .operating{
+
+  .operating {
     position: fixed;
     right: 20rpx;
     bottom: 200rpx;
-    .operating-item{
+
+    .operating-item {
       width: 113rpx;
       height: 113rpx;
       background: #FEFEFE;
@@ -126,20 +150,24 @@ export default {
       text-align: center;
       box-sizing: border-box;
       margin-bottom: 26rpx;
-      .text{
+
+      .text {
         color: #2487FF;
       }
-      .open_icon{
+
+      .open_icon {
         width: 35rpx;
         height: 40rpx;
         margin-top: 12rpx;
       }
-      .money_icon{
+
+      .money_icon {
         width: 33rpx;
         height: 34rpx;
         margin-top: 18rpx;
       }
-      .order_icon{
+
+      .order_icon {
         margin-top: 18rpx;
         width: 29rpx;
         height: 31rpx;

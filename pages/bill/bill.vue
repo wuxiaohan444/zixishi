@@ -78,7 +78,16 @@
 				}
 			}
 		},
+    onLoad(){
+      this.rechargeList()
+    },
 		methods: {
+      // 充值记录
+      rechargeList(){
+        this.$u.api.rechargeList({openId:1}).then((res)=>{
+
+        })
+      },
 			recharge(){
 				uni.navigateTo({
 					url:'/pages/recharge/recharge'
