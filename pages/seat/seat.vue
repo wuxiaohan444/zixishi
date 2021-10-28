@@ -104,7 +104,7 @@ export default {
       tomorrow: [],//明天
       acquired: [],//后天
       businessHours: ['08:00', '20:00'],//营业时间
-      intervalType: 0,//0代表30分钟 1代表60分钟
+      intervalType: 1,//0代表30分钟 1代表60分钟
       allData: [],
       seatData: []
     }
@@ -123,6 +123,7 @@ export default {
         this.today.push(item)
       }
     })
+    this.today.unshift({time:this.getTime()+'-' +this.today[0].time.split('-')[0]})
     this.seatData = this.today;
   },
   methods: {
