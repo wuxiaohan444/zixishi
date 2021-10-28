@@ -21,7 +21,7 @@
       </view>
       <view class="operation-right u-flex">
         <view :class="payIndex===1?'operation-btn-pay active':'operation-btn-pay'" @click="choosePay(1)">美团券</view>
-        <view :class="payIndex===0?'operation-btn-pay active':'operation-btn-pay'" @click="choosePay(0)">去结算</view>
+        <view :class="payIndex===0?'operation-btn-pay active':'operation-btn-pay'" @click="choosePay(0,'123123')">去结算</view>
       </view>
     </view>
     <!--    美团-->
@@ -126,11 +126,15 @@ export default {
     this.seatData = this.today;
   },
   methods: {
-    choosePay(index) {
+    choosePay(index,orderId) {
       this.payIndex = index;
       if (index === 1) {
         this.oneShow = true;
-      }
+      }else{
+		  uni.navigateTo({
+		  	url:`/pages/order/pay/pay?orderId=${orderId}`
+		  })
+	  }
     },
     // 提交券码
     submitCode() {

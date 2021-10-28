@@ -46,6 +46,7 @@
 			</view>
 		</view>
 		<view class="botton">
+			<u-button :custom-style="customStyle" shape="circle" type="primary" @click="useTimeCard">使用时长卡</u-button>
 			<u-button :custom-style="customStyle" shape="circle" type="primary">余额支付:1.2元</u-button>
 			<u-button :custom-style="customStyle" shape="circle" type="success">微信支付:1.2元</u-button>
 		</view>
@@ -63,7 +64,11 @@
 			}
 		},
 		methods: {
-			
+			useTimeCard(){
+				uni.navigateTo({
+					url:'/pages/seat/time_card/time_card'
+				})
+			}
 		}
 	}
 </script>

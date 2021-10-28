@@ -41,7 +41,7 @@
 			return {
 				navBarHeight: app.globalData.navBarHeight, // 导航栏高度
 				statusBarHeight: app.globalData.statusBarHeight, // 状态栏高度
-				winHeight:app.globalData.winHeight,
+				winHeight:app.globalData.winHeight+app.globalData.statusBarHeight+app.globalData.navBarHeight,
 				flag: true,
 				tokenStatus:false
 			};
@@ -77,17 +77,6 @@
 </script>
 
 <style scoped lang="scss">
-	.header {
-	  position: fixed;
-	  top: 0;
-	  left: 0;
-	  width: 100vw;
-	}
-
-	.header-navbar {
-	  display: flex;
-	  align-items: center;
-	}
 	.header-navbar image {
 	  padding-left: 30rpx;
 	  width:48rpx;
@@ -95,9 +84,6 @@
 	}
 
 	.container {
-	  display: flex;
-	  top: 0;
-	  left: 0;
 	  width:100%;
 	  height:100%;
 	  bottom: 0;
@@ -106,12 +92,10 @@
 	  align-items: center;
 	  color: #fff;
 	  background-image: url('https://cdn.uviewui.com/uview/swiper/1.jpg');
-	  background-color: #fff;
 	  background-repeat: no-repeat;
 	  background-size: cover;
 	  -webkit-background-size: cover;
 	  -o-background-size: cover;
-	  background-position: center 0;
 	}
 
 	.top {
@@ -153,6 +137,7 @@
 	}
 
 	.bottom {
+	  text-align: center;
 	  margin-top: 540rpx;
 	  font-size: 24rpx;
 	}

@@ -185,6 +185,15 @@
 		}
 		
 	}
+	,{
+		"path" : "pages/seat/time_card/time_card",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "时长卡",
+			"enablePullDownRefresh": false
+		}
+		
+	}
     ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
