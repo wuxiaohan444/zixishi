@@ -44,7 +44,7 @@
           <image src="../../static/images/home/seatExamples_yes_icon.png" class="seat_icon"></image>
           <text class="u-font-28 u-black-color">可选</text>
         </view>
-        <view class="seat-top_right u-font-28">查看平面图</view>
+        <view class="seat-top_right u-font-28" @click="preViewImg">查看平面图</view>
       </view>
       <view class="seat-box u-flex u-flex-wrap">
         <view class="seat-box_item" v-for="(item,index) in 12" @click="chooseSeat" :key="index">
@@ -112,6 +112,11 @@ export default {
     chooseSeat(){
       uni.navigateTo({
         url: '../seat/seat'
+      });
+    },
+    preViewImg(){
+      uni.previewImage({
+        urls: ['https://cdn.uviewui.com/uview/swiper/2.jpg'],
       });
     }
   }
