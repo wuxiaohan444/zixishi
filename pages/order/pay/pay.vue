@@ -88,13 +88,13 @@
 		.titles{
 			text-align: center;
 			padding-bottom: 40rpx;
-			border-bottom: 2rpx solid #B2B2B2;;
+			border-bottom: 2rpx solid #EEEFF1;;
 			>view:last-child{
 				margin-top: 35rpx;
 			}
 		}
 	}
-	
+
 	.content{
 		padding-top: 24rpx;
 		border-bottom: 2rpx solid #CECECE;

@@ -231,7 +231,7 @@ export default {
     width: 208rpx;
     height: 94rpx;
     background: #FFFFFF;
-    border: 1rpx solid #B2B2B2;
+    border: 1rpx solid #EEEFF1;
     border-radius: 6rpx;
     font-size: 28rpx;
     color: #010101;
@@ -255,7 +255,7 @@ export default {
 .operation-btn {
   width: 750rpx;
   background: #FFFFFF;
-  border-top: 1px solid #B2B2B2;
+  border-top: 1px solid #EEEFF1;
   padding: 0 30rpx;
   position: fixed;
   left: 0;
@@ -301,7 +301,7 @@ export default {
   }
 
   .demalCode-box {
-    border: 1px solid #B2B2B2;
+    border: 1px solid #EEEFF1;
     border-radius: 6rpx;
     margin: 0 30rpx;
     padding: 0 20rpx;

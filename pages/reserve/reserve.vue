@@ -18,7 +18,7 @@
 					<view class="u-font-28 over" @click="over('2')">结束消费</view>
 				</view>
 			</view>
-			
+
 			<view class="card-list">
 				<view class="info">
 					<view class="u-font-32 u-bold">天庆店春深读书堂自习馆</view>
@@ -50,7 +50,7 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<view>
 			<u-modal v-model="popupTipStatus" @confirm="confirm" show-cancel-button content="确定要结束消费吗?"></u-modal>
 		</view>
@@ -67,6 +67,11 @@ export default {
 		popupTipStatus:false,
 		winHeight:app.globalData.winHeight,
   	}
+  },
+  onLoad(){
+    this.$u.api.myPresaleorderList().then((res)=>{
+      console.log(res);
+    })
   },
   methods: {
   	change(index){
@@ -89,13 +94,13 @@ export default {
 	}
 	.card-box{
 		padding: 26rpx 30rpx;
-		
+
 		.card-list{
 			padding: 20rpx 30rpx;
 			background-color: #FFFFFF;
 			border-radius: 19rpx;
 			margin-bottom: 25rpx;
-			
+
 			.tag{
 				display: inline-block;
 				background: #2487FF;
@@ -106,7 +111,7 @@ export default {
 				padding: 0 12rpx;
 			}
 			.info{
-				border-bottom: 2rpx dashed #8B8B8B;
+				border-bottom: 2rpx dashed #EEEFF1;
 				padding: 22rpx 0;
 				.data{
 					color: #999999;
@@ -132,7 +137,7 @@ export default {
 					height: 54rpx;
 					line-height: 52rpx;
 					background: #FFFFFF;
-					border: 2rpx solid #B2B2B2;
+					border: 2rpx solid #EEEFF1;
 					border-radius: 27rpx;
 					text-align: center;
 					color: #010101;

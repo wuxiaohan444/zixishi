@@ -34,7 +34,7 @@
 								</view>
 							</view>
 						</view>
-						
+
 						<!-- <u-empty text="暂无订单，快去逛逛吧~" mode="list"></u-empty> -->
 					</scroll-view>
 				</swiper-item>
@@ -73,7 +73,7 @@
 			}
 		},
 		onLoad(){
-			
+
 		},
 		methods: {
 			// tabs通知swiper切换
@@ -120,7 +120,7 @@
 <style scoped lang="scss">
 .my-swiper{
 	background-color: #F5F5F5;
-}	
+}
 .order-list{
 	padding: 30rpx;
 	.list-item{
@@ -128,7 +128,7 @@
 		background-color: #FFFFFF;
 		border-radius: 20rpx;
 		margin-bottom: 30rpx;
-		
+
 		.top{
 			display: flex;
 			justify-content: space-between;
@@ -141,32 +141,32 @@
 				color: #999999;
 			}
 		}
-	
+
 		.center{
 			display: flex;
 			justify-content: flex-start;
 			align-items: center;
 			padding: 26rpx 0;
 			border-bottom: 2rpx solid #CECECE;
-			
+
 			image{
 				width: 130rpx;
 				height: 130rpx;
 				border-radius: 6rpx;
 				margin-right: 27rpx;
 			}
-			
+
 			.info{
 				line-height: 40rpx;
 				color: #666666;
 				font-size: 24rpx;
 			}
 		}
-		
+
 		.price{
 			text-align: right;
 			margin-top: 22rpx;
-			
+
 			text{
 				color: #FC1716;
 			}
@@ -183,7 +183,7 @@
 				height: 54rpx;
 				line-height: 52rpx;
 				background: #FFFFFF;
-				border: 2rpx solid #B2B2B2;
+				border: 2rpx solid #EEEFF1;
 				border-radius: 27rpx;
 				text-align: center;
 				color: #010101;

@@ -32,7 +32,7 @@
 			}
 		},
 		methods: {
-			
+
 		}
 	}
 </script>
@@ -45,31 +45,31 @@
 	.infos{
 		background-color: #FFFFFF;
 		padding: 112rpx 30rpx 55rpx 30rpx;
-		
+
 		.price{
 			height: 94rpx;
 			position: relative;
 			display: flex;
 			align-items: flex-end;
 			margin-top: 19rpx;
-			
+
 			.icon{
 				position: absolute;
 				bottom: 20rpx;
 				left: 23rpx;
 			}
-			
+
 			input{
 				width: 208rpx;
 				height: 94rpx;
 				background: #FFFFFF;
-				border: 2rpx solid #B2B2B2;
+				border: 2rpx solid #EEEFF1;
 				border-radius: 6rpx;
 				padding-left: 56rpx;
 				font-size: 71rpx;
 				font-weight: bold;
 			}
-			
+
 			view{
 				margin-left: 19rpx;
 				font-size: 31rpx;
@@ -79,7 +79,7 @@
 	}
 	.doc{
 		padding: 19rpx 30rpx;
-		
+
 		.activity-doc{
 			padding: 48rpx 78rpx;
 			color: #B9B9B9;

@@ -99,15 +99,15 @@
 		padding: 40rpx;
 		background: linear-gradient(90deg, #259BFF,#3470FF);
 		border-radius: 20rpx;
-		
+
 		.account-info{
 			color: #FFFFFF;
 			border-bottom: 2rpx solid #81B3F1;
-			
+
 			.price{
 				font-size: 64rpx;
 				margin: 20rpx 0 40rpx 0;
-				
+
 				text{
 					margin-left: 15rpx;
 				}
@@ -118,11 +118,11 @@
 		margin-top: 37rpx;
 		padding: 30rpx;
 		box-shadow: 0 0 20rpx 0 rgba(0, 0, 0, 0.1);
-		
+
 		.titles{
 			border-bottom: 2rpx dashed #A3A3A3;
 			padding-bottom: 34rpx;
-		
+
 			text{
 				margin-right: 74rpx;
 				font-size: 31rpx;
@@ -153,7 +153,7 @@
 				font-size: 28rpx;
 				color: #010101;
 				margin-bottom: 22rpx;
-				
+
 				>text:first-child{
 					color: #8D8D8D;
 				}

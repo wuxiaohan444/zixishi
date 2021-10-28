@@ -124,7 +124,7 @@ export default {
     .line {
       width: 100%;
       height: 1rpx;
-      background: #B2B2B2;
+      background: #EEEFF1;
     }
   }
 }

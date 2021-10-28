@@ -99,7 +99,7 @@
 		.content{
 			padding: 35rpx 0;
 			color: #010101;
-			border-bottom: 2rpx solid #B2B2B2;
+			border-bottom: 2rpx solid #EEEFF1;
 
 			.doc,
 			.doc-i,

@@ -1,7 +1,7 @@
 <template>
 <view class="container card-details">
   <view class="my-table">
-    <u-table font-size="23" border-color="#B2B2B2">
+    <u-table font-size="23" border-color="#EEEFF1">
       <u-tr>
         <u-th width="178rpx" background="#E1E4EB">日期</u-th>
         <u-th background="#E1E4EB">座位号</u-th>
@@ -115,7 +115,7 @@ page{
     padding: 0 15rpx;
     box-sizing: border-box;
     .money-box-item{
-      border-bottom: 1px solid #D8D8D8;
+      border-bottom: 2rpx solid #EEEFF1;
       height: 71rpx;
       &_label{
         font-size: 28rpx;

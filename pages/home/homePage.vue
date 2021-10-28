@@ -192,8 +192,8 @@ export default {
 }
 
 .room-change {
-  border-top: 1rpx solid #CECECE;
-  border-bottom: 1rpx solid #CECECE;
+  border-top: 2rpx solid #EEEFF1;
+  border-bottom: 2rpx solid #EEEFF1;
 }
 
 .seat{
