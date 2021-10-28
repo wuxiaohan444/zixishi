@@ -66,7 +66,7 @@
 		methods: {
 			useTimeCard(){
 				uni.navigateTo({
-					url:'/pages/seat/time_card/time_card'
+					url:'/pages/seat/choice_card/choice_card'
 				})
 			}
 		}

@@ -194,6 +194,15 @@
 		}
 		
 	}
+	,{
+		"path" : "pages/seat/choice_card/choice_card",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "选择卡卷",
+			"enablePullDownRefresh": false
+		}
+		
+	}
     ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
