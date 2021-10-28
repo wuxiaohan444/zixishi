@@ -1,8 +1,7 @@
 <template>
 	<view class="container">
 		<view>
-			<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false"
-				swiperWidth="750"></u-tabs-swiper>
+			<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false"></u-tabs-swiper>
 		</view>
 		<view class="my-swiper">
 			<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" :style="{'height':winHeight+'rpx'}">
@@ -18,7 +17,7 @@
 									<view class="right u-font-26">交易成功</view>
 								</view>
 								<view class="center">
-									<image src="../../static/images/home/n2.png"></image>
+									<image src="https://cdn.uviewui.com/uview/swiper/3.jpg"></image>
 									<view class="info">
 										<view class="title u-font-26 u-black-color">自习室一/1</view>
 										<view class="">下单时间:2021-09-24  21:00:00</view>
@@ -79,7 +78,7 @@
 			// tabs通知swiper切换
 			tabsChange(index) {
 				this.swiperCurrent = index;
-				this.current = index;
+				// this.current = index;
 			},
 			// swiper-item左右移动，通知tabs的滑块跟随移动
 			transition(e) {
@@ -88,7 +87,7 @@
 			},
 			// 由于swiper的内部机制问题，快速切换swiper不会触发dx的连续变化，需要在结束时重置状态
 			// swiper滑动结束，分别设置tabs和swiper的状态
-			animationfinish(e) {
+      animationfinish(e) {
 				let current = e.detail.current;
 				this.$refs.uTabs.setFinishCurrent(current);
 				this.swiperCurrent = current;

@@ -1,7 +1,9 @@
 <template>
 	<view class="container">
 			<view class="seat-list">
-				<image mode="widthFix" src="/static/images/personal/recharge-i1.png"></image>
+        <view class="card-header u-flex">
+          <view class="card-header-name u-ellipsis">读书日卡（天庆大厦店）</view>
+        </view>
 				<view class="content">
 					<view class="title u-font-32 u-bold">17小时读书卡（门店名）</view>
 					<view class="doc-i">
@@ -92,9 +94,20 @@
 		clear:both;
 		margin-bottom: 33rpx;
 
-		image{
-			width: 100%;
-		}
+    .card-header {
+      width: 100%;
+      height: 179rpx;
+      background-image: linear-gradient(90deg, #3B72FC, #8BB5FF);
+      border-radius: 10rpx;
+      padding: 50rpx;
+      box-sizing: border-box;
+
+      .card-header-name {
+        color: #FFFFFF;
+        font-size: 28rpx;
+        font-weight: bold;
+      }
+    }
 
 		.content{
 			padding: 35rpx 0;

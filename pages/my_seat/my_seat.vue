@@ -2,7 +2,9 @@
 	<view class="container" :style="{'height':winHeight+'rpx'}">
 		<view class="seat-box">
 			<view class="seat-list">
-				<image mode="widthFix" src="../../static/images/personal/recharge-i.png"></image>
+        <view class="card-header u-flex">
+          <view class="card-header-name u-ellipsis">读书日卡（天庆大厦店）</view>
+        </view>
 				<view class="content">
 					<view class="title u-font-32">周末晚间时段定座月卡（门店名）</view>
 					<view class="doc-i">
@@ -38,9 +40,11 @@
 				</view>
 				<view class="details" @click="toDetails('2')"><view>座位详情</view></view>
 			</view>
-			
+
 			<view class="seat-list">
-				<image mode="widthFix" src="../../static/images/personal/recharge-i.png"></image>
+        <view class="card-header u-flex">
+          <view class="card-header-name u-ellipsis">读书日卡（天庆大厦店）</view>
+        </view>
 				<view class="content">
 					<view class="title u-font-32">周末晚间时段定座月卡（门店名）</view>
 					<view class="doc-i">
@@ -97,22 +101,33 @@
 		background-color: #F5F5F5;
 		padding: 30rpx;
 	}
-	
+
 	.seat-list{
 		padding: 15rpx;
 		background-color: #FFFFFF;
 		border-radius: 19rpx;
 		clear:both;
 		margin-bottom: 33rpx;
-		
-		image{
-			width: 100%;
-		}
-		
+
+    .card-header {
+      width: 100%;
+      height: 179rpx;
+      background-image: linear-gradient(90deg, #FFB019, #FED141);
+      border-radius: 10rpx;
+      padding: 50rpx;
+      box-sizing: border-box;
+
+      .card-header-name {
+        color: #FFFFFF;
+        font-size: 28rpx;
+        font-weight: bold;
+      }
+    }
+
 		.content{
 			padding: 35rpx 0;
 			color: #010101;
-			
+
 			.doc,
 			.doc-i,
 			.doc-i view{
@@ -130,9 +145,9 @@
 					color: #8D8D8D;
 				}
 			}
-			
+
 			.doc{
-				
+
 				>view:first-child{
 					color: #8D8D8D;
 				}
