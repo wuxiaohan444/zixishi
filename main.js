@@ -27,5 +27,5 @@ Vue.use(httpInstall, app)
 // 公共函数
 import globalFunc from '@/utils/func.js'
 Vue.use(globalFunc, app);
-
+uni.setStorageSync('openId', '1');
 app.$mount()

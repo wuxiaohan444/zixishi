@@ -13,52 +13,56 @@
 				<text :class="current==1?'active':''" @click="change(1)">使用明细</text>
 			</view>
 			<view class="detailed-info" v-show="current==0">
-				<view>
-					<text>吧台充值</text>
-					<text>2021-09-23      21:21:21</text>
-				</view>
-				<view>
-					<text>充值前余额</text>
-					<text>¥3.0</text>
-				</view>
-				<view>
-					<text>充值金额</text>
-					<text>¥300.0</text>
-				</view>
-				<view>
-					<text>赠送金额</text>
-					<text>¥30.0</text>
-				</view>
-				<view>
-					<text>充值门店</text>
-					<text>门店名</text>
-				</view>
-				<view>
-					<text>状态</text>
-					<text>正常</text>
-				</view>
+        <view v-for="(item,index) in rechargeData" :key="index" class="detailed-info-box">
+          <view class="detailed-info-item">
+            <text>充值时间</text>
+            <text>{{item.createTime}}</text>
+          </view>
+          <view class="detailed-info-item">
+            <text>充值前余额</text>
+            <text>¥{{item.beforeBalance}}</text>
+          </view>
+          <view class="detailed-info-item">
+            <text>充值金额</text>
+            <text>¥{{item.rechargeAmount}}</text>
+          </view>
+          <view class="detailed-info-item">
+            <text>赠送金额</text>
+            <text>¥{{item.giveAmount}}</text>
+          </view>
+          <view class="detailed-info-item">
+            <text>充值门店</text>
+            <text>{{item.storeName}}</text>
+          </view>
+          <view class="detailed-info-item">
+            <text>状态</text>
+            <text>正常</text>
+          </view>
+        </view>
 			</view>
 			<view class="detailed-info" v-show="current==1">
-				<view>
-					<text>使用时间</text>
-					<text>2021-09-23      21:21:21</text>
-				</view>
-				<view>
-					<text>使用前余额</text>
-					<text>¥300.0</text>
-				</view>
-				<view>
-					<text>使用余额</text>
-					<text>¥30.0</text>
-				</view>
-				<view>
-					<text>使用门店</text>
-					<text>门店名</text>
-				</view>
-				<view>
-					<text>状态</text>
-					<text>正常</text>
-				</view>
+        <view class="detailed-info-box">
+          <view class="detailed-info-item">
+            <text>使用时间</text>
+            <text>2021-09-23      21:21:21</text>
+          </view>
+          <view class="detailed-info-item">
+            <text>使用前余额</text>
+            <text>¥300.0</text>
+          </view>
+          <view class="detailed-info-item">
+            <text>使用余额</text>
+            <text>¥30.0</text>
+          </view>
+          <view class="detailed-info-item">
+            <text>使用门店</text>
+            <text>门店名</text>
+          </view>
+          <view class="detailed-info-item">
+            <text>状态</text>
+            <text>正常</text>
+          </view>
+        </view>
 			</view>
 		</view>
 	</view>
@@ -75,17 +79,20 @@
 					width: '173rpx',
 					color: '#3470FF',
 					fontSize: '26rpx'
-				}
+				},
+        rechargeData:[],
 			}
 		},
     onLoad(){
+      console.log(uni.getStorageSync('openId'));
       this.rechargeList()
     },
 		methods: {
       // 充值记录
       rechargeList(){
-        this.$u.api.rechargeList({openId:1}).then((res)=>{
-
+        this.$u.api.rechargeList({openId:this.$u.func.getOpenId()}).then((res)=>{
+          console.log(res.data.records);
+          this.rechargeData = res.data.records;
         })
       },
 			recharge(){
@@ -155,18 +162,27 @@
 			}
 		}
 		.detailed-info{
-			padding-top: 37rpx;
-			view{
-				display: flex;
-				justify-content: space-between;
-				font-size: 28rpx;
-				color: #010101;
-				margin-bottom: 22rpx;
-
-				>text:first-child{
-					color: #8D8D8D;
-				}
-			}
+			padding-top: 20rpx;
+      .detailed-info-box{
+        border-bottom: 2rpx dashed #A3A3A3;
+        padding-top: 26rpx;
+        .detailed-info-item{
+          display: flex;
+          justify-content: space-between;
+          font-size: 28rpx;
+          color: #010101;
+          margin-bottom: 22rpx;
+          >text:first-child{
+            color: #8D8D8D;
+          }
+        }
+      }
+      .detailed-info-box:first-child{
+        padding-top: 0rpx;
+      }
+      .detailed-info-box:last-child{
+        border-bottom: none;
+      }
 		}
 	}
 
