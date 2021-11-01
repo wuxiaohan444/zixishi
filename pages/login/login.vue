@@ -2,9 +2,7 @@
 	<view class="container" :style="{'height':winHeight+'rpx'}">
 		<view class="header">
 		    <view :style="{'height':statusBarHeight+'px'}"></view>
-		    <view :style="{'height':navBarHeight+'px'}" class="header-navbar">
-		      <image src="../../static/images/pay/close.png" @click="navToBackLastPage"/>
-		    </view>
+		    <view :style="{'height':navBarHeight+'px'}" class="header-navbar"></view>
 		  </view>
 
 		  <view class="top">
@@ -91,7 +89,6 @@
 	  flex-direction: column;
 	  align-items: center;
 	  color: #fff;
-	  background-image: url('https://cdn.uviewui.com/uview/swiper/1.jpg');
 	  background-repeat: no-repeat;
 	  background-size: cover;
 	  -webkit-background-size: cover;
