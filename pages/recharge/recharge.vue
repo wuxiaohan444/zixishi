@@ -9,7 +9,7 @@
       </view>
     </view>
     <view class="doc">
-      <view class="current-price u-font-24">当前余额：¥356.0</view>
+      <view class="current-price u-font-24">当前余额：¥{{balance}}</view>
       <u-button :custom-style="customStyle" shape="circle" type="primary" @click="rechargeMoney">去支付</u-button>
       <view class="activity-doc">
         <view>充值活动：</view>
@@ -33,6 +33,7 @@ export default {
       rechargeAmount: '',
       giveAmount: 0,
       giveProportion: '',
+      balance:'',
     }
   },
   onLoad() {
@@ -41,9 +42,11 @@ export default {
       this.storeId = data.id;
       this.storeName = data.fullName
     }
-    this.rechargeRule()
+    this.rechargeRule();
+    this.balance = uni.getStorageSync('userInfo').balance;
   },
   methods: {
+    // 开始支付
     rechargeMoney() {
       let data = {
         rechargeAmount: this.rechargeAmount,
@@ -53,7 +56,11 @@ export default {
         storeName: this.storeName,
       }
       this.$u.api.rechargeMoney(data).then((res) => {
-
+        if(res.code==200){
+          this.payMent()
+        }else {
+          this.$u.toast(res.msg)
+        }
       })
     },
     inputMoney() {
@@ -63,6 +70,34 @@ export default {
       this.$u.api.rechargeRule().then((res) => {
         this.giveProportion = res.data.records[0].giveProportion
       })
+    },
+    getUserInfo() {
+      let data={
+        openId: this.$u.func.getOpenId()
+      };
+      this.$u.api.userInfo(data).then((res) => {
+        console.log(res.data);
+        this.info = res.data;
+        uni.setStorageSync('userInfo', this.info);
+        this.balance = uni.getStorageSync('userInfo').balance;
+      })
+    },
+    payMent(){
+      let that=this;
+      uni.requestPayment({
+        provider: 'wxpay',
+        timeStamp: String(Date.now()),
+        nonceStr: 'A1B2C3D4E5',
+        package: 'prepay_id=wx20180101abcdefg',
+        signType: 'MD5',
+        paySign: '',
+        success: function (res) {
+          that.getUserInfo();
+        },
+        fail: function (err) {
+          console.log('fail:' + JSON.stringify(err));
+        }
+      });
     }
   }
 }

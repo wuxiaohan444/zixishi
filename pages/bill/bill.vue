@@ -3,7 +3,7 @@
     <view class="account">
       <view class="account-info">
         <view class="u-font-26">账户余额</view>
-        <view class="price">356.0
+        <view class="price">{{balance}}
           <text class="u-font-26">元</text>
         </view>
       </view>
@@ -88,11 +88,13 @@ export default {
       page: 1,
       size: 10,
       isMore: false,
-      status: ''
+      status: '',
+      balance:'',
     }
   },
   onLoad() {
-    this.rechargeList()
+    this.rechargeList();
+    this.balance = uni.getStorageSync('userInfo').balance;
   },
   methods: {
     // 充值记录

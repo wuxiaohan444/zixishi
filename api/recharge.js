@@ -5,7 +5,7 @@ const rechargeMoney = (params) => {
     return http.request({
         url: '/blade-system/balancerechargerecord/recharge',
         method: 'POST',
-        params:params
+        data:params
     })
 }
 

@@ -11,12 +11,12 @@
         </view>
         <view class="header-user">
           <view class="user-name">
-            <text class="u-font-33 u-bold">Yuki</text>
-            <text class="user-tag u-font-23">黄金会员</text>
+            <text class="u-font-33 u-bold">{{info.memberName}}</text>
+            <text class="user-tag u-font-23">{{info.memberLevelName}}</text>
           </view>
           <view class="user-content">
-            <text>187****3446</text>
-            <text>账户余额:666.00</text>
+            <text>{{info.phone}}</text>
+            <text>账户余额:{{info.balance}}</text>
           </view>
         </view>
       </view>
@@ -64,18 +64,29 @@ export default {
     return {
       statusBarHeight: app.globalData.statusBarHeight, // 状态栏高度
       navBarHeight: app.globalData.navBarHeight, // 导航栏高度
+      info:{},
     }
   },
   onLoad() {
-
+    this.getUserInfo();
   },
   methods: {
+    getUserInfo() {
+      let data={
+        openId: this.$u.func.getOpenId()
+      };
+      this.$u.api.userInfo(data).then((res) => {
+        console.log(res.data);
+        this.info = res.data;
+        uni.setStorageSync('userInfo', this.info);
+      })
+    },
     myNavigator(link) {
       uni.navigateTo({
         url: link
       })
     },
-    goLoGin(){
+    goLoGin() {
       uni.navigateTo({
         url: '../login/login'
       });
@@ -89,7 +100,8 @@ export default {
   width: 100%;
   height: 438rpx;
   position: relative;
-  background-image: linear-gradient(to bottom, #E4F2FD , #F1F4F8);
+  background-image: linear-gradient(to bottom, #E4F2FD, #F1F4F8);
+
   &::before {
     position: absolute;
     bottom: 0;
