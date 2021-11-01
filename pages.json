@@ -105,7 +105,7 @@
 		"path" : "pages/my_card/my_card",
 		"style" :
 		{
-			"navigationBarTitleText": "我的卡卷",
+			"navigationBarTitleText": "我的卡券",
 			"enablePullDownRefresh": false
 		}
 
@@ -124,7 +124,7 @@
 		"style" :
 		{
 			"navigationBarTitleText": "我的定座",
-			"enablePullDownRefresh": false
+			"enablePullDownRefresh": true
 		}
 
 	}
