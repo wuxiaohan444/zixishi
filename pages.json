@@ -133,7 +133,7 @@
 		"style" :
 		{
 			"navigationBarTitleText": "我的账单",
-			"enablePullDownRefresh": false
+			"enablePullDownRefresh": true
 		}
 
 	}
@@ -148,60 +148,60 @@
 	}
 	,{
 		"path" : "pages/my_seat/detail/detail",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "座位详情",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
 	,{
 		"path" : "pages/my_card/detail/detail",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "明细",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
 	,{
 		"path" : "pages/order/pay/pay",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "订单支付",
 			"enablePullDownRefresh": false,
 			"navigationBarBackgroundColor": "#2487FF",
 			"navigationBarTextStyle": "#ffffff"
 		}
-		
+
 	},
 	{
 		"path" : "pages/login/login",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "",
 			"enablePullDownRefresh": false,
 			"navigationStyle": "custom"
 		}
-		
+
 	}
 	,{
 		"path" : "pages/seat/time_card/time_card",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "时长卡",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
 	,{
 		"path" : "pages/seat/choice_card/choice_card",
-		"style" :                                                                                    
+		"style" :
 		{
 			"navigationBarTitleText": "选择卡卷",
 			"enablePullDownRefresh": false
 		}
-		
+
 	}
     ],
   "globalStyle": {

@@ -9,6 +9,16 @@ const rechargeList = (params) => {
     })
 }
 
+// 使用记录
+const usedList = (params) => {
+    return http.request({
+        url: '/blade-system/balanceusedrecord/list',
+        method: 'POST',
+        params:params
+    })
+}
+
 export default {
-    rechargeList
+    rechargeList,
+    usedList
 }
