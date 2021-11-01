@@ -6,7 +6,9 @@
             class="header-navbar u-black-color u-font-31 u-bold">个人中心
       </view>
       <view class="personal-info">
-        <image src="../../static/images/home/address_icon.png"></image>
+        <view class="userAvatar">
+          <open-data type="userAvatarUrl" style="width: 100%;height: 100%;"></open-data>
+        </view>
         <view class="header-user">
           <view class="user-name">
             <text class="u-font-33 u-bold">Yuki</text>
@@ -55,7 +57,7 @@
 </template>
 
 <script>
-const app = getApp();	
+const app = getApp();
 export default {
   name: "personal",
   data() {
@@ -65,7 +67,7 @@ export default {
     }
   },
   onLoad() {
-	  
+
   },
   methods: {
 	myNavigator(link){
@@ -96,7 +98,7 @@ export default {
 	  background-color: #FFFFFF;
 	  border-radius: 20rpx 20rpx 0 0;
   }
-  
+
   .header-navbar {
     text-align: center;
   }
@@ -107,11 +109,12 @@ export default {
     justify-content: flex-start;
     align-items: center;
 
-    image {
+    .userAvatar {
       width: 124rpx;
       height: 124rpx;
       border-radius: 50%;
       background-color: #666666;
+      overflow: hidden;
     }
 
     .header-user {
