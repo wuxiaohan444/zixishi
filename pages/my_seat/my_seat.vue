@@ -71,6 +71,7 @@
 					</view>
 				</view>
 			</view>
+      <u-loadmore :status="status"/>
 		</view>
 	</view>
 </template>
@@ -81,9 +82,47 @@
 		data() {
 			return {
 				winHeight:app.globalData.winHeight,
+        page: 1,
+        size: 10,
+        isMore: false,
+        status: '',
+        tenantId: '',
+        cardData:[]
 			}
 		},
+    onLoad(){
+      if (uni.getStorageSync('storeInfo')) {
+        console.log();
+        let data = uni.getStorageSync('storeInfo');
+        this.tenantId = data.tenantId;
+      }
+    this.mySeatList();
+    },
 		methods: {
+      mySeatList(){
+        this.status = 'loading'
+        let data = {
+          openId: this.$u.func.getOpenId(),
+          current: this.page,
+          size: this.size,
+          tenantId: this.tenantId,
+          cardType:1
+        }
+        this.$u.api.mySeatList(data).then((res) => {
+          if (this.page > 1) {
+            this.cardData = this.cardData.concat(res.data.records);
+          } else {
+            this.cardData = res.data.records;
+          }
+          this.isMore = this.cardData.length < res.data.total;
+          if (this.isMore) {
+            this.status = 'loadmore'
+          } else {
+            this.status = 'nomore'
+          }
+          uni.stopPullDownRefresh();
+        })
+      },
 			toDetails(id){
 				uni.navigateTo({
 					url:`/pages/my_seat/detail/detail?id=${id}`

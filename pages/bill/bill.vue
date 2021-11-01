@@ -15,7 +15,7 @@
         <text :class="current==1?'active':''" @click="change(1)">使用明细</text>
       </view>
       <view class="detailed-info" v-show="current==0">
-        <view v-for="(item,index) in rechargeData" :key="index" class="detailed-info-box" :style="{borderBottom:index+1===rechargeData.length?'none':''}">
+        <view v-for="(item,index) in rechargeData" :key="index" class="detailed-info-box">
           <view class="detailed-info-item">
             <text>充值时间</text>
             <text>{{ item.createTime }}</text>
@@ -41,10 +41,9 @@
             <text>{{ item.status == 1 ? '正常' : '失败' }}</text>
           </view>
         </view>
-        <u-loadmore :status="status"/>
       </view>
       <view class="detailed-info" v-show="current==1">
-        <view class="detailed-info-box" :style="{borderBottom:index+1===usedData.length?'none':''}" v-for="(item,index) in usedData" :key="index">
+        <view class="detailed-info-box" v-for="(item,index) in usedData" :key="index">
           <view class="detailed-info-item">
             <text>使用时间</text>
             <text>{{item.createTime}}</text>
@@ -66,8 +65,8 @@
             <text>{{ item.status == 1 ? '正常' : '失败' }}</text>
           </view>
         </view>
-        <u-loadmore :status="status"/>
       </view>
+      <u-loadmore :status="status"/>
     </view>
   </view>
 </template>
@@ -116,7 +115,7 @@ export default {
         } else {
           this.status = 'nomore'
         }
-        uni.stopPullDownRefresh()
+        uni.stopPullDownRefresh();
       })
     },
     // 使用记录
@@ -173,8 +172,13 @@ export default {
     },
     //上拉加载
     onReachBottom() {
-      if (this.isMore) {
-        this.page = this.page + 1;
+      if (!this.isMore) {
+        return false;
+      }
+      this.page = this.page + 1;
+      if(this.current===1){
+        this.usedList()
+      }else{
         this.rechargeList()
       }
     },
@@ -260,7 +264,9 @@ export default {
         }
       }
     }
-
+    .detailed-info-box:last-child{
+      border: none;
+    }
     .detailed-info-box:first-child {
       padding-top: 0rpx;
     }
