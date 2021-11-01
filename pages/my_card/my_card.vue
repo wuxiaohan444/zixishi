@@ -17,14 +17,14 @@
       <u-loadmore :status="status"/>
     </view>
     <view class="card-box" v-show="current==1">
-      <view class="card-list" v-for="(item,index) in timeCardData" :key="index">
+      <view class="card-list" v-for="(item,index) in timeCardData" :key="index" @click="toDetails(item)">
         <text class="tag u-font-23">{{item.storeName}}</text>
         <view class="info">
           <view class="u-font-32 u-bold">{{item.durationCardName}}</view>
           <view class="u-font-24 data">{{item.expDate}}到期</view>
         </view>
         <view class="times">
-          <view class="u-font-24">剩余：{{item.surplusHours}}(分钟)</view>
+          <view class="u-font-24">剩余：{{toHourMinute(item.surplusHours)}}</view>
           <view class="use u-font-23">去使用</view>
         </view>
       </view>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import {toHourMinute} from '../../utils/timeFunc'
 const app = getApp();
 export default {
   data() {
@@ -74,9 +75,10 @@ export default {
         this.myCardCustomerList();
       }
     },
-    toDetails(id) {
+    toDetails(item) {
+      let info = JSON.stringify(item)
       uni.navigateTo({
-        url: `/pages/my_card/detail/detail?id=${id}`
+        url: `/pages/my_card/detail/detail?info=${info}`
       })
     },
     myCardTimeList() {
@@ -131,6 +133,30 @@ export default {
       this.isMore = false;
       this.status = '';
     },
+    // 下拉刷新
+    onPullDownRefresh() {
+      this.resetData()
+      if(this.current===1){
+        this.myCardTimeList()
+      }else{
+        this.myCardCustomerList()
+      }
+    },
+    //上拉加载
+    onReachBottom() {
+      if (!this.isMore) {
+        return false;
+      }
+      this.page = this.page + 1;
+      if(this.current===1){
+        this.myCardTimeList()
+      }else{
+        this.myCardCustomerList()
+      }
+    },
+    toHourMinute(minutes){
+      return toHourMinute(minutes)
+    }
   }
 }
 </script>

@@ -120,3 +120,7 @@ export function getAllDate(day1, day2) {
     dateArr.push(day2);
     return dateArr;
 }
+// 拿分钟算--小时--分钟
+export function toHourMinute(minutes){
+    return (Math.floor(minutes/60) + "小时" + (minutes%60) + "分" );
+}

@@ -4,8 +4,8 @@
       <view>充值金额</view>
       <view class="price">
         <u-icon class="icon" name="rmb" :size="24"></u-icon>
-        <input type="number" v-model="rechargeAmount">
-        <view>赠送¥100</view>
+        <input type="number" v-model="rechargeAmount" @input="inputMoney">
+        <view>赠送¥{{ giveAmount }}</view>
       </view>
     </view>
     <view class="doc">
@@ -13,8 +13,7 @@
       <u-button :custom-style="customStyle" shape="circle" type="primary" @click="rechargeMoney">去支付</u-button>
       <view class="activity-doc">
         <view>充值活动：</view>
-        <view>·充值每满¥100送¥100</view>
-        <view>·每满¥200送¥210</view>
+        <view>赠送比例{{ giveProportion }}%</view>
       </view>
     </view>
   </view>
@@ -33,6 +32,7 @@ export default {
       storeName: '',
       rechargeAmount: '',
       giveAmount: 0,
+      giveProportion: '',
     }
   },
   onLoad() {
@@ -41,6 +41,7 @@ export default {
       this.storeId = data.id;
       this.storeName = data.fullName
     }
+    this.rechargeRule()
   },
   methods: {
     rechargeMoney() {
@@ -53,6 +54,14 @@ export default {
       }
       this.$u.api.rechargeMoney(data).then((res) => {
 
+      })
+    },
+    inputMoney() {
+      this.giveAmount = this.rechargeAmount * this.giveProportion / 100
+    },
+    rechargeRule() {
+      this.$u.api.rechargeRule().then((res) => {
+        this.giveProportion = res.data.records[0].giveProportion
       })
     }
   }

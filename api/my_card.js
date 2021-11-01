@@ -18,7 +18,17 @@ const myCardCustomerList = (params) => {
     })
 }
 
+// 时长卡详情
+const myCardTimeDetails = (params) => {
+    return http.request({
+        url: '/blade-system/durationcardusedrecord/list',
+        method: 'POST',
+        params:params
+    })
+}
+
 export default {
     myCardTimeList,
-    myCardCustomerList
+    myCardCustomerList,
+    myCardTimeDetails
 }

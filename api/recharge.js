@@ -9,7 +9,17 @@ const rechargeMoney = (params) => {
     })
 }
 
+// 充值规则
+const rechargeRule = (params) => {
+    return http.request({
+        url: '/blade-system/tenantrechargerule/list',
+        method: 'POST',
+        params:params
+    })
+}
+
 
 export default {
     rechargeMoney,
+    rechargeRule
 }
