@@ -13,8 +13,8 @@
     <view class="room-header">
       <view class="room-header_top u-flex u-row-between">
         <view class="room-header_top_left u-flex">
-          <text class="u-font-32 u-black-color u-bold">天庆店自习室</text>
-          <text class="room-label">全天</text>
+          <text class="u-font-32 u-black-color u-bold">{{storeInfo.fullName}}</text>
+<!--          <text class="room-label">全天</text>-->
         </view>
         <view class="room-header_top_right">
           <image src="../../static/images/home/phone_icon.png" class="phone_icon"></image>
@@ -22,7 +22,7 @@
         </view>
       </view>
       <view class="room-header_bottom u-flex u-row-between">
-        <view class="room-header_bottom_left u-font-26 u-black-color">合肥市庐阳区天庆大厦309</view>
+        <view class="room-header_bottom_left u-font-26 u-black-color">{{storeInfo.address}}</view>
         <view class="room-header_bottom_right u-font-26">4.3Km</view>
       </view>
     </view>
@@ -94,11 +94,15 @@ export default {
         height: '8rpx',
         background: '#2487FF',
         borderRadius: '4rpx'
-      }
+      },
+      storeInfo:{}
     }
   },
-  onLoad() {
-
+  onShow() {
+    if (uni.getStorageSync('storeInfo')) {
+      this.storeInfo = uni.getStorageSync('storeInfo');
+      console.log(this.storeInfo);
+    }
   },
   methods: {
     change(index) {

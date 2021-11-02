@@ -106,25 +106,35 @@ export default {
       businessHours: ['08:00', '20:00'],//营业时间
       intervalType: 1,//0代表30分钟 1代表60分钟
       allData: [],
-      seatData: []
+      seatData: [],
+      seatId:'1450771981835010049',
+      roomId:'1450771981608517633',
+      createDept:'',
+      chargeSetId:'1450372697123819521',
     }
   },
   onLoad() {
-    if (this.intervalType === 0) {
-      this.allData = allTimeHalf
-    } else {
-      this.allData = allTimeInt
+    // if (this.intervalType === 0) {
+    //   this.allData = allTimeHalf
+    // } else {
+    //   this.allData = allTimeInt
+    // }
+    // let today = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
+    // this.tomorrow = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
+    // this.acquired = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
+    // today.map((item, index) => {
+    //   if (this.bjDate(item.time.split('-')[0], this.getTime()) === 1) {
+    //     this.today.push(item)
+    //   }
+    // })
+    // this.today.unshift({time:this.getTime()+'-' +this.today[0].time.split('-')[0]})
+    // this.seatData = this.today;
+    if (uni.getStorageSync('storeInfo')) {
+      let data = uni.getStorageSync('storeInfo');
+      console.log(data);
+      this.createDept = data.id;
     }
-    let today = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
-    this.tomorrow = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
-    this.acquired = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
-    today.map((item, index) => {
-      if (this.bjDate(item.time.split('-')[0], this.getTime()) === 1) {
-        this.today.push(item)
-      }
-    })
-    this.today.unshift({time:this.getTime()+'-' +this.today[0].time.split('-')[0]})
-    this.seatData = this.today;
+    this.seatTimeList()
   },
   methods: {
     choosePay(index,orderId) {
@@ -135,7 +145,19 @@ export default {
 		  uni.navigateTo({
 		  	url:`/pages/order/pay/pay?orderId=${orderId}`
 		  })
-	  }
+  	  }
+    },
+    seatTimeList(){
+      let data = {
+        id:this.seatId,//座位id
+        roomId:this.roomId,//房间Id
+        createDept:this.createDept,
+        chargeSetId:this.chargeSetId,//计费规则
+        bookDate:'20211102',
+      }
+      this.$u.api.seatTimeList(data).then((res)=>{
+        console.log(res.data);
+      })
     },
     // 提交券码
     submitCode() {
