@@ -10,30 +10,33 @@
         <swiper-item class="swiper-item" v-for="(item, index) in list" :key="index">
           <scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="onreachBottom">
             <view class="order-list" v-for="(item,index) in orderList" :key="index">
-              <view class="list-item" @click="toDetailes('1')">
+              <view class="list-item" @click="toDetailes(item)">
                 <view class="top">
                   <view class="store">
-                    <text class="u-font-31 u-bold">夏日流星限定贩卖</text>
+                    <text class="u-font-31 u-bold">{{item.storeName}}</text>
                     <image src="/static/images/arrow.png"></image>
                   </view>
-                  <view class="right u-font-26">交易成功</view>
+                  <view class="right u-font-26" v-if="item.status==0">待支付</view>
+                  <view class="right u-font-26" v-if="item.status==1">支付成功</view>
+                  <view class="right u-font-26" v-if="item.status==2">交易成功</view>
+                  <view class="right u-font-26" v-if="item.status==3">已取消</view>
                 </view>
                 <view class="center">
                   <image src="https://cdn.uviewui.com/uview/swiper/3.jpg"></image>
                   <view class="info">
-                    <view class="title u-font-26 u-black-color">自习室一/1</view>
-                    <view class="">下单时间:2021-09-24 21:00:00</view>
+                    <view class="title u-font-26 u-black-color">{{item.roomName}}/{{item.seatName}}</view>
+                    <view class="">下单时间:{{item.orderTime}}</view>
                     <view>预订时间段:</view>
-                    <view class="time">2021-09-23 22:00-23:59</view>
-                    <view class="password">开大门密码:123456</view>
+                    <view class="time">{{item.startDate}}至{{item.endDate}}</view>
+<!--                    <view class="password">开大门密码:123456</view>-->
                   </view>
                 </view>
                 <view class="price u-font-31">总计:
                   <text>¥3.0</text>
                 </view>
                 <view class="list-botton">
-                  <view class="u-font-28" @tap.stop="cancel($event,'21323')">取消订单</view>
-                  <view class="u-font-28 consumption" @tap.stop="toPay($event,'21323')">立即支付</view>
+                  <view class="u-font-28" @tap.stop="cancel($event,'21323')" v-if="item.status==1">取消订单</view>
+                  <view class="u-font-28 consumption" @tap.stop="toPay($event,'21323')" v-if="item.status==0">立即支付</view>
                 </view>
               </view>
             </view>
@@ -93,23 +96,11 @@ export default {
       let data = {
         openId: this.$u.func.getOpenId(),
         tenantId: this.tenantId,
-        current: this.page,
-        size: this.size,
         status: this.orderStatus
       }
       this.$u.api.orderList(data).then((res) => {
-        this.orderList = res.data.records;
-        if (this.page > 1) {
-          this.orderList = this.orderList.concat(res.data.records);
-        } else {
-          this.orderList = res.data.records;
-        }
-        this.isMore = this.orderList.length < res.data.total;
-        if (this.isMore) {
-          this.status = 'loadmore'
-        } else {
-          this.status = 'nomore'
-        }
+        this.orderList = res.data
+        this.status = 'nomore'
         uni.stopPullDownRefresh();
       })
     },
@@ -135,9 +126,10 @@ export default {
     onreachBottom() {
       console.log(2)
     },
-    toDetailes(id) {
+    toDetailes(item) {
+      let info = JSON.stringify(item)
       uni.navigateTo({
-        url: `/pages/order/detail/detail?id=${id}`
+        url: `/pages/order/detail/detail?info=${info}`
       })
     },
     cancel(e) {
@@ -181,14 +173,14 @@ export default {
       this.resetData()
       this.getList();
     },
-    //上拉加载
-    onReachBottom() {
-      if (!this.isMore) {
-        return false;
-      }
-      this.page = this.page + 1;
-      this.getList();
-    },
+    // //上拉加载
+    // onReachBottom() {
+    //   if (!this.isMore) {
+    //     return false;
+    //   }
+    //   this.page = this.page + 1;
+    //   this.getList();
+    // },
   }
 }
 </script>

@@ -107,13 +107,13 @@ export default {
       intervalType: 1,//0代表30分钟 1代表60分钟
       allData: [],
       seatData: [],
-      seatId:'1450771981835010049',
-      roomId:'1450771981608517633',
+      seatId:'',
+      roomId:'',
       createDept:'',
-      chargeSetId:'1450372697123819521',
+      chargeSetId:'',
     }
   },
-  onLoad() {
+  onLoad(options) {
     // if (this.intervalType === 0) {
     //   this.allData = allTimeHalf
     // } else {
@@ -134,7 +134,10 @@ export default {
       console.log(data);
       this.createDept = data.id;
     }
-    // this.seatTimeList()
+    this.seatId = options.seatId;
+    this.roomId = options.roomId;
+    this.chargeSetId = options.chargeSetId;
+    this.seatTimeList()
   },
   methods: {
     choosePay(index,orderId) {
@@ -153,7 +156,7 @@ export default {
         roomId:this.roomId,//房间Id
         createDept:this.createDept,
         chargeSetId:this.chargeSetId,//计费规则
-        bookDate:'20211102',
+        bookDate:'2021-11-02',
       }
       this.$u.api.seatTimeList(data).then((res)=>{
         console.log(res.data);
