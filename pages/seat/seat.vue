@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <u-image height="334rpx" src="https://cdn.uviewui.com/uview/swiper/1.jpg" :lazy-load="true"></u-image>
-    <view class="room-name u-font-32 u-bold u-black-color">天庆大厦店自习室</view>
+    <view class="room-name u-font-32 u-bold u-black-color">{{storeInfo.fullName}}</view>
     <view class="chooseDate u-flex u-row-around">
       <view :class="timeIndex===index?'chooseDate-item active':'chooseDate-item'" v-for="(item,index) in timeData"
             :key="index" @click="chooseTime(index)">
@@ -12,7 +12,12 @@
     <!--    通知-->
     <u-notice-bar mode="horizontal" :list="content" bg-color="#FCF8E3"></u-notice-bar>
     <view class="seat-time-box u-flex u-flex-wrap">
-      <view class="seat-time-item" v-for="(item,index) in seatData" :key="index">{{ item.time }}</view>
+      <view class="seat-time-item" v-for="(item,index) in seatData" :key="index">{{ format(item.startTime) }}-{{format(item.endTime)}}</view>
+      <view class="loading-box u-flex u-row-center u-col-center" v-show="loadingShow">
+        <view>
+          <u-loading mode="circle"></u-loading>
+        </view>
+      </view>
     </view>
     <!--    底部按钮-->
     <view class="operation-btn u-flex u-row-between">
@@ -103,40 +108,27 @@ export default {
       today: [],//今天
       tomorrow: [],//明天
       acquired: [],//后天
-      businessHours: ['08:00', '20:00'],//营业时间
-      intervalType: 1,//0代表30分钟 1代表60分钟
       allData: [],
       seatData: [],
       seatId:'',
       roomId:'',
       createDept:'',
       chargeSetId:'',
+      date:'',
+      storeInfo:'',
+      loadingShow:true
     }
   },
   onLoad(options) {
-    // if (this.intervalType === 0) {
-    //   this.allData = allTimeHalf
-    // } else {
-    //   this.allData = allTimeInt
-    // }
-    // let today = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
-    // this.tomorrow = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
-    // this.acquired = getBusiness(this.allData, this.businessHours[0], this.businessHours[1]);
-    // today.map((item, index) => {
-    //   if (this.bjDate(item.time.split('-')[0], this.getTime()) === 1) {
-    //     this.today.push(item)
-    //   }
-    // })
-    // this.today.unshift({time:this.getTime()+'-' +this.today[0].time.split('-')[0]})
-    // this.seatData = this.today;
     if (uni.getStorageSync('storeInfo')) {
       let data = uni.getStorageSync('storeInfo');
-      console.log(data);
+      this.storeInfo = data;
       this.createDept = data.id;
     }
     this.seatId = options.seatId;
     this.roomId = options.roomId;
     this.chargeSetId = options.chargeSetId;
+    this.date =  this.timeData[0].date
     this.seatTimeList()
   },
   methods: {
@@ -155,11 +147,14 @@ export default {
         id:this.seatId,//座位id
         roomId:this.roomId,//房间Id
         createDept:this.createDept,
-        chargeSetId:this.chargeSetId,//计费规则
-        bookDate:'2021-11-02',
+        defaultChargeSetId:this.chargeSetId,//计费规则
+        bookDate:this.date,
       }
+      this.loadingShow = true;
       this.$u.api.seatTimeList(data).then((res)=>{
         console.log(res.data);
+        this.seatData = res.data;
+        this.loadingShow = false;
       })
     },
     // 提交券码
@@ -193,6 +188,8 @@ export default {
         case 2:
           this.seatData = this.acquired;
       }
+      this.date =  this.timeData[index].date
+      this.seatTimeList()
     },
     getTime() {
       var myDate = new Date();
@@ -215,6 +212,9 @@ export default {
       } else {
         return 1;
       }
+    },
+    format(str){
+      return str.substr(0,5)
     }
   }
 }
@@ -251,6 +251,9 @@ export default {
 .seat-time-box {
   padding-top: 32rpx;
   padding-left: 31rpx;
+  .loading-box{
+    width: 100%;
+  }
 
   .seat-time-item {
     width: 208rpx;

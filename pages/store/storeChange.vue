@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="store-box">
-      <view class="store-item" v-for="(item,index) in list" :key="index" @click="change(item.id)">
+      <view class="store-item" v-for="(item,index) in list" :key="index" @click="change(item)">
         <view class="store-item-info">
           <view class="store-item-info_top u-flex u-row-between">
             <view class="u-flex">
@@ -62,10 +62,11 @@ export default {
         }
       })
     },
-    change(id){
-      this.$u.api.changeStore({id:id}).then((res)=>{
+    change(item){
+      this.$u.api.changeStore({id:item.id}).then((res)=>{
         if(res.code==200){
           uni.setStorageSync('storeInfo', res.data);
+          uni.setStorageSync('parentName', item.parentName);
           uni.switchTab({
             url: '../home/homePage'
           });

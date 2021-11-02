@@ -8,7 +8,7 @@
         <image src="../../static/images/home/change.png" class="change-icon"></image>
       </view>
       <view :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}"
-            class="navigation-text u-black-color u-font-31 u-bold">春深读书堂
+            class="navigation-text u-black-color u-font-31 u-bold u-ellipsis">{{parentName}}
       </view>
     </view>
     <view :style="{'height':navBarHeight+'px'}"></view>
@@ -96,12 +96,14 @@ export default {
       storeInfo: {},
       roomList: [],
       seatList: [],
-      loadingShow: true
+      loadingShow: true,
+      parentName:''
     }
   },
   onShow() {
     if (uni.getStorageSync('storeInfo')) {
       this.storeInfo = uni.getStorageSync('storeInfo');
+      this.parentName = uni.getStorageSync('parentName');
     }
     this.getRoomList();
   },
