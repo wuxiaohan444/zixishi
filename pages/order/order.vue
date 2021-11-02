@@ -55,26 +55,37 @@
 					},
 					{
 						name: '支付成功',
-						count: 5
 					},
 					{
 						name: '已使用',
-						count: 5
 					},
 					{
 						name: '已取消',
-						count: 5
 					}
 				],
 				current: 0, // tabs组件的current值，表示当前活动的tab选项
 				swiperCurrent: 0, // swiper组件的current值，表示当前那个swiper-item是活动的
 				winHeight:app.globalData.winHeight,
+        tenantId:'',
 			}
 		},
 		onLoad(){
-
+      if (uni.getStorageSync('storeInfo')) {
+        let data = uni.getStorageSync('storeInfo');
+        this.tenantId = data.tenantId;
+      }
+      this.getList()
 		},
 		methods: {
+      getList(){
+        let data={
+          openId: this.$u.func.getOpenId(),
+          tenantId:this.tenantId,
+        }
+        this.$u.api.orderList(data).then((res)=>{
+          console.log(res.data);
+        })
+      },
 			// tabs通知swiper切换
 			tabsChange(index) {
 				this.swiperCurrent = index;

@@ -59,7 +59,6 @@ export default {
   },
   onLoad() {
     if (uni.getStorageSync('storeInfo')) {
-      console.log();
       let data = uni.getStorageSync('storeInfo');
       this.tenantId = data.tenantId;
     }

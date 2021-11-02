@@ -23,7 +23,7 @@
       "path": "pages/reserve/reserve",
       "style": {
         "navigationBarTitleText": "我的预定",
-        "enablePullDownRefresh": false
+        "enablePullDownRefresh": true
       }
     },
     {

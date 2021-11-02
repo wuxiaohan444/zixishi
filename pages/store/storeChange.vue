@@ -26,7 +26,7 @@
         <image src="../../static/images/store/open.png" class="open_icon"></image>
         <view class="text u-font-24">开大门</view>
       </view>
-      <view class="operating-item">
+      <view class="operating-item" @click="presaleorderRenew">
         <image src="../../static/images/store/money.png" class="money_icon"></image>
         <view class="text u-font-24">续费</view>
       </view>
@@ -69,6 +69,15 @@ export default {
           uni.switchTab({
             url: '../home/homePage'
           });
+        }else{
+          this.$u.toast(res.msg)
+        }
+      })
+    },
+    presaleorderRenew(){
+      this.$u.api.presaleorderRenew({openId: this.$u.func.getOpenId()}).then((res)=>{
+        if(res.code==200){
+
         }else{
           this.$u.toast(res.msg)
         }
