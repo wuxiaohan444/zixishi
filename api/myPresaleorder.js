@@ -5,7 +5,7 @@ const myPresaleorderList = (params) => {
     return http.request({
         url: '/bill/presaleorder/myPresaleorder',
         method: 'get',
-        params:params
+        params: params
     })
 }
 
@@ -14,12 +14,31 @@ const presaleorderRenew = (params) => {
     return http.request({
         url: '/bill/presaleorder/renew',
         method: 'post',
-        data:params
+        data: params
     })
 }
 
+// 开始消费
+const startSpending = (params) => {
+    return http.request({
+        url: '/blade-system/consumerecord/save',
+        method: 'post',
+        data: params
+    })
+}
+
+// 结束消费
+const finishConsume = (params) => {
+    return http.request({
+        url: '/blade-system/consumerecord/finishConsume',
+        method: 'post',
+        data: params
+    })
+}
 
 export default {
     myPresaleorderList,
-    presaleorderRenew
+    presaleorderRenew,
+    startSpending,
+    finishConsume
 }

@@ -1,54 +1,54 @@
 <template>
-  <view class="container" :style="{'height':winHeight+'rpx'}">
+  <view class="container">
     <view class="card-box">
       <view class="card-list" v-for="(item,index) in reserveData" :key="index">
         <view class="info">
-          <view class="u-font-32 u-bold">{{item.storeName}}</view>
-          <view class="u-font-26 data">{{item.roomName}}/{{item.seatName}}</view>
+          <view class="u-font-32 u-bold">{{ item.storeName }}</view>
+          <view class="u-font-26 data">{{ item.roomName }}/{{ item.seatName }}</view>
           <view class="u-font-26 time data">
-            <text>{{item.startDate}}至{{item.endDate}}</text>
-            <text class="u-font-28">{{item.orderStatus==4?'消费中':item.orderStatus==1?'未消费':''}}</text>
+            <text>{{ item.startDate }}至{{ item.endDate }}</text>
+            <text class="u-font-28">{{ item.orderStatus == 4 ? '消费中' : item.orderStatus == 1 ? '未消费' : '' }}</text>
           </view>
         </view>
         <view class="list-botton">
           <view class="u-font-28" v-if="item.orderStatus==4">开大门</view>
           <view class="u-font-28" v-if="item.orderStatus==1">开房间门</view>
-          <view class="u-font-28 consumption" v-if="item.orderStatus==1">开始消费</view>
-           <view class="u-font-28 consumption" @click="presaleorderRenew(item.id)" v-if="item.orderStatus==4">续费</view>
-          <view class="u-font-28 over" @click="over('2')" v-if="item.orderStatus==4">结束消费</view>
+          <view class="u-font-28 consumption" v-if="item.orderStatus==1" @click="startConsume(item.id)">开始消费</view>
+          <view class="u-font-28 consumption" @click="presaleorderRenew(item.id)" v-if="item.orderStatus==4">续费</view>
+          <view class="u-font-28 over" @click="over(item.id)" v-if="item.orderStatus==4">结束消费</view>
         </view>
       </view>
 
-<!--      <view class="card-list">-->
-<!--        <view class="info">-->
-<!--          <view class="u-font-32 u-bold">天庆店春深读书堂自习馆</view>-->
-<!--          <view class="u-font-26 data">自习室一/1</view>-->
-<!--          <view class="u-font-26 time data">-->
-<!--            <text>2021-09-24 21:00-23:00</text>-->
-<!--            <text class="u-font-28">未消费</text>-->
-<!--          </view>-->
-<!--        </view>-->
-<!--        <view class="list-botton">-->
-<!--          <view class="u-font-28">开大门</view>-->
-<!--          <view class="u-font-28">开房间门</view>-->
-<!--          <view class="u-font-28 consumption">续费</view>-->
-<!--          <view class="u-font-28 over" @click="over('2')">结束消费</view>-->
-<!--        </view>-->
-<!--      </view>-->
-<!--      <view class="card-list">-->
-<!--        <view class="info">-->
-<!--          <view class="u-font-32 u-bold">天庆店春深读书堂自习馆</view>-->
-<!--          <view class="u-font-26 data">自习室一/1</view>-->
-<!--          <view class="u-font-26 time data">-->
-<!--            <text>2021-09-24 21:00-23:00</text>-->
-<!--            <text class="u-font-28">未消费</text>-->
-<!--          </view>-->
-<!--        </view>-->
-<!--        <view class="list-botton">-->
-<!--          <view class="u-font-28">开大门</view>-->
-<!--          <view class="u-font-28 consumption">开门消费</view>-->
-<!--        </view>-->
-<!--      </view>-->
+      <!--      <view class="card-list">-->
+      <!--        <view class="info">-->
+      <!--          <view class="u-font-32 u-bold">天庆店春深读书堂自习馆</view>-->
+      <!--          <view class="u-font-26 data">自习室一/1</view>-->
+      <!--          <view class="u-font-26 time data">-->
+      <!--            <text>2021-09-24 21:00-23:00</text>-->
+      <!--            <text class="u-font-28">未消费</text>-->
+      <!--          </view>-->
+      <!--        </view>-->
+      <!--        <view class="list-botton">-->
+      <!--          <view class="u-font-28">开大门</view>-->
+      <!--          <view class="u-font-28">开房间门</view>-->
+      <!--          <view class="u-font-28 consumption">续费</view>-->
+      <!--          <view class="u-font-28 over" @click="over('2')">结束消费</view>-->
+      <!--        </view>-->
+      <!--      </view>-->
+      <!--      <view class="card-list">-->
+      <!--        <view class="info">-->
+      <!--          <view class="u-font-32 u-bold">天庆店春深读书堂自习馆</view>-->
+      <!--          <view class="u-font-26 data">自习室一/1</view>-->
+      <!--          <view class="u-font-26 time data">-->
+      <!--            <text>2021-09-24 21:00-23:00</text>-->
+      <!--            <text class="u-font-28">未消费</text>-->
+      <!--          </view>-->
+      <!--        </view>-->
+      <!--        <view class="list-botton">-->
+      <!--          <view class="u-font-28">开大门</view>-->
+      <!--          <view class="u-font-28 consumption">开门消费</view>-->
+      <!--        </view>-->
+      <!--      </view>-->
     </view>
 
     <view>
@@ -66,8 +66,9 @@ export default {
       current: 0,
       popupTipStatus: false,
       winHeight: app.globalData.winHeight,
-      tenantId:'',
-      reserveData:[]
+      tenantId: '',
+      reserveData: [],
+      preOrderId:''
     }
   },
   onLoad() {
@@ -78,22 +79,23 @@ export default {
     this.getList();
   },
   methods: {
-     getList(){
-       let data={
-         openId: this.$u.func.getOpenId(),
-         tenantId:this.tenantId
-       }
-       this.$u.api.myPresaleorderList(data).then((res) => {
-         console.log(res.data);
-         this.reserveData = res.data;
-         uni.stopPullDownRefresh()
-       })
+    getList() {
+      let data = {
+        openId: this.$u.func.getOpenId(),
+        tenantId: this.tenantId
+      }
+      this.$u.api.myPresaleorderList(data).then((res) => {
+        console.log(res.data);
+        this.reserveData = res.data;
+        uni.stopPullDownRefresh()
+      })
     },
     change(index) {
       this.current = index;
     },
     over(id) {
       this.popupTipStatus = true;
+      this.preOrderId=id;
     },
     confirm() {
       console.log(3)
@@ -102,11 +104,38 @@ export default {
     onPullDownRefresh() {
       this.getList()
     },
-    presaleorderRenew(id){
-      this.$u.api.presaleorderRenew({openId: this.$u.func.getOpenId(),id:id}).then((res)=>{
-        if(res.code==200){
+    presaleorderRenew(id) {
+      this.$u.api.presaleorderRenew({openId: this.$u.func.getOpenId(), id: id}).then((res) => {
+        if (res.code == 200) {
 
-        }else{
+        } else {
+          this.$u.toast(res.msg)
+        }
+      })
+    },
+    // 开始消费
+    startConsume(id) {
+      let data = {
+        openId: this.$u.func.getOpenId(),
+        preOrderId: id
+      }
+      this.$u.api.startSpending(data).then((res) => {
+        if (res.code == 200) {
+
+        } else {
+          this.$u.toast(res.msg)
+        }
+      })
+    },
+    finishConsume(id){
+      let data = {
+        openId: this.$u.func.getOpenId(),
+        preOrderId: this.preOrderId
+      }
+      this.$u.api.finishConsume(data).then((res) => {
+        if (res.code == 200) {
+
+        } else {
           this.$u.toast(res.msg)
         }
       })
@@ -115,14 +144,14 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-.container,
-.card-box {
+<style lang="scss">
+page{
   background-color: #F5F5F5;
 }
 
 .card-box {
   padding: 26rpx 30rpx;
+  box-sizing: border-box;
 
   .card-list {
     padding: 20rpx 30rpx;
