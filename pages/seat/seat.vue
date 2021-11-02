@@ -134,7 +134,7 @@ export default {
       console.log(data);
       this.createDept = data.id;
     }
-    this.seatTimeList()
+    // this.seatTimeList()
   },
   methods: {
     choosePay(index,orderId) {

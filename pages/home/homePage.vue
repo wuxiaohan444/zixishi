@@ -1,20 +1,23 @@
 <template>
   <view class="container" :style="{'padding-top':statusBarHeight+'px'}">
-	<!--    自定义头部-->
-	<view class="my-navigation" :style="{'top': statusBarHeight+'px','height': navBarHeight+'px'}">
-		<view class="store-change" :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}" @click="changeStore">
-			<text class="u-font-31">门店切换</text>
-			<image src="../../static/images/home/change.png" class="change-icon"></image>
-		</view>
-		<view :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}" class="navigation-text u-black-color u-font-31 u-bold">春深读书堂</view>
-	</view>
-	<view :style="{'height':navBarHeight+'px'}"></view>
+    <!--    自定义头部-->
+    <view class="my-navigation" :style="{'top': statusBarHeight+'px','height': navBarHeight+'px'}">
+      <view class="store-change" :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}"
+            @click="changeStore">
+        <text class="u-font-31">门店切换</text>
+        <image src="../../static/images/home/change.png" class="change-icon"></image>
+      </view>
+      <view :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}"
+            class="navigation-text u-black-color u-font-31 u-bold">春深读书堂
+      </view>
+    </view>
+    <view :style="{'height':navBarHeight+'px'}"></view>
     <!--    门店信息-->
     <view class="room-header">
       <view class="room-header_top u-flex u-row-between">
         <view class="room-header_top_left u-flex">
-          <text class="u-font-32 u-black-color u-bold">{{storeInfo.fullName}}</text>
-<!--          <text class="room-label">全天</text>-->
+          <text class="u-font-32 u-black-color u-bold">{{ storeInfo.fullName }}</text>
+          <!--          <text class="room-label">全天</text>-->
         </view>
         <view class="room-header_top_right">
           <image src="../../static/images/home/phone_icon.png" class="phone_icon"></image>
@@ -22,7 +25,7 @@
         </view>
       </view>
       <view class="room-header_bottom u-flex u-row-between">
-        <view class="room-header_bottom_left u-font-26 u-black-color">{{storeInfo.address}}</view>
+        <view class="room-header_bottom_left u-font-26 u-black-color">{{ storeInfo.address }}</view>
         <view class="room-header_bottom_right u-font-26">4.3Km</view>
       </view>
     </view>
@@ -32,8 +35,8 @@
     </view>
     <!--    切换房间-->
     <view class="room-change">
-      <u-tabs :list="roomList" :is-scroll="false" :current="current" @change="change" :bar-style="barStyle"
-              active-color="#2487FF"></u-tabs>
+      <u-tabs :list="roomList" :is-scroll="true" :current="current" @change="change" :bar-style="barStyle"
+              active-color="#2487FF" name="roomName"></u-tabs>
     </view>
     <!--    座位详情-->
     <view class="seat">
@@ -47,10 +50,16 @@
         <view class="seat-top_right u-font-28" @click="preViewImg">查看平面图</view>
       </view>
       <view class="seat-box u-flex u-flex-wrap">
-        <view class="seat-box_item" v-for="(item,index) in 12" @click="chooseSeat" :key="index">
-          <image src="../../static/images/home/seat_yes_icon.png" class="seat_icon"></image>
-          <view class="u-font-28 u-black-color">{{index+1}}</view>
+        <view class="seat-box_item" v-for="(item,index) in seatList" @click="chooseSeat(item)" :key="index">
+          <image src="../../static/images/home/seat_yes_icon.png" class="seat_icon" v-if="item.status!==5"></image>
+          <image src="../../static/images/home/seat_no_icon.png" class="seat_icon" v-else></image>
+          <view class="u-font-28 u-black-color">{{ item.seatName }}</view>
         </view>
+      </view>
+    </view>
+    <view class="loading-box u-flex u-row-center u-col-center" v-show="loadingShow">
+      <view>
+        <u-loading mode="circle"></u-loading>
       </view>
     </view>
   </view>
@@ -78,47 +87,59 @@ export default {
         }
       ],
       current: 0,
-      roomList: [
-        {
-          name: '自习室一'
-        },
-        {
-          name: '自习室二'
-        },
-        {
-          name: '自习室三'
-        }
-      ],
       barStyle: {
         width: '46rpx',
         height: '8rpx',
         background: '#2487FF',
         borderRadius: '4rpx'
       },
-      storeInfo:{}
+      storeInfo: {},
+      roomList: [],
+      seatList: [],
+      loadingShow: true
     }
   },
   onShow() {
     if (uni.getStorageSync('storeInfo')) {
       this.storeInfo = uni.getStorageSync('storeInfo');
-      console.log(this.storeInfo);
     }
+    this.getRoomList();
   },
   methods: {
+    getRoomList() {
+      this.loadingShow = true;
+      this.$u.api.roomList().then((res) => {
+        this.roomList = res.data;
+        this.loadingShow = false;
+        this.getSeatList(this.roomList[0].id)
+      }).catch((res) => {
+        this.loadingShow = false;
+      })
+    },
+    getSeatList(roomId){
+      this.$u.api.seatList({roomId:roomId}).then((res)=>{
+        this.seatList = res.data
+      })
+    },
     change(index) {
       this.current = index;
+      this.getSeatList(this.roomList[index].id)
     },
-    changeStore(){
+    changeStore() {
       uni.navigateTo({
         url: '../store/storeChange'
       });
     },
-    chooseSeat(){
-      uni.navigateTo({
-        url: '../seat/seat'
-      });
+    chooseSeat(item) {
+      if (item.status === 5) {
+        this.$u.toast('此座位正在维护中,请选择其他座位')
+      } else {
+        uni.navigateTo({
+          url: `../seat/seat?roomId=${item.roomId}&seatId=${item.id}&chargeSetId=${item.defaultChargeSetId}`
+        });
+      }
     },
-    preViewImg(){
+    preViewImg() {
       uni.previewImage({
         urls: ['https://cdn.uviewui.com/uview/swiper/2.jpg'],
       });
@@ -205,33 +226,49 @@ export default {
   border-bottom: 2rpx solid #EEEFF1;
 }
 
-.seat{
+.seat {
   padding: 20rpx 0;
-  .seat-top{
+
+  .seat-top {
     padding: 0 30rpx;
-    .seat_icon{
+
+    .seat_icon {
       width: 32rpx;
       height: 31rpx;
       margin-right: 14rpx;
     }
-    text{
+
+    text {
       padding-right: 43rpx;
     }
-    &_right{
+
+    &_right {
       color: #F07100;
     }
   }
-  .seat-box{
+
+  .seat-box {
     padding-left: 14rpx;
-    &_item{
+
+    &_item {
       text-align: center;
       margin-top: 40rpx;
       width: 16%;
-      .seat_icon{
+
+      .seat_icon {
         width: 60rpx;
         height: 58rpx;
       }
     }
   }
+}
+
+.loading-box {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #FFFFFF;
 }
 </style>

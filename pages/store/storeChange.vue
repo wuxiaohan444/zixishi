@@ -49,7 +49,7 @@ export default {
     }
   },
   onLoad() {
-    this.storeList()
+    this.storeList();
   },
   methods: {
     storeList() {
@@ -74,6 +74,7 @@ export default {
         }
       })
     },
+    // 续费
     presaleorderRenew(){
       this.$u.api.presaleorderRenew({openId: this.$u.func.getOpenId()}).then((res)=>{
         if(res.code==200){
@@ -82,7 +83,7 @@ export default {
           this.$u.toast(res.msg)
         }
       })
-    }
+    },
   }
 }
 </script>
