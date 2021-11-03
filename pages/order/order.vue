@@ -178,19 +178,6 @@ export default {
       this.isMore = false;
       this.status = '';
     },
-    // 下拉刷新
-    onPullDownRefresh() {
-      this.resetData()
-      this.getList();
-    },
-    // //上拉加载
-    // onReachBottom() {
-    //   if (!this.isMore) {
-    //     return false;
-    //   }
-    //   this.page = this.page + 1;
-    //   this.getList();
-    // },
   }
 }
 </script>

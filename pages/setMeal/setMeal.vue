@@ -67,11 +67,14 @@ export default {
       ]
     }
   },
+  onLoad(){
+    this.getTimeCardList()
+  },
   methods: {
     change(index) {
       this.current = index;
     },
-    timeCardList(){
+    getTimeCardList(){
       let params = {
         current: this.page,
         size: this.size
