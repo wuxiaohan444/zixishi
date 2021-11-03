@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <u-image height="334rpx" src="https://cdn.uviewui.com/uview/swiper/1.jpg" :lazy-load="true"></u-image>
-    <view class="room-name u-font-32 u-bold u-black-color">{{storeInfo.fullName}}</view>
+    <view class="room-name u-font-32 u-bold u-black-color">{{ storeInfo.fullName }}</view>
     <view class="chooseDate u-flex u-row-around">
       <view :class="timeIndex===index?'chooseDate-item active':'chooseDate-item'" v-for="(item,index) in timeData"
             :key="index" @click="chooseTime(index)">
@@ -11,22 +11,36 @@
     </view>
     <!--    通知-->
     <u-notice-bar mode="horizontal" :list="content" bg-color="#FCF8E3"></u-notice-bar>
-    <view class="seat-time-box u-flex u-flex-wrap">
-      <view class="seat-time-item" v-for="(item,index) in seatData" :key="index">{{ format(item.startTime) }}-{{format(item.endTime)}}</view>
+    <!--    时间-->
+    <view class="seat-time-box u-flex u-flex-wrap" v-show="timeIndex===0">
+      <view :class="item.choose?'seat-time-item active':'seat-time-item'" v-for="(item,index) in today" :key="index"
+            @click="chooseTimeQuantum(index,item)">{{ format(item.startTime) }}-{{ format(item.endTime) }}
+      </view>
       <view class="loading-box u-flex u-row-center u-col-center" v-show="loadingShow">
         <view>
           <u-loading mode="circle"></u-loading>
         </view>
       </view>
     </view>
+    <view class="seat-time-box u-flex u-flex-wrap" v-show="timeIndex===1">
+      <view :class="item.choose?'seat-time-item active':'seat-time-item'" v-for="(item,index) in tomorrow" :key="index"
+            @click="chooseTimeQuantum(index,item)">{{ format(item.startTime) }}-{{ format(item.endTime) }}
+      </view>
+    </view>
+    <view class="seat-time-box u-flex u-flex-wrap" v-show="timeIndex===2">
+      <view :class="item.choose?'seat-time-item active':'seat-time-item'" v-for="(item,index) in acquired" :key="index"
+            @click="chooseTimeQuantum(index,item)">{{ format(item.startTime) }}-{{ format(item.endTime) }}
+      </view>
+    </view>
     <!--    底部按钮-->
     <view class="operation-btn u-flex u-row-between">
       <view class="u-font-24">合计 ：
-        <text class="u-red-color u-font-34">¥5</text>
+        <text class="u-red-color u-font-34">¥{{totalMoney}}</text>
       </view>
       <view class="operation-right u-flex">
         <view :class="payIndex===1?'operation-btn-pay active':'operation-btn-pay'" @click="choosePay(1)">美团券</view>
-        <view :class="payIndex===0?'operation-btn-pay active':'operation-btn-pay'" @click="choosePay(0,'123123')">去结算</view>
+        <view :class="payIndex===0?'operation-btn-pay active':'operation-btn-pay'" @click="choosePay(0,'123123')">去结算
+        </view>
       </view>
     </view>
     <!--    美团-->
@@ -108,15 +122,13 @@ export default {
       today: [],//今天
       tomorrow: [],//明天
       acquired: [],//后天
-      allData: [],
-      seatData: [],
-      seatId:'',
-      roomId:'',
-      createDept:'',
-      chargeSetId:'',
-      date:'',
-      storeInfo:'',
-      loadingShow:true
+      seatId: '',
+      roomId: '',
+      createDept: '',
+      chargeSetId: '',
+      storeInfo: '',
+      loadingShow: true,
+      totalMoney:0
     }
   },
   onLoad(options) {
@@ -128,34 +140,18 @@ export default {
     this.seatId = options.seatId;
     this.roomId = options.roomId;
     this.chargeSetId = options.chargeSetId;
-    this.date =  this.timeData[0].date
     this.seatTimeList()
   },
   methods: {
-    choosePay(index,orderId) {
+    choosePay(index, orderId) {
       this.payIndex = index;
       if (index === 1) {
         this.oneShow = true;
-      }else{
-		  uni.navigateTo({
-		  	url:`/pages/order/pay/pay?orderId=${orderId}`
-		  })
-  	  }
-    },
-    seatTimeList(){
-      let data = {
-        id:this.seatId,//座位id
-        roomId:this.roomId,//房间Id
-        createDept:this.createDept,
-        defaultChargeSetId:this.chargeSetId,//计费规则
-        bookDate:this.date,
+      } else {
+        uni.navigateTo({
+          url: `/pages/order/pay/pay?orderId=${orderId}`
+        })
       }
-      this.loadingShow = true;
-      this.$u.api.seatTimeList(data).then((res)=>{
-        console.log(res.data);
-        this.seatData = res.data;
-        this.loadingShow = false;
-      })
     },
     // 提交券码
     submitCode() {
@@ -178,44 +174,178 @@ export default {
     },
     chooseTime(index) {
       this.timeIndex = index;
-      switch (index) {
-        case 0:
-          this.seatData = this.today;
-          break;
-        case 1:
-          this.seatData = this.tomorrow;
-          break;
-        case 2:
-          this.seatData = this.acquired;
+    },
+    format(str) {
+      return str.substr(0, 5)
+    },
+    // 选择时间段
+    chooseTimeQuantum: function (index, item) {
+      if (this.timeIndex === 0) {
+        this.today[index].choose = !this.today[index].choose;
+      } else if (this.timeIndex === 1) {
+        this.tomorrow[index].choose = !this.tomorrow[index].choose;
+      } else if (this.timeIndex === 2) {
+        this.acquired[index].choose = !this.acquired[index].choose;
       }
-      this.date =  this.timeData[index].date
-      this.seatTimeList()
+      this.$forceUpdate();
+      let todayArr = [], tomorrowArr = [], acquiredArr = [];
+      this.today.map((item) => {
+        if (item.choose) {
+          todayArr.push(item.no)
+        }
+      });
+      this.tomorrow.map((item) => {
+        if (item.choose) {
+          tomorrowArr.push(item.no)
+        }
+      })
+      this.acquired.map((item) => {
+        if (item.choose) {
+          acquiredArr.push(item.no)
+        }
+      });
+      if (todayArr.length > 0 && tomorrowArr.length > 0) {
+        if (this.tomorrow[0].choose && todayArr.length > 0) {
+          if (!this.today[this.today.length - 1].choose) {
+            this.$u.toast('请选择连续的时间段')
+            return false;
+          }
+        }else{
+          this.$u.toast('请选择连续的时间段')
+          return false;
+        }
+        if (this.today[this.today.length - 1].choose && tomorrowArr.length > 0) {
+          if (!this.tomorrow[0].choose) {
+            this.$u.toast('请选择连续的时间段')
+            return false;
+          }
+        }else{
+          this.$u.toast('请选择连续的时间段')
+          return false;
+        }
+      }
+      if (tomorrowArr.length > 0 && acquiredArr.length > 0) {
+        if (this.acquired[0].choose && tomorrowArr.length > 0) {
+          if (!this.tomorrow[this.tomorrow.length - 1].choose) {
+            this.$u.toast('请选择连续的时间段')
+            return false;
+          }
+        }else{
+          this.$u.toast('请选择连续的时间段')
+          return false;
+        }
+        if (this.tomorrow[this.tomorrow.length - 1].choose && acquiredArr.length > 0) {
+          if (!this.acquired[0].choose) {
+            this.$u.toast('请选择连续的时间段')
+            return false;
+          }
+        }else{
+          this.$u.toast('请选择连续的时间段')
+          return false;
+        }
+      }
+      let continuousToday = this.isContinuityNum(todayArr);//今天是否连续
+      let continuousTomorrow = this.isContinuityNum(tomorrowArr);//明天是否连续
+      let continuousAcquired = this.isContinuityNum(acquiredArr);//明天是否连续
+      if (!continuousToday || !continuousTomorrow || !continuousAcquired) {
+        this.$u.toast('请选择连续的时间段')
+        return false;
+      }
+      if (todayArr.length > 0 && acquiredArr.length > 0&&tomorrowArr.length===0) {
+        this.$u.toast('请选择连续的时间段')
+        return false;
+      }
+      this.getPayment()
     },
-    getTime() {
-      var myDate = new Date();
-      let hours = this.addZero(myDate.getHours());       //获取当前小时数(0-23)
-      let minutes = this.addZero(myDate.getMinutes());     //获取当前分钟数(0-59)
-      return hours + ':' + minutes
+    getPayment(){
+      let arr=[];
+      this.today.map((item) => {
+        if (item.choose) {
+          arr.push(item)
+        }
+      });
+      this.tomorrow.map((item) => {
+        if (item.choose) {
+          arr.push(item)
+        }
+      })
+      this.acquired.map((item) => {
+        if (item.choose) {
+          arr.push(item)
+        }
+      })
+      let data = {
+        roomId:this.roomId,
+        seatId:this.seatId,
+        seatTimeRanges:arr
+      };
+      this.$u.api.getPayment(data).then((res)=>{
+        this.totalMoney = res.data;
+      })
     },
-    addZero(item) {
-      if (item > 9) {
-        return item
+    // 判断是否是连续时间端
+    isContinuityNum(num) {
+      let array = [];
+      if (num instanceof Array) {
+        array = [...num];
       } else {
-        return '0' + item
+        array = Array.from(num.toString())//转换为数组
       }
-    },
-    bjDate(date, date1) {
-      var date = new Date('2021-10-01 ' + date);
-      var date1 = new Date('2021-10-01 ' + date1);
-      if (date.getTime() - date1.getTime() < 0) {
-        return 2;
-      } else {
-        return 1;
+
+      var i = array[0];
+      var isContinuation = true;
+      for (var e in array) {
+        if (array[e] != i) {
+          isContinuation = false;
+          break;
+        }
+        i++;
       }
+      return isContinuation;
     },
-    format(str){
-      return str.substr(0,5)
-    }
+    seatTimeList() {
+      let data1 = {
+        id: this.seatId,//座位id
+        roomId: this.roomId,//房间Id
+        createDept: this.createDept,
+        defaultChargeSetId: this.chargeSetId,//计费规则
+        bookDate: this.timeData[0].date,
+      }
+      this.loadingShow = true;
+      this.$u.api.seatTimeList(data1).then((res) => {
+        this.today = res.data;
+        this.today.map((item) => {
+          item.choose = false;
+        })
+        this.loadingShow = false;
+      });
+      let data2 = {
+        id: this.seatId,//座位id
+        roomId: this.roomId,//房间Id
+        createDept: this.createDept,
+        defaultChargeSetId: this.chargeSetId,//计费规则
+        bookDate: this.timeData[1].date,
+      }
+      this.$u.api.seatTimeList(data2).then((res) => {
+        this.tomorrow = res.data;
+        this.tomorrow.map((item) => {
+          item.choose = false;
+        })
+      })
+      let data3 = {
+        id: this.seatId,//座位id
+        roomId: this.roomId,//房间Id
+        createDept: this.createDept,
+        defaultChargeSetId: this.chargeSetId,//计费规则
+        bookDate: this.timeData[2].date,
+      }
+      this.$u.api.seatTimeList(data3).then((res) => {
+        this.acquired = res.data;
+        this.acquired.map((item) => {
+          item.choose = false;
+        })
+      })
+    },
   }
 }
 </script>
@@ -251,7 +381,8 @@ export default {
 .seat-time-box {
   padding-top: 32rpx;
   padding-left: 31rpx;
-  .loading-box{
+
+  .loading-box {
     width: 100%;
   }
 

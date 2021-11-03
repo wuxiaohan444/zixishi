@@ -13,21 +13,14 @@
 
 		  <view v-if="!tokenStatus">
 		    <button class="btn" @click="getUserProfile">
-		      <image src="../../static/images/wx.png" />
 		      <text>微信账号一键登录</text>
 		    </button>
 		  </view>
 
 		  <view v-if="tokenStatus && !telStatus">
 		    <button class="btn" open-type="getPhoneNumber" @click="getPhoneNumber">
-		      <image src="../../static/images/personal/card-i.png" />
 		      <text>授权手机号</text>
 		    </button>
-		  </view>
-
-		  <view class="bottom" bindtap="protocolTap">
-		    <text>登录即代表您同意</text>
-		    <text>《这是服务服务协议》</text>
 		  </view>
 	</view>
 </template>
@@ -41,15 +34,18 @@
 				statusBarHeight: app.globalData.statusBarHeight, // 状态栏高度
 				winHeight:app.globalData.winHeight+app.globalData.statusBarHeight+app.globalData.navBarHeight,
 				flag: true,
-				tokenStatus:false
+				tokenStatus:false,
+
 			};
 		},
 		methods: {
 			getUserProfile(){
-				console.log(3);
+        let code = '';
+        let that =this;
 				wx.login({
 				  success: function (res) { //拿到code
 					wx.setStorageSync('code', res.code);
+            code = res.code;
 				  }
 				})
 				uni.getUserProfile({
@@ -58,9 +54,20 @@
 						console.log(result,'dsds');
 						this.tokenStatus = true;
 						this.telStatus = false
+            let data={
+              code:code,
+              encryptedData:result.encryptedData,
+              iv:result.iv
+            };
+            that.login(data);
 					}
 				})
 			},
+      login(data){
+        this.$u.api.login(data).then((res)=>{
+          console.log(res);
+        })
+      },
 			getPhoneNumber(e){
 				//获取用户的手机号码
 				if(e.detail.encryptedData){

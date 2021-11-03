@@ -8,6 +8,16 @@ const userInfo = (params) => {
     })
 }
 
+// 登录
+const login = (params) => {
+    return http.request({
+        url: '/blade-system/wx/login',
+        method: 'POST',
+        data: params
+    })
+}
+
 export default {
-    userInfo
+    userInfo,
+    login
 }

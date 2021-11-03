@@ -9,6 +9,17 @@ const seatTimeList = (params) => {
     })
 }
 
+// 查询售价
+const getPayment = (params) => {
+    return http.request({
+        url: '/bill/presaleorder/getpayment',
+        method: 'post',
+        data:params
+    })
+}
+
+
 export default {
-    seatTimeList
+    seatTimeList,
+    getPayment
 }
