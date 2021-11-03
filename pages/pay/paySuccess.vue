@@ -46,8 +46,15 @@ export default {
         background: '#2487FF',
         color: '#ffffff',
         fontSize:'31rpx'
-      }
+      },
+      userInfo:{},
     }
+  },
+  onLoad(){
+
+  },
+  methods:{
+
   }
 }
 </script>

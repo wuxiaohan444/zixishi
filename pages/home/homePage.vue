@@ -136,6 +136,7 @@ export default {
       if (item.status === 5) {
         this.$u.toast('此座位正在维护中,请选择其他座位')
       } else {
+        uni.setStorageSync('seatInfo', item);
         uni.navigateTo({
           url: `../seat/seat?roomId=${item.roomId}&seatId=${item.id}&chargeSetId=${item.defaultChargeSetId}`
         });

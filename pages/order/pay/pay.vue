@@ -6,8 +6,8 @@
 		</view>
 		<view class="info-box">
 			<view class="titles">
-				<view class="u-font-36 u-bold">天庆大厦店</view>
-				<view class="u-font-31">自习室一（1）号座位</view>
+				<view class="u-font-36 u-bold">{{storeInfo.fullName}}</view>
+				<view class="u-font-31">{{seatInfo.roomName}}（{{seatInfo.seatName}}）号座位</view>
 			</view>
 			<view class="content">
 				<view>
@@ -19,7 +19,7 @@
 				</view>
 				<view>
 					<view class="u-font-28">会员姓名:</view>
-					<view class="u-font-31">王杨林(黄金会员)</view>
+					<view class="u-font-31">{{ user.memberName }}({{user.memberLevelName}})</view>
 				</view>
 				<view>
 					<view class="u-font-28">会员优惠:</view>
@@ -27,7 +27,7 @@
 				</view>
 				<view>
 					<view class="u-font-28">会员余额:</view>
-					<view class="u-font-31">16.0元</view>
+					<view class="u-font-31">{{user.balance}}元</view>
 				</view>
 				<view>
 					<view class="u-font-28">订单金额:</view>
@@ -60,9 +60,18 @@
 				customStyle:{
 					marginBottom:'30rpx',
 					height: '92rpx',
-				}
+				},
+        user:{},
+        storeInfo:{},
+        seatInfo:{},
 			}
 		},
+    onLoad(){
+      this.user = uni.getStorageSync('userInfo');
+      this.storeInfo = uni.getStorageSync('storeInfo');
+      this.seatInfo = uni.getStorageSync('seatInfo');
+      console.log(this.seatInfo);
+    },
 		methods: {
 			useTimeCard(){
 				uni.navigateTo({
