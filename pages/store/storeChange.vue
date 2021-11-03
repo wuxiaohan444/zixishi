@@ -79,7 +79,9 @@ export default {
     presaleorderRenew(){
       this.$u.api.presaleorderRenew({openId: this.$u.func.getOpenId()}).then((res)=>{
         if(res.code==200){
-
+          uni.navigateTo({
+            url:`../seat/seat?seatId=${data.seatId}&roomId=${data.roomId}&chargeSetId=${data.chargeSetId}`
+          })
         }else{
           this.$u.toast(res.msg)
         }

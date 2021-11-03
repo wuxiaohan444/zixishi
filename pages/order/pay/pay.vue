@@ -30,24 +30,24 @@
 				</view>
 				<view>
 					<view class="u-font-28">订单金额:</view>
-					<view class="u-font-31">{{totalMoney}}元</view>
+					<view class="u-font-31">{{couponMoney}}元</view>
 				</view>
-				<view>
+				<view v-if="couponMoney > cumulativeMinimumConsumption">
 					<view class="u-font-28">优惠金额:</view>
-					<view class="u-font-31">-{{couponMoney}}元</view>
+					<view class="u-font-31">-{{handleMoney}}元</view>
 				</view>
 			</view>
 			<view class="all-price">
 				<view>
 					<view class="u-font-28">应付款:</view>
-					<view class="u-font-31">{{handleMoney}}元</view>
+					<view class="u-font-31">{{couponMoney}}元</view>
 				</view>
 			</view>
 		</view>
 		<view class="botton">
 			<u-button :custom-style="customStyle" shape="circle" type="primary" @click="useTimeCard">使用时长卡</u-button>
-			<u-button :custom-style="customStyle" shape="circle" type="primary" @click="play(7)">余额支付:1.2元</u-button>
-			<u-button :custom-style="customStyle" shape="circle" type="success">微信支付:1.2元</u-button>
+			<u-button :custom-style="customStyle" shape="circle" type="primary" @click="play(7)">余额支付:{{couponMoney}}元</u-button>
+			<u-button :custom-style="customStyle" shape="circle" type="success">微信支付:{{couponMoney}}元</u-button>
 		</view>
 	</view>
 </template>
@@ -69,7 +69,8 @@ import {accMul,Subtr} from '../../../utils/calculate'
         totalMoney:'',
         couponMoney:'',
         handleMoney:'',
-        timeRanges:[]
+        timeRanges:[],
+        cumulativeMinimumConsumption:'',
 			}
 		},
     onLoad(options){
@@ -81,6 +82,10 @@ import {accMul,Subtr} from '../../../utils/calculate'
       this.seatInfo = uni.getStorageSync('seatInfo');
       this.couponMoney = accMul(this.user.seatDiscount,this.totalMoney)
       this.handleMoney = Subtr(this.totalMoney,this.couponMoney);
+      this.cumulativeMinimumConsumption = this.seatInfo.cumulativeMinimumConsumption;
+      if(this.couponMoney<=this.cumulativeMinimumConsumption){
+        this.couponMoney = this.cumulativeMinimumConsumption
+      }
       let data = uni.getStorageSync('timeRanges');
       data.map((item,index)=>{
         this.timeRanges.push({
@@ -95,6 +100,9 @@ import {accMul,Subtr} from '../../../utils/calculate'
           index:index+1
         })
       })
+    },
+    onUnload(){
+      uni.removeStorageSync('timeRanges');
     },
 		methods: {
 			useTimeCard(){
@@ -115,9 +123,11 @@ import {accMul,Subtr} from '../../../utils/calculate'
           startDate:this.format(this.startDate),
           endDate:this.format(this.endDate),
           amount:this.totalMoney,
+          actualPayment:this.couponMoney,
           payType:index,
           cardType:0,
-          timeRanges:JSON.stringify(this.timeRanges)
+          timeRanges:JSON.stringify(this.timeRanges),
+          seatDiscount:this.user.seatDiscount
         };
         this.$u.api.generateOrder(data).then((res)=>{
           this.confirmOrderPay(res.data.id)

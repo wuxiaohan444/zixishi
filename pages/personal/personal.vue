@@ -15,7 +15,7 @@
             <text class="user-tag u-font-23">{{info.memberLevelName}}</text>
           </view>
           <view class="user-content">
-            <text>{{info.phone}}</text>
+            <text>{{noPassByMobile(info.phone)}}</text>
             <text>账户余额:{{info.balance}}</text>
           </view>
         </view>
@@ -67,7 +67,7 @@ export default {
       info:{},
     }
   },
-  onLoad() {
+  onShow() {
     this.getUserInfo();
   },
   methods: {
@@ -90,7 +90,15 @@ export default {
       uni.navigateTo({
         url: '../login/login'
       });
-    }
+    },
+    noPassByMobile(str){
+      if(null != str && str != undefined){
+        var pat=/(\d{3})\d*(\d{4})/;
+        return str.replace(pat,'$1****$2');
+      } else {
+        return "";
+      }
+    },
   }
 }
 </script>

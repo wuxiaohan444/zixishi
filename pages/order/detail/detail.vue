@@ -28,8 +28,8 @@
 						<text class="u-font-31">¥{{info.actualPayment}}</text>
 					</view>
 					<view>
-						<text class="u-font-28">会员优惠:</text>
-						<text class="u-font-31">-¥{{info.discount}}</text>
+						<text class="u-font-28">会员折扣:</text>
+						<text class="u-font-31">{{info.seatDiscount}}</text>
 					</view>
 <!--					<view>-->
 <!--						<text class="u-font-28">代金券:</text>-->

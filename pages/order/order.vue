@@ -36,7 +36,7 @@
                 </view>
                 <view class="list-botton">
                   <view class="u-font-28" @click.stop="cancel(item.id)" v-if="item.orderStatus==1">取消订单</view>
-                  <view class="u-font-28 consumption" @click.stop="toPay($event,'21323')" v-if="item.orderStatus==0">立即支付</view>
+                  <view class="u-font-28 consumption" @click.stop="toPay(item.id)" v-if="item.orderStatus==0">立即支付</view>
                 </view>
               </view>
             </view>
@@ -145,8 +145,7 @@ export default {
         }
       })
     },
-    toPay(e, orderId) {
-      e.preventDefault();
+    toPay(orderId) {
       uni.navigateTo({
         url: `/pages/order/pay/pay?orderId=${orderId}`
       })
