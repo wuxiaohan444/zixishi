@@ -104,6 +104,8 @@ export default {
     if (uni.getStorageSync('storeInfo')) {
       this.storeInfo = uni.getStorageSync('storeInfo');
       this.parentName = uni.getStorageSync('parentName');
+    }else{
+
     }
     this.getRoomList();
   },

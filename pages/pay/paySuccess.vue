@@ -6,24 +6,28 @@
       </view>
       <view class="text">支付成功</view>
     </view>
-    <view class="pay-type">
+    <view class="pay-type" v-if="orderInfo.payType===7">
       <text class="u-font-31">余额支付:</text>
-      <text class="u-font-64">￥15</text>
+      <text class="u-font-64">￥{{orderInfo.actualPayment}}</text>
+    </view>
+    <view class="pay-type" v-if="orderInfo.payType===2">
+      <text class="u-font-31">微信支付:</text>
+      <text class="u-font-64">￥{{orderInfo.actualPayment}}</text>
     </view>
     <view class="line"></view>
     <view class="reserve-item u-flex u-row-between">
       <text class="left">预订位置:</text>
-      <text class="right">自习室-1</text>
+      <text class="right">{{orderInfo.roomName}}-{{orderInfo.seatName}}</text>
     </view>
     <view class="line"></view>
     <view class="reserve-item u-flex u-row-between">
       <text class="left">预订时间:</text>
-      <text class="right">2021-09-24 17:00-19:00</text>
+      <text class="right">{{orderInfo.startDate}}至{{orderInfo.endDate}}</text>
     </view>
     <view class="line"></view>
     <view class="operation u-flex u-row-between">
-      <u-button shape="circle" :custom-style="customStyle1">再来一单</u-button>
-      <u-button shape="circle" :custom-style="customStyle2">前去使用</u-button>
+      <u-button shape="circle" :custom-style="customStyle1" @click="skip('../home/homePage')">再来一单</u-button>
+      <u-button shape="circle" :custom-style="customStyle2"  @click="skip('../reserve/reserve')">前去使用</u-button>
     </view>
   </view>
 </template>
@@ -47,14 +51,25 @@ export default {
         color: '#ffffff',
         fontSize:'31rpx'
       },
-      userInfo:{},
+      orderId:'',
+      orderInfo:{}
     }
   },
-  onLoad(){
-
+  onLoad(options){
+    this.orderId = options.orderId
+    this.getDetail()
   },
   methods:{
-
+    getDetail(){
+      this.$u.api.orderDetail({id:this.orderId}).then((res)=>{
+        this.orderInfo = res.data
+      })
+    },
+    skip(url){
+      uni.switchTab({
+        url: url
+      });
+    }
   }
 }
 </script>
@@ -103,7 +118,7 @@ export default {
     color: #8D8D8D;
   }
   .right{
-    font-size: 32rpx;
+    font-size: 28rpx;
     font-weight: 500;
     color: #010101;
   }

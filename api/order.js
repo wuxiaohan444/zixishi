@@ -9,7 +9,26 @@ const orderList = (params) => {
     })
 }
 
+// 订单
+const cancelOrder = (params) => {
+    return http.request({
+        url: '/bill/presaleorder/cancelOrder',
+        method: 'post',
+        data:params
+    })
+}
+
+// 订单
+const orderDetail = (params) => {
+    return http.request({
+        url: '/bill/presaleorder/detail',
+        method: 'get',
+        data:params
+    })
+}
 
 export default {
-    orderList
+    orderList,
+    cancelOrder,
+    orderDetail
 }

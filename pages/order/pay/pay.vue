@@ -69,6 +69,7 @@ import {accMul,Subtr} from '../../../utils/calculate'
         totalMoney:'',
         couponMoney:'',
         handleMoney:'',
+        timeRanges:[]
 			}
 		},
     onLoad(options){
@@ -80,6 +81,21 @@ import {accMul,Subtr} from '../../../utils/calculate'
       this.seatInfo = uni.getStorageSync('seatInfo');
       this.couponMoney = accMul(this.user.seatDiscount,this.totalMoney)
       this.handleMoney = Subtr(this.totalMoney,this.couponMoney);
+      let data = uni.getStorageSync('timeRanges');
+      data.map((item,index)=>{
+        this.timeRanges.push({
+          startTime:item.startTime,
+          endTime:item.endTime,
+          unitPrice:item.unitPrice,
+          totalPrice:item.totalPrice,
+          status:item.status,
+          bookDate:item.bookDate,
+          startDate:item.startDate,
+          endDate:item.endDate,
+          index:index+1
+        })
+      })
+      this.timeRanges = data
     },
 		methods: {
 			useTimeCard(){
@@ -101,7 +117,8 @@ import {accMul,Subtr} from '../../../utils/calculate'
           endDate:this.format(this.endDate),
           amount:this.totalMoney,
           payType:index,
-          cardType:0
+          cardType:0,
+          timeRanges:JSON.stringify(this.timeRanges)
         };
         this.$u.api.generateOrder(data).then((res)=>{
           this.confirmOrderPay(res.data.id)
@@ -113,7 +130,11 @@ import {accMul,Subtr} from '../../../utils/calculate'
           openId: this.$u.func.getOpenId()
         }
         this.$u.api.confirmOrderPay(data).then((res)=>{
-          console.log(res.data);
+            if(res.code===200){
+              uni.navigateTo({
+                url:'/pages/pay/paySuccess?orderId='+id
+              })
+            }
         })
       },
       format(str) {

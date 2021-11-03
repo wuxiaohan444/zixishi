@@ -170,6 +170,7 @@ export default {
       let beginning =[sumData[0],sumData[sumData.length-1]];
       let startDate = beginning[0].bookDate+' '+beginning[0].startTime;
       let endDate = beginning[1].bookDate+' '+beginning[1].endTime;
+      uni.setStorageSync('timeRanges',sumData);
       uni.navigateTo({
         url: `/pages/order/pay/pay?startDate=${startDate}&endDate=${endDate}&totalMoney=${this.totalMoney}`
       })

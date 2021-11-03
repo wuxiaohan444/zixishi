@@ -32,11 +32,11 @@
                   </view>
                 </view>
                 <view class="price u-font-31">总计:
-                  <text>¥3.0</text>
+                  <text>¥{{item.actualPayment}}</text>
                 </view>
                 <view class="list-botton">
-                  <view class="u-font-28" @tap.stop="cancel($event,'21323')" v-if="item.orderStatus==1">取消订单</view>
-                  <view class="u-font-28 consumption" @tap.stop="toPay($event,'21323')" v-if="item.orderStatus==0">立即支付</view>
+                  <view class="u-font-28" @click.stop="cancel(item.id)" v-if="item.orderStatus==1">取消订单</view>
+                  <view class="u-font-28 consumption" @click.stop="toPay($event,'21323')" v-if="item.orderStatus==0">立即支付</view>
                 </view>
               </view>
             </view>
@@ -132,9 +132,19 @@ export default {
         url: `/pages/order/detail/detail?info=${info}`
       })
     },
-    cancel(e) {
-      e.preventDefault();
-      console.log('取消订单')
+    cancel(id) {
+      let params = {
+        id:id,
+        openId: this.$u.func.getOpenId(),
+      };
+      this.$u.api.cancelOrder(params).then((res)=>{
+        if(res.code==200){
+          this.$u.toast('操作成功');
+          this.getList();
+        }else{
+          this.$u.toast(res.msg);
+        }
+      })
     },
     toPay(e, orderId) {
       e.preventDefault();

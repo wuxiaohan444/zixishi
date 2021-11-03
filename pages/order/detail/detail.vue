@@ -7,10 +7,10 @@
 						<text class="u-font-31 u-bold">{{info.storeName}}</text>
 						<image src="/static/images/arrow.png"></image>
 					</view>
-          <view class="right u-font-26" v-if="info.status==0">待支付</view>
-          <view class="right u-font-26" v-if="info.status==1">支付成功</view>
-          <view class="right u-font-26" v-if="info.status==2">交易成功</view>
-          <view class="right u-font-26" v-if="info.status==3">已取消</view>
+          <view class="right u-font-26" v-if="info.orderStatus==0">待支付</view>
+          <view class="right u-font-26" v-if="info.orderStatus==1">支付成功</view>
+          <view class="right u-font-26" v-if="info.orderStatus==2">交易成功</view>
+          <view class="right u-font-26" v-if="info.orderStatus==3">已取消</view>
 				</view>
 				<view class="center">
 					<image src="/static/images/home/n2.png"></image>

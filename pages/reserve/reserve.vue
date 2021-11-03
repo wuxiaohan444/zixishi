@@ -52,6 +52,9 @@
     </view>
 
     <view>
+    <view v-show="noData">
+      <u-empty text="预定列表为空" mode="list"></u-empty>
+    </view>
       <u-modal v-model="popupTipStatus" @confirm="confirm" show-cancel-button content="确定要结束消费吗?"></u-modal>
     </view>
   </view>
@@ -68,10 +71,11 @@ export default {
       winHeight: app.globalData.winHeight,
       tenantId: '',
       reserveData: [],
-      preOrderId:''
+      preOrderId:'',
+      noData:false,
     }
   },
-  onLoad() {
+  onShow(){
     if (uni.getStorageSync('storeInfo')) {
       let data = uni.getStorageSync('storeInfo');
       this.tenantId = data.tenantId;
@@ -82,11 +86,12 @@ export default {
     getList() {
       let data = {
         openId: this.$u.func.getOpenId(),
-        tenantId: this.tenantId
+        tenantId: this.tenantId,
       }
       this.$u.api.myPresaleorderList(data).then((res) => {
         console.log(res.data);
         this.reserveData = res.data;
+        this.noData = this.reserveData.length <= 0;
         uni.stopPullDownRefresh()
       })
     },
@@ -98,7 +103,7 @@ export default {
       this.preOrderId=id;
     },
     confirm() {
-      console.log(3)
+      this.finishConsume()
     },
     // 下拉刷新
     onPullDownRefresh() {
@@ -121,20 +126,22 @@ export default {
       }
       this.$u.api.startSpending(data).then((res) => {
         if (res.code == 200) {
-
+          this.$u.toast('操作成功');
+          this.getList()
         } else {
           this.$u.toast(res.msg)
         }
       })
     },
-    finishConsume(id){
+    finishConsume(){
       let data = {
         openId: this.$u.func.getOpenId(),
         preOrderId: this.preOrderId
       }
       this.$u.api.finishConsume(data).then((res) => {
         if (res.code == 200) {
-
+          this.popupTipStatus = false;
+          this.getList();
         } else {
           this.$u.toast(res.msg)
         }
