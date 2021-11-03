@@ -127,9 +127,8 @@ export default {
       console.log(2)
     },
     toDetailes(item) {
-      let info = JSON.stringify(item)
       uni.navigateTo({
-        url: `/pages/order/detail/detail?info=${info}`
+        url: `/pages/order/detail/detail?id=${item.id}`
       })
     },
     cancel(id) {

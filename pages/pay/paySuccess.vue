@@ -52,18 +52,28 @@ export default {
         fontSize:'31rpx'
       },
       orderId:'',
-      orderInfo:{}
+      orderInfo:{},
+      tenantId:''
     }
   },
   onLoad(options){
-    this.orderId = options.orderId
+    this.orderId = options.orderId;
+    if (uni.getStorageSync('storeInfo')) {
+      let data = uni.getStorageSync('storeInfo');
+      this.tenantId = data.tenantId;
+    }
     this.getDetail()
   },
   methods:{
     getDetail(){
-      this.$u.api.orderDetail({id:this.orderId}).then((res)=>{
-        this.orderInfo = res.data
-      })
+      let data = {
+        openId: this.$u.func.getOpenId(),
+        tenantId: this.tenantId,
+        id:this.orderId
+      }
+      this.$u.api.orderList(data).then((res) => {
+        this.orderInfo = res.data[0]
+      });
     },
     skip(url){
       uni.switchTab({

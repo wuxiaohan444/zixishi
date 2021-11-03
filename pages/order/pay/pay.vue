@@ -95,7 +95,6 @@ import {accMul,Subtr} from '../../../utils/calculate'
           index:index+1
         })
       })
-      this.timeRanges = data
     },
 		methods: {
 			useTimeCard(){

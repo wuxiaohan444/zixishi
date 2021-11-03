@@ -15,7 +15,7 @@
 				<view class="center">
 					<image src="/static/images/home/n2.png"></image>
 					<view class="info">
-						<view class="title u-font-26 u-black-color">自习室一/1</view>
+						<view class="title u-font-26 u-black-color">{{info.roomName}}/{{info.seatName}}</view>
 						<view class="">下单时间:{{info.orderTime}}</view>
 						<view>预订时间段:</view>
             <view class="time">{{info.startDate}}至{{info.endDate}}</view>
@@ -24,7 +24,7 @@
 				<view class="price u-font-31 u-bold">总计: <text>¥{{info.amount}}</text></view>
 				<view class="price-info">
 					<view>
-						<text class="u-font-28">订单总额:</text>
+						<text class="u-font-28">实付金额:</text>
 						<text class="u-font-31">¥{{info.actualPayment}}</text>
 					</view>
 					<view>
@@ -53,12 +53,29 @@
 			return {
 				winHeight:app.globalData.winHeight,
         info:'',
+        orderId:'',
+        tenantId:''
 			}
 		},
 		onLoad(options){
-		  this.info = JSON.parse(options.info)
+      if (uni.getStorageSync('storeInfo')) {
+        let data = uni.getStorageSync('storeInfo');
+        this.tenantId = data.tenantId;
+      }
+		  this.orderId = options.id;
+      this.getDetail()
 		},
 		methods: {
+      getDetail(){
+        let data = {
+          openId: this.$u.func.getOpenId(),
+          tenantId: this.tenantId,
+          id:this.orderId
+        }
+        this.$u.api.orderList(data).then((res) => {
+          this.info = res.data[0]
+        });
+      },
 			copy(order){
 				uni.setClipboardData({
 					data:order,
