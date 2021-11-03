@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="tips">
 			<view>待支付</view>
-			<view class="u-font-23">请在2分钟内完成支付,订单开始120分钟前可取消订单，逾期不可取消</view>
+<!--			<view class="u-font-23">请在2分钟内完成支付,订单开始120分钟前可取消订单，逾期不可取消</view>-->
 		</view>
 		<view class="info-box">
 			<view class="titles">
@@ -13,8 +13,7 @@
 				<view>
 					<view class="u-font-28">预订时间:</view>
 					<view class="u-font-31">
-						<view>2021-09-08  16:00-18:00（星期三）</view>
-						<view>2021-09-07  16:00-18:00（星期二）</view>
+						<view>{{format(startDate)}}至{{format(endDate)}}</view>
 					</view>
 				</view>
 				<view>
@@ -23,7 +22,7 @@
 				</view>
 				<view>
 					<view class="u-font-28">会员优惠:</view>
-					<view class="u-font-31">房间费无折扣</view>
+					<view class="u-font-31">{{user.seatDiscount===0?'暂无优惠':user.seatDiscount}}</view>
 				</view>
 				<view>
 					<view class="u-font-28">会员余额:</view>
@@ -31,29 +30,30 @@
 				</view>
 				<view>
 					<view class="u-font-28">订单金额:</view>
-					<view class="u-font-31">5.0元</view>
+					<view class="u-font-31">{{totalMoney}}元</view>
 				</view>
 				<view>
 					<view class="u-font-28">优惠金额:</view>
-					<view class="u-font-31">-0.8元</view>
+					<view class="u-font-31">-{{couponMoney}}元</view>
 				</view>
 			</view>
 			<view class="all-price">
 				<view>
 					<view class="u-font-28">应付款:</view>
-					<view class="u-font-31">5.0元</view>
+					<view class="u-font-31">{{handleMoney}}元</view>
 				</view>
 			</view>
 		</view>
 		<view class="botton">
 			<u-button :custom-style="customStyle" shape="circle" type="primary" @click="useTimeCard">使用时长卡</u-button>
-			<u-button :custom-style="customStyle" shape="circle" type="primary">余额支付:1.2元</u-button>
+			<u-button :custom-style="customStyle" shape="circle" type="primary" @click="play(7)">余额支付:1.2元</u-button>
 			<u-button :custom-style="customStyle" shape="circle" type="success">微信支付:1.2元</u-button>
 		</view>
 	</view>
 </template>
 
 <script>
+import {accMul,Subtr} from '../../../utils/calculate'
 	export default {
 		data() {
 			return {
@@ -64,20 +64,61 @@
         user:{},
         storeInfo:{},
         seatInfo:{},
+        startDate:'',
+        endDate:'',
+        totalMoney:'',
+        couponMoney:'',
+        handleMoney:'',
 			}
 		},
-    onLoad(){
+    onLoad(options){
+      this.startDate = options.startDate;
+      this.endDate = options.endDate;
+      this.totalMoney = options.totalMoney;
       this.user = uni.getStorageSync('userInfo');
       this.storeInfo = uni.getStorageSync('storeInfo');
       this.seatInfo = uni.getStorageSync('seatInfo');
-      console.log(this.seatInfo);
+      this.couponMoney = accMul(this.user.seatDiscount,this.totalMoney)
+      this.handleMoney = Subtr(this.totalMoney,this.couponMoney);
     },
 		methods: {
 			useTimeCard(){
 				uni.navigateTo({
 					url:'/pages/seat/choice_card/choice_card'
 				})
-			}
+			},
+      play(index){
+        let data={
+          tenantId:this.storeInfo.tenantId,
+          userName:this.user.memberName,
+          mobilePhone:this.user.phone,
+          memberId:this.user.id,
+          memberLevel:this.user.memberLevelId,
+          storeId:this.storeInfo.id,
+          roomId:this.seatInfo.roomId,
+          seatId:this.seatInfo.id,
+          startDate:this.format(this.startDate),
+          endDate:this.format(this.endDate),
+          amount:this.totalMoney,
+          payType:index,
+          cardType:0
+        };
+        this.$u.api.generateOrder(data).then((res)=>{
+          this.confirmOrderPay(res.data.id)
+        })
+      },
+      confirmOrderPay(id){
+        let data={
+          id:id,
+          openId: this.$u.func.getOpenId()
+        }
+        this.$u.api.confirmOrderPay(data).then((res)=>{
+          console.log(res.data);
+        })
+      },
+      format(str) {
+        return str.substr(0, 16)
+      },
 		}
 	}
 </script>

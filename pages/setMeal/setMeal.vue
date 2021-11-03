@@ -71,6 +71,15 @@ export default {
     change(index) {
       this.current = index;
     },
+    timeCardList(){
+      let params = {
+        current: this.page,
+        size: this.size
+      };
+      this.$u.api.timeCardList(params).then((res)=>{
+
+      })
+    },
     // 下拉刷新
     onPullDownRefresh() {
       setTimeout(function () {

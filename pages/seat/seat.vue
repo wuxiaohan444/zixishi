@@ -13,7 +13,7 @@
     <u-notice-bar mode="horizontal" :list="content" bg-color="#FCF8E3"></u-notice-bar>
     <!--    时间-->
     <view class="seat-time-box u-flex u-flex-wrap" v-show="timeIndex===0">
-      <view :class="item.choose?'seat-time-item active':'seat-time-item'" v-for="(item,index) in today" :key="index"
+      <view :class="[item.choose?'seat-time-item active':'seat-time-item',item.status===0?'disabled':'']" v-for="(item,index) in today" :key="index"
             @click="chooseTimeQuantum(index,item)">{{ format(item.startTime) }}-{{ format(item.endTime) }}
       </view>
       <view class="loading-box u-flex u-row-center u-col-center" v-show="loadingShow">
@@ -23,12 +23,12 @@
       </view>
     </view>
     <view class="seat-time-box u-flex u-flex-wrap" v-show="timeIndex===1">
-      <view :class="item.choose?'seat-time-item active':'seat-time-item'" v-for="(item,index) in tomorrow" :key="index"
+      <view :class="[item.choose?'seat-time-item active':'seat-time-item',item.status===0?'disabled':'']" v-for="(item,index) in tomorrow" :key="index"
             @click="chooseTimeQuantum(index,item)">{{ format(item.startTime) }}-{{ format(item.endTime) }}
       </view>
     </view>
     <view class="seat-time-box u-flex u-flex-wrap" v-show="timeIndex===2">
-      <view :class="item.choose?'seat-time-item active':'seat-time-item'" v-for="(item,index) in acquired" :key="index"
+      <view :class="[item.choose?'seat-time-item active':'seat-time-item',item.status===0?'disabled':'']" v-for="(item,index) in acquired" :key="index"
             @click="chooseTimeQuantum(index,item)">{{ format(item.startTime) }}-{{ format(item.endTime) }}
       </view>
     </view>
@@ -147,11 +147,32 @@ export default {
       this.payIndex = index;
       if (index === 1) {
         this.oneShow = true;
-      } else {
-        uni.navigateTo({
-          url: `/pages/order/pay/pay?orderId=${orderId}`
-        })
+        return false;
       }
+      let today=[],tomorrow=[],acquired=[];
+      this.today.map((item)=>{
+        if(item.choose){
+          today.push(item)
+        }
+      });
+      this.tomorrow.map((item)=>{
+        if(item.choose){
+          tomorrow.push(item)
+        }
+      });
+      this.acquired.map((item)=>{
+        if(item.choose){
+          acquired.push(item)
+        }
+      });
+      let sumData = [];
+      sumData= sumData.concat(today).concat(tomorrow).concat(acquired);
+      let beginning =[sumData[0],sumData[sumData.length-1]];
+      let startDate = beginning[0].bookDate+' '+beginning[0].startTime;
+      let endDate = beginning[1].bookDate+' '+beginning[1].endTime;
+      uni.navigateTo({
+        url: `/pages/order/pay/pay?startDate=${startDate}&endDate=${endDate}&totalMoney=${this.totalMoney}`
+      })
     },
     // 提交券码
     submitCode() {
@@ -180,6 +201,9 @@ export default {
     },
     // 选择时间段
     chooseTimeQuantum: function (index, item) {
+      if(item.status===0){
+        return false
+      }
       if (this.timeIndex === 0) {
         this.today[index].choose = !this.today[index].choose;
       } else if (this.timeIndex === 1) {
@@ -408,6 +432,7 @@ export default {
 
   .seat-time-item.disabled {
     background: #EEEEEF;
+    color: #333333;
   }
 }
 
