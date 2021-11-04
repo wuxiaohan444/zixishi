@@ -14,6 +14,9 @@
           <view class="new-price u-red-color">¥{{ item.price }}</view>
         </view>
       </view>
+      <view v-show="noData">
+        <u-empty text="预定列表为空" mode="list"></u-empty>
+      </view>
     </view>
   </view>
 </template>
@@ -42,10 +45,16 @@ export default {
       size: 10,
       isMore: false,
       status: '',
+      noData:false,
+      tenantId:''
     }
   },
   onLoad(){
-    this.getTimeCardList()
+    if (uni.getStorageSync('storeInfo')) {
+      let data = uni.getStorageSync('storeInfo');
+      this.tenantId = data.tenantId;
+    }
+    this.getTimeCardList();
   },
   methods: {
     change(index) {
@@ -61,7 +70,8 @@ export default {
     getTimeCardList(){
       let params = {
         current: this.page,
-        size: this.size
+        size: this.size,
+        tenantId:this.tenantId
       };
       this.$u.api.timeCardList(params).then((res)=>{
         if(this.page>1){
@@ -82,7 +92,9 @@ export default {
     GetContractSeatList(){
       let params = {
         current: this.page,
-        size: this.size
+        size: this.size,
+        status:1,
+        tenantId:this.tenantId
       };
       this.$u.api.contractSeatList(params).then((res)=>{
         if(this.page>1){
@@ -91,11 +103,7 @@ export default {
           this.timeCardList = res.data.records;
         }
         this.isMore = this.timeCardList.length < res.data.total;
-        if (this.isMore) {
-          this.status = 'loadmore'
-        } else {
-          this.status = 'nomore'
-        }
+        this.noData = this.timeCardList.length <= 0;
         uni.stopPullDownRefresh();
       })
     },
@@ -136,6 +144,7 @@ export default {
       this.size = 10;
       this.isMore = false;
       this.status = '';
+      this.noData = false;
     },
   }
 }

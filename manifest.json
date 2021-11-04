@@ -68,7 +68,11 @@
             "urlCheck" : false
         },
         "usingComponents" : true,
-        "permission" : {}
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "推荐离用户最近门店"
+            }
+        }
     },
     "mp-alipay" : {
         "usingComponents" : true

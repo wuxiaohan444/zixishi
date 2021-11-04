@@ -3,18 +3,16 @@
     <view class="my-table">
       <u-table font-size="23" border-color="#EEEFF1">
         <u-tr>
-          <u-th width="178rpx" background="#E1E4EB">日期</u-th>
+          <u-th background="#E1E4EB">日期</u-th>
           <u-th background="#E1E4EB">座位号</u-th>
-          <u-th width="160rpx" background="#E1E4EB">订座时间</u-th>
-          <u-th width="122rpx" background="#E1E4EB">时长</u-th>
-          <u-th width="127rpx" background="#E1E4EB">价格</u-th>
+          <u-th background="#E1E4EB">订座时间</u-th>
+          <u-th background="#E1E4EB">时长</u-th>
         </u-tr>
         <u-tr v-for="(item,index) in tableData" :key="index">
-          <u-td width="178rpx" :background="index%2===0?'':'#F4F3F5'">{{ item.date }}</u-td>
+          <u-td :background="index%2===0?'':'#F4F3F5'">{{ item.date }}</u-td>
           <u-td :background="index%2===0?'':'#F4F3F5'">{{ item.seat }}</u-td>
-          <u-td width="160rpx" :background="index%2===0?'':'#F4F3F5'">{{ item.time }}</u-td>
-          <u-td width="122rpx" :background="index%2===0?'':'#F4F3F5'">{{ item.duration }}</u-td>
-          <u-td width="127rpx" :background="index%2===0?'':'#F4F3F5'">{{ item.price }}</u-td>
+          <u-td :background="index%2===0?'':'#F4F3F5'">{{ item.time }}</u-td>
+          <u-td :background="index%2===0?'':'#F4F3F5'">{{ item.duration }}</u-td>
         </u-tr>
       </u-table>
     </view>
@@ -71,9 +69,9 @@ export default {
     data.map((item)=>{
       this.tableData.push({
         date:item,
-        seat: '1',
+        seat: '1'+'号座位',
         time: this.info.startTime+' - '+this.info.endTime,
-        duration: duration,
+        duration: duration+'小时',
         price: price+'元'
       })
     });

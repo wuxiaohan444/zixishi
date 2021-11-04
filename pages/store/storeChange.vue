@@ -8,7 +8,7 @@
               <view class="store-name u-font-24">{{item.parentName}}</view>
               <view class="u-ellipsis u-font-32">{{item.fullName}}</view>
             </view>
-<!--            <view class="u-font-26">5.8km</view>-->
+            <view class="u-font-26">{{item.distance?item.distance:0}}km</view>
           </view>
 <!--          <view class="store-item-info_middle u-flex">-->
 <!--            <image src="../../static/images/store/time.png" class="time_icon"></image>-->
@@ -35,17 +35,26 @@
         <view class="text u-font-24">订单</view>
       </view>
     </view>
+    <view class="loading-box u-flex u-row-center u-col-center" v-show="loadingShow">
+      <view>
+        <u-loading mode="circle"></u-loading>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
-import toast from "../../uview-ui/libs/function/toast";
+var bmap = require('../../js_sdk/bmap-wx.min.js');
+var wxMarkerData = [];
 
 export default {
   name: "storeChange",
   data() {
     return {
       list: [],
+      longitude:'',
+      latitude:'',
+      loadingShow:true
     }
   },
   onLoad() {
@@ -57,6 +66,7 @@ export default {
         console.log(res);
         if (res.code == 200) {
           this.list = this.$u.deepClone(res.data);
+          this.getLocaton();
         } else {
           this.$u.toast(res.msg)
         }
@@ -65,7 +75,7 @@ export default {
     change(item){
       this.$u.api.changeStore({id:item.id}).then((res)=>{
         if(res.code==200){
-          uni.setStorageSync('storeInfo', res.data);
+          uni.setStorageSync('storeInfo', item);
           uni.setStorageSync('parentName', item.parentName);
           uni.switchTab({
             url: '../home/homePage'
@@ -87,6 +97,65 @@ export default {
         }
       })
     },
+
+    getLocaton(){
+      const that = this;
+      const BMap = new bmap.BMapWX({
+        ak: 'RUQGykpPH5GrHnHSyuGvc5879gkZhSwF'
+      });
+      const fail = function(data) {
+        console.log(data)
+      };
+      const success = function(data) {
+        wxMarkerData = data.wxMarkerData;
+        that.markers=wxMarkerData;
+        that.latitude=wxMarkerData[0].latitude;
+        that.longitude=wxMarkerData[0].longitude;
+        that.list.map(v => {
+          v['distance'] = that.getDistance(wxMarkerData[0].latitude,wxMarkerData[0].longitude,v.latitude,v.longitude);
+        });
+        that.list.sort(that.compare("distance",true));
+        that.loadingShow = false;
+      }
+      BMap.regeocoding({
+        fail:fail,
+        success:success
+      });
+    },
+    getDistance(lat1,lng1,lat2,lng2){
+      // lat1 用户纬度
+      // lng1 用户经度
+      // lat2 门店纬度
+      // lng2 门店经度
+      let radLat1 = this.Rad(lat1);
+      let radLat2 = this.Rad(lat2);
+      let a = this.Rad(lat1) - this.Rad(lat2);
+      let b = this.Rad(lng1) - this.Rad(lng2);
+      let s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+      s = s * 6378.137;
+      s = Math.round(s * 10000) / 10000;
+      s = s.toFixed(1) //保留两位小数
+      console.log('经纬度计算的距离:' + s)
+      return s
+    },
+    Rad(d) {
+      //根据经纬度判断距离
+      return d * Math.PI / 180.0;
+    },
+    // 排序
+    compare(property,desc) {
+      return function (a, b) {
+        var value1 = a[property];
+        var value2 = b[property];
+        if(desc==true){
+          // 升序排列
+          return value1 - value2;
+        }else{
+          // 降序排列
+          return value2 - value1;
+        }
+      }
+    }
   }
 }
 </script>
@@ -186,6 +255,16 @@ export default {
         height: 31rpx;
       }
     }
+  }
+
+  .loading-box{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    top: 0;
+    left: 0;
+    z-index: 9999;
   }
 }
 </style>

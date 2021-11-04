@@ -20,13 +20,13 @@
           <!--          <text class="room-label">全天</text>-->
         </view>
         <view class="room-header_top_right">
-          <image src="../../static/images/home/phone_icon.png" class="phone_icon"></image>
+<!--          <image src="../../static/images/home/phone_icon.png" class="phone_icon"></image>-->
           <image src="../../static/images/home/address_icon.png" class="address_icon"></image>
         </view>
       </view>
       <view class="room-header_bottom u-flex u-row-between">
         <view class="room-header_bottom_left u-font-26 u-black-color">{{ storeInfo.address }}</view>
-        <view class="room-header_bottom_right u-font-26">4.3Km</view>
+        <view class="room-header_bottom_right u-font-26">{{storeInfo.distance}}Km</view>
       </view>
     </view>
     <!--    轮播图-->
@@ -104,8 +104,10 @@ export default {
     if (uni.getStorageSync('storeInfo')) {
       this.storeInfo = uni.getStorageSync('storeInfo');
       this.parentName = uni.getStorageSync('parentName');
+      this.getRoomList();
+    }else{
+      this.changeStore()
     }
-    this.getRoomList();
   },
   methods: {
     getRoomList() {
