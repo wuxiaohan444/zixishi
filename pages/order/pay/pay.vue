@@ -26,7 +26,7 @@
 				</view>
 				<view>
 					<view class="u-font-28">会员余额:</view>
-					<view class="u-font-31">{{user.balance}}元</view>
+					<view class="u-font-31">{{user.balance?user.balance:'0.00'}}元</view>
 				</view>
 				<view>
 					<view class="u-font-28">订单金额:</view>

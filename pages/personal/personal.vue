@@ -5,20 +5,25 @@
       <view :style="{'height':navBarHeight+'px','line-height':navBarHeight+'px'}"
             class="header-navbar u-black-color u-font-31 u-bold">个人中心
       </view>
-      <view class="personal-info" @click="goLoGin">
-        <view class="userAvatar">
-          <open-data type="userAvatarUrl" style="width: 100%;height: 100%;"></open-data>
-        </view>
-        <view class="header-user">
-          <view class="user-name">
-            <text class="u-font-33 u-bold">{{info.memberName}}</text>
-            <text class="user-tag u-font-23">{{info.memberLevelName}}</text>
+      <view class="personal-info u-flex u-row-between" @click="goLoGin">
+        <view class="u-flex">
+          <view class="userAvatar">
+            <open-data type="userAvatarUrl" style="width: 100%;height: 100%;"></open-data>
           </view>
-          <view class="user-content">
-            <text>{{noPassByMobile(info.phone)}}</text>
-            <text>账户余额:{{info.balance}}</text>
+          <view class="header-user u-font-33 u-bold" v-if="!login">未登录</view>
+          <view class="header-user" v-if="login">
+            <view class="user-name u-flex">
+              <open-data type="userNickName" lang="zh_CN" class="u-font-33 u-bold"></open-data>
+<!--              <text class="u-font-33 u-bold">{{info.memberName}}</text>-->
+              <text class="user-tag u-font-23">{{info.memberLevelName}}</text>
+            </view>
+            <view class="user-content">
+              <text>{{noPassByMobile(info.phone)}}</text>
+              <text>账户余额:{{info.balance?info.balance:'0.00'}}</text>
+            </view>
           </view>
         </view>
+<!--        <u-icon name="setting-fill" size="40"></u-icon>-->
       </view>
     </view>
     <u-grid :col="4" :border="false" class="my-grid" u-hover-class>
@@ -65,10 +70,14 @@ export default {
       statusBarHeight: app.globalData.statusBarHeight, // 状态栏高度
       navBarHeight: app.globalData.navBarHeight, // 导航栏高度
       info:{},
+      login:''
     }
   },
   onShow() {
-    this.getUserInfo();
+    this.login = !!uni.getStorageSync('openId');
+    if(this.login){
+      this.getUserInfo();
+    }
   },
   methods: {
     getUserInfo() {
@@ -79,6 +88,8 @@ export default {
         console.log(res.data);
         this.info = res.data;
         uni.setStorageSync('userInfo', this.info);
+      }).catch((res)=>{
+        console.log('没登陆');
       })
     },
     myNavigator(link) {
@@ -87,6 +98,9 @@ export default {
       })
     },
     goLoGin() {
+      if(this.login){
+        return false
+      }
       uni.navigateTo({
         url: '../login/login'
       });
@@ -126,9 +140,6 @@ export default {
 
   .personal-info {
     padding: 40rpx 38rpx 0 38rpx;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
 
     .userAvatar {
       width: 124rpx;

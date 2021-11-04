@@ -3,7 +3,7 @@
     <view class="account">
       <view class="account-info">
         <view class="u-font-26">账户余额</view>
-        <view class="price">{{balance}}
+        <view class="price">{{balance?balance:'0.00'}}
           <text class="u-font-26">元</text>
         </view>
       </view>

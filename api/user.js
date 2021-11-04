@@ -17,7 +17,17 @@ const login = (params) => {
     })
 }
 
+// 登录
+const updateMemberName = (params) => {
+    return http.request({
+        url: '/blade-system/member/updateMemberName',
+        method: 'POST',
+        data: params
+    })
+}
+
 export default {
     userInfo,
-    login
+    login,
+    updateMemberName
 }

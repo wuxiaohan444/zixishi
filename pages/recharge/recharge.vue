@@ -9,7 +9,7 @@
       </view>
     </view>
     <view class="doc">
-      <view class="current-price u-font-24">当前余额：¥{{balance}}</view>
+      <view class="current-price u-font-24">当前余额：¥{{balance?balance:'0.00'}}</view>
       <u-button :custom-style="customStyle" shape="circle" type="primary" @click="rechargeMoney">去支付</u-button>
       <view class="activity-doc">
         <view>充值活动：</view>

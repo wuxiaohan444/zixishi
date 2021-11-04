@@ -104,8 +104,6 @@ export default {
     if (uni.getStorageSync('storeInfo')) {
       this.storeInfo = uni.getStorageSync('storeInfo');
       this.parentName = uni.getStorageSync('parentName');
-    }else{
-
     }
     this.getRoomList();
   },
@@ -113,9 +111,14 @@ export default {
     getRoomList() {
       this.loadingShow = true;
       this.$u.api.roomList().then((res) => {
-        this.roomList = res.data;
-        this.loadingShow = false;
-        this.getSeatList(this.roomList[0].id)
+        let arr = Object.keys(res.data);
+        if(arr.length > 0){
+          this.roomList = res.data;
+          this.loadingShow = false;
+          this.getSeatList(this.roomList[0].id)
+        }else{
+          this.changeStore()
+        }
       }).catch((res) => {
         this.loadingShow = false;
       })
@@ -135,6 +138,12 @@ export default {
       });
     },
     chooseSeat(item) {
+      if(!uni.getStorageSync('openId')){
+        uni.navigateTo({
+          url:'../login/login'
+        });
+        return false;
+      }
       if (item.status === 5) {
         this.$u.toast('此座位正在维护中,请选择其他座位')
       } else {

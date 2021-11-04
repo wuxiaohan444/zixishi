@@ -4,28 +4,33 @@
 		    <view :style="{'height':statusBarHeight+'px'}"></view>
 		    <view :style="{'height':navBarHeight+'px'}" class="header-navbar"></view>
 		  </view>
-
 		  <view class="top">
 		    <image src="../../static/images/rider.png" />
 		    <view>这是我的描述</view>
 		  </view>
-
-
-		  <view v-if="!tokenStatus">
-		    <button class="btn" @click="getUserProfile">
-		      <text>微信账号一键登录</text>
-		    </button>
-		  </view>
-
-		  <view v-if="tokenStatus && !telStatus">
-		    <button class="btn" open-type="getPhoneNumber" @click="getPhoneNumber">
+		  <view>
+		    <button class="btn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
 		      <text>授权手机号</text>
 		    </button>
 		  </view>
+    <u-mask :show="show" @click="show = false">
+      <view class="warp">
+        <view class="rect" @tap.stop>
+          <view class="title">为了更好的体验，请输入会员名称</view>
+          <view class="form-box">
+            <u-form :model="form" ref="uForm" >
+              <u-form-item label="姓名"><u-input v-model="form.memberName" /></u-form-item>
+            </u-form>
+            <u-button shape="circle" type="primary" :custom-style="customStyle" @click="affirm">确认</u-button>
+          </view>
+        </view>
+      </view>
+    </u-mask>
 	</view>
 </template>
 
 <script>
+  import AESUtil from "../../js_sdk/CBCCrypto.js"
 	const app = getApp();
 	export default {
 		data() {
@@ -35,48 +40,57 @@
 				winHeight:app.globalData.winHeight+app.globalData.statusBarHeight+app.globalData.navBarHeight,
 				flag: true,
 				tokenStatus:false,
-
+        code:'',
+        show:false,
+        form:{},
+        customStyle:{
+          marginTop:'20rpx'
+        }
 			};
 		},
+    onLoad(){
+      var that = this;
+      uni.login({
+        success: (e) => {
+          console.log("登录成功", e);
+          that.code = e.code;
+        },
+        fail: (e) => {
+          uni.showModal({
+            content: "登录失败,原因为: " + e.errMsg,
+            showCancel: false
+          });
+        }
+      })
+    },
 		methods: {
-			getUserProfile(){
-        let code = '';
-        let that =this;
-				wx.login({
-				  success: function (res) { //拿到code
-					wx.setStorageSync('code', res.code);
-            code = res.code;
-				  }
-				})
-				uni.getUserProfile({
-					desc: '用于完善会员资料',
-					success: (result) => {
-						console.log(result,'dsds');
-						this.tokenStatus = true;
-						this.telStatus = false
-            let data={
-              code:code,
-              encryptedData:result.encryptedData,
-              iv:result.iv
-            };
-            that.login(data);
-					}
-				})
-			},
-      login(data){
+      getPhoneNumber(e){
+        let data = {
+          code: this.code,
+          encryptedData: e.detail.encryptedData,
+          iv: e.detail.iv
+        }
         this.$u.api.login(data).then((res)=>{
-          console.log(res);
+          let openid = AESUtil.decrypt((res.data.encryptedData).split(";")[0])
+          // let phone = AESUtil.decrypt((res.data.encryptedData).split(";")[1])
+          uni.setStorageSync('openId', openid);
+          this.show = true
         })
-      },
-			getPhoneNumber(e){
-				//获取用户的手机号码
-				if(e.detail.encryptedData){
-					const data = {
-						encryptedData: e.detail.encryptedData,
-						iv: e.detail.iv,
-					  }
-				}
-			}
+			},
+      affirm(){
+        let data={
+          memberName:this.form.memberName,
+          openId: this.$u.func.getOpenId(),
+        };
+        this.$u.api.updateMemberName(data).then((res)=>{
+          if(res.code===200){
+            uni.navigateBack();
+            this.show = false;
+          }else{
+            this.$u.toast(res.msg)
+          }
+        })
+      }
 		}
 	};
 </script>
@@ -149,4 +163,27 @@
 	.bottom text:first-child {
 	  color: #ccc;
 	}
+  .warp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .rect {
+    width: 500rpx;
+    height: 340rpx;
+    background-color: #fff;
+    border-radius: 18rpx;
+    .title{
+      text-align: center;
+      color: #333333;
+      font-size: 24rpx;
+      line-height: 100rpx;
+    }
+    .form-box{
+      padding: 0 30rpx;
+      font-size: 24rpx;
+    }
+  }
 </style>
