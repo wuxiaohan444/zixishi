@@ -61,6 +61,12 @@ export default {
   onLoad(options){
     console.log(JSON.parse(options.info));
     this.info = JSON.parse(options.info);
+    if(!uni.getStorageSync('openId')){
+      uni.navigateTo({
+        url:`../login/login`
+      })
+      return false;
+    }
   },
   methods: {
     payShow() {

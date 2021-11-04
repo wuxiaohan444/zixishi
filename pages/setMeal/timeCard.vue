@@ -99,7 +99,6 @@ export default {
     }
   },
   onLoad(options){
-    console.log(JSON.parse(options.info));
     this.info = JSON.parse(options.info);
     this.time = this.formatTime(this.info.cappingHours)
     console.log(this.time);
@@ -120,7 +119,12 @@ export default {
       let data=this.info.expiryDate.split(';');
       this.info.expiryDateText = data[0]+' 至 '+data[1]
     }
-    console.log(this.astrictText);
+    if(!uni.getStorageSync('openId')){
+      uni.navigateTo({
+        url:`../login/login`
+      })
+      return false;
+    }
   },
   methods: {
     payShow() {

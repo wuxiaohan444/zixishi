@@ -76,6 +76,12 @@ export default {
     }
   },
   onShow(){
+    if(!uni.getStorageSync('openId')){
+      uni.navigateTo({
+        url:`../login/login`
+      })
+      return false;
+    }
     if (uni.getStorageSync('storeInfo')) {
       let data = uni.getStorageSync('storeInfo');
       this.tenantId = data.tenantId;
