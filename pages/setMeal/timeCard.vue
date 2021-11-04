@@ -3,53 +3,57 @@
     <view class="card-header u-flex">
       <view class="card-header-time u-flex u-col-center u-row-center">
         <view>
-          <text class="one">17</text>
+          <text class="one">{{time}}</text>
           <text class="two">h</text>
         </view>
       </view>
-      <view class="card-header-name u-ellipsis">读书日卡（天庆大厦店）</view>
+      <view class="card-header-name u-ellipsis">{{info.name}}（{{info.storeName}}）</view>
     </view>
     <view class="info-box">
-      <view class="card-name u-font-32 u-bold u-black-color">17小时读书日卡（门店名）</view>
+      <view class="card-name u-font-32 u-bold u-black-color">{{info.name}}（{{info.storeName}}）</view>
       <view class="info-item u-flex u-row-between">
         <view class="u-flex">
           <view class="item-label">销售价格：</view>
-          <view class="item-text">15.0元</view>
+          <view class="item-text">{{info.price}}元</view>
         </view>
-        <view class="u-flex">
+        <view class="u-flex" v-if="info.expireType ===0">
           <view class="item-label">天数：</view>
-          <view class="item-text">1天</view>
+          <view class="item-text">{{info.expiryDate}}天</view>
         </view>
       </view>
       <view class="info-item u-flex">
+        <view class="item-label">使用限制：</view>
+        <view v-if="info.restrictionType ===2">
+          <view class="item-text" v-for="(item,index) in astrictText" :key="index">{{item}}</view>
+        </view>
+        <view class="item-text" v-else>{{astrictText}}</view>
+      </view>
+      <view class="info-item u-flex" v-if="info.expireType ===1">
         <view class="item-label">使用日期：</view>
-        <view class="item-text">无限制</view>
+        <view class="item-text">{{info.expiryDateText}}</view>
       </view>
       <view class="info-item u-flex">
         <view class="item-label">封顶小时：</view>
-        <view class="item-text">17小时</view>
+        <view class="item-text">{{time}}小时</view>
       </view>
       <view class="info-item u-flex">
         <view class="item-label">适用门店：</view>
-        <view class="item-text">门店名</view>
+        <view class="item-text">{{info.storeName}}</view>
       </view>
       <view class="info-item u-flex">
-        <view class="item-label">有 效 期：</view>
-        <view class="item-text">2021-09-08至2021-10-21</view>
+        <view class="item-label">使用时间：</view>
+        <view class="item-text">{{info.timeLimitStart}} - {{info.timeLimitEnd}}</view>
       </view>
       <view class="line"></view>
     </view>
-    <u-button shape="circle" :custom-style="customStyle" @click="payShow">支付：1.5元</u-button>
-    <pay-type :show="payModalShow" @close="payModalShow=false" @pay="pay"></pay-type>
+    <u-button shape="circle" :custom-style="customStyle" @click="payShow">支付：{{info.price}}元</u-button>
   </view>
 </template>
 
 <script>
-import payType from "../../components/pay/payType";
 
 export default {
   name: "timeCard",
-  components: {payType},
   data() {
     return {
       customStyle: {
@@ -59,18 +63,83 @@ export default {
         fontSize: '31rpx',
         marginTop: '92rpx'
       },
-      payModalShow: false
+      info:'',
+      astrictText:'',
+      weekData: [
+        {
+          label: '周一',
+          value: '1'
+        },
+        {
+          label: '周二',
+          value: '2'
+        },
+        {
+          label: '周三',
+          value: '3'
+        },
+        {
+          label: '周四',
+          value: '4'
+        },
+        {
+          label: '周五',
+          value: '5'
+        },
+        {
+          label: '周六',
+          value: '6'
+        },
+        {
+          label: '周日',
+          value: '7'
+        }
+      ],
+      time:'',
     }
+  },
+  onLoad(options){
+    console.log(JSON.parse(options.info));
+    this.info = JSON.parse(options.info);
+    this.time = this.formatTime(this.info.cappingHours)
+    console.log(this.time);
+    if(this.info.restrictionType ===0){
+      this.astrictText= '无限制'
+    }else if(this.info.restrictionType ===1){
+      let text=[];
+      this.weekData.map((item)=>{
+        if(this.info.availableTime.indexOf(item.value)>-1){
+          text.push(item.label)
+        }
+      })
+      this.astrictText = text.join('、')
+    }else if(this.info.restrictionType ===2){
+      this.astrictText = this.info.availableTime.split(',');
+    }
+    if(this.info.expireType ===1){
+      let data=this.info.expiryDate.split(';');
+      this.info.expiryDateText = data[0]+' 至 '+data[1]
+    }
+    console.log(this.astrictText);
   },
   methods: {
     payShow() {
-      this.payModalShow = true;
+      let data = {
+        openId: this.$u.func.getOpenId(),
+        id:this.info.id,
+        storeId:this.info.storeId,
+        storeName:this.info.storeName,
+      }
+      this.$u.api.timeCardBuy(data).then((res)=>{
+
+      })
+      // uni.navigateTo({
+      //   url: 'paySuccess'
+      // });
     },
-    pay(){
-      this.payModalShow = false;
-      uni.navigateTo({
-        url: 'paySuccess'
-      });
+    formatTime(time){
+      console.log(time);
+      return time / 60
     }
   }
 }

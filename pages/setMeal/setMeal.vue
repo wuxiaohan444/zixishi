@@ -3,15 +3,15 @@
     <u-tabs :list="list" :is-scroll="false" :current="current" @change="change" active-color="#2487FF"
             :bar-style="barStyle"></u-tabs>
     <view class="setMeal-box">
-      <view class="setMeal-box_item" v-for="(item,index) in timeCardList" :key="index" @click="skip">
-        <image :src="item.img" class="item-img" :lazy-load="true" mode="aspectFill"></image>
+      <view class="setMeal-box_item" v-for="(item,index) in timeCardList" :key="index" @click="skip(item)">
+        <image src="https://cdn.uviewui.com/uview/swiper/2.jpg" class="item-img" :lazy-load="true" mode="aspectFill"></image>
         <view class="item-top u-flex">
           <view class="store-name">{{ item.storeName }}</view>
-          <view class="card-name">{{ item.cardName }}</view>
+          <view class="card-name">{{ item.name }}</view>
         </view>
         <view class="item-bottom u-flex u-row-right">
-          <view class="old-price">¥{{ item.oldPrice }}</view>
-          <view class="new-price u-red-color">¥{{ item.newPrice }}</view>
+          <view class="old-price">¥{{ item.originalPrice }}</view>
+          <view class="new-price u-red-color">¥{{ item.price }}</view>
         </view>
       </view>
     </view>
@@ -37,34 +37,11 @@ export default {
         background: '#2487FF',
         borderRadius: '4rpx'
       },
-      timeCardList: [
-        {
-          img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-          storeName: '大摩店',
-          cardName: '17小时读书日卡(56小时)',
-          oldPrice: '20',
-          newPrice: '5'
-        },
-        {
-          img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-          storeName: '大摩店',
-          cardName: '17小时读书日卡(56小时)',
-          oldPrice: '20',
-          newPrice: '5'
-        },  {
-          img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-          storeName: '大摩店',
-          cardName: '17小时读书日卡(56小时)',
-          oldPrice: '20',
-          newPrice: '5'
-        },  {
-          img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-          storeName: '大摩店',
-          cardName: '17小时读书日卡(56小时)',
-          oldPrice: '20',
-          newPrice: '5'
-        }
-      ]
+      timeCardList: [],
+      page: 1,
+      size: 10,
+      isMore: false,
+      status: '',
     }
   },
   onLoad(){
@@ -73,37 +50,93 @@ export default {
   methods: {
     change(index) {
       this.current = index;
+      this.resetData();
+      if(this.current===1){
+        this.GetContractSeatList()
+      }else{
+        this.getTimeCardList()
+      }
     },
+    // 获取时长卡
     getTimeCardList(){
       let params = {
         current: this.page,
         size: this.size
       };
       this.$u.api.timeCardList(params).then((res)=>{
-
+        if(this.page>1){
+          this.timeCardList = this.timeCardList.concat(res.data.records);
+        }else{
+          this.timeCardList = res.data.records;
+        }
+        this.isMore = this.timeCardList.length < res.data.total;
+        if (this.isMore) {
+          this.status = 'loadmore'
+        } else {
+          this.status = 'nomore'
+        }
+        uni.stopPullDownRefresh();
+      })
+    },
+    // 获取定座卡
+    GetContractSeatList(){
+      let params = {
+        current: this.page,
+        size: this.size
+      };
+      this.$u.api.contractSeatList(params).then((res)=>{
+        if(this.page>1){
+          this.timeCardList = this.timeCardList.concat(res.data.records);
+        }else{
+          this.timeCardList = res.data.records;
+        }
+        this.isMore = this.timeCardList.length < res.data.total;
+        if (this.isMore) {
+          this.status = 'loadmore'
+        } else {
+          this.status = 'nomore'
+        }
+        uni.stopPullDownRefresh();
       })
     },
     // 下拉刷新
     onPullDownRefresh() {
-      setTimeout(function () {
-        uni.stopPullDownRefresh()
-      }, 1000)
+      this.resetData()
+      if(this.current===1){
+        this.GetContractSeatList()
+      }else{
+        this.getTimeCardList()
+      }
     },
     //上拉加载
     onReachBottom() {
-     this.timeCardList.push({
-       img: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-       storeName: '大摩店',
-       cardName: '17小时读书日卡(56小时)',
-       oldPrice: '20',
-       newPrice: '5'
-     })
+      if (!this.isMore) {
+        return false;
+      }
+      this.page = this.page + 1;
+      if(this.current===1){
+        this.GetContractSeatList()
+      }else{
+        this.getTimeCardList()
+      }
     },
-    skip(){
-      uni.navigateTo({
-        url: 'reservationCard'
-      });
-    }
+    skip(item){
+      if(this.current===1){
+        uni.navigateTo({
+          url: 'reservationCard?info='+JSON.stringify(item)
+        });
+      }else{
+        uni.navigateTo({
+          url: 'timeCard?info='+JSON.stringify(item)
+        });
+      }
+    },
+    resetData(){
+      this.page = 1;
+      this.size = 10;
+      this.isMore = false;
+      this.status = '';
+    },
   }
 }
 </script>

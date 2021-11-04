@@ -1,52 +1,44 @@
 <template>
   <view class="container">
     <view class="card-header u-flex">
-      <view class="card-header-name u-ellipsis">读书日卡（天庆大厦店）</view>
+      <view class="card-header-name u-ellipsis">{{info.name}}（{{info.storeName}}）</view>
     </view>
     <view class="info-box">
-      <view class="card-name u-font-32 u-bold u-black-color">17小时读书日卡（门店名）</view>
+      <view class="card-name u-font-32 u-bold u-black-color">1{{info.name}}（{{info.storeName}}）</view>
       <view class="info-item u-flex u-row-between">
         <view class="u-flex">
           <view class="item-label">销售价格：</view>
-          <view class="item-text">15.0元</view>
+          <view class="item-text">{{info.price}}元</view>
         </view>
         <view class="u-flex">
           <view class="item-label">天数：</view>
-          <view class="item-text">1天</view>
+          <view class="item-text">{{info.days}}天</view>
         </view>
       </view>
       <view class="info-item u-flex">
         <view class="item-label">使用日期：</view>
-        <view class="item-text">无限制</view>
-      </view>
-      <view class="info-item u-flex">
-        <view class="item-label">封顶小时：</view>
-        <view class="item-text">17小时</view>
+        <view class="item-text">{{info.startDate}}至{{info.endDate}}</view>
       </view>
       <view class="info-item u-flex">
         <view class="item-label">适用门店：</view>
-        <view class="item-text">门店名</view>
+        <view class="item-text">{{info.storeName}}</view>
       </view>
       <view class="info-item u-flex">
-        <view class="item-label">有 效 期：</view>
-        <view class="item-text">2021-09-08至2021-10-21</view>
+        <view class="item-label">使用时间：</view>
+        <view class="item-text">{{info.startTime}} - {{info.endTime}}</view>
       </view>
       <view class="info-item u-flex u-row-right">
         <u-button shape="circle" :custom-style="customStyle2" @click="details">座位详情</u-button>
       </view>
       <view class="line"></view>
     </view>
-    <u-button shape="circle" :custom-style="customStyle" @click="payShow">支付：1.5元</u-button>
-    <pay-type :show="payModalShow" @close="payModalShow=false" @pay="pay"></pay-type>
+    <u-button shape="circle" :custom-style="customStyle" @click="payShow">支付：{{info.price}}元</u-button>
   </view>
 </template>
 
 <script>
-import payType from "../../components/pay/payType";
-
 export default {
   name: "timeCard",
-  components: {payType},
   data() {
     return {
       customStyle: {
@@ -62,22 +54,30 @@ export default {
         color: '#2487FF',
         fontSize: '28rpx'
       },
-      payModalShow: false
+      payModalShow: false,
+      info:''
     }
+  },
+  onLoad(options){
+    console.log(JSON.parse(options.info));
+    this.info = JSON.parse(options.info);
   },
   methods: {
     payShow() {
-      this.payModalShow = true;
-    },
-    pay(){
-      this.payModalShow = false;
-      uni.navigateTo({
-        url: 'paySuccess'
-      });
+      let data = {
+        openId: this.$u.func.getOpenId(),
+        id:this.info.id,
+      }
+      this.$u.api.seatCardBuy(data).then((res)=>{
+        uni.navigateTo({
+          url: 'paySuccess'
+        });
+      })
     },
     details(){
+      let date= this.info.startDate +','+this.info.endDate
       uni.navigateTo({
-        url: 'reservationCardDetails'
+        url: 'reservationCardDetails?info='+ JSON.stringify(this.info)
       });
     }
   }

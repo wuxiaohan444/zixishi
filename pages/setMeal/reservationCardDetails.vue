@@ -21,28 +21,30 @@
     <view class="money-box">
       <view class="money-box-item u-flex u-row-between">
         <view class="money-box-item_label">合计时长：</view>
-        <view class="money-box-item_content">48小时</view>
+        <view class="money-box-item_content">{{durationTime}}小时</view>
       </view>
       <view class="money-box-item u-flex u-row-between">
         <view class="money-box-item_label">合计金额：</view>
-        <view class="money-box-item_content">144元</view>
+        <view class="money-box-item_content">{{info.price}}元</view>
       </view>
       <view class="last-item u-flex u-row-right">
         <view class="label">售价：</view>
-        <view class="price">100元</view>
+        <view class="price">{{info.price}}元</view>
       </view>
     </view>
     <u-button shape="circle" :custom-style="customStyle" @click="payShow">确认支付</u-button>
-    <pay-type :show="payModalShow" @close="payModalShow=false" @pay="pay"></pay-type>
+    <view class="loading-box u-flex u-row-center u-col-center" v-show="loadingShow">
+      <view>
+        <u-loading mode="circle"></u-loading>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
-import payType from "../../components/pay/payType";
 import {getAllDate} from '../../utils/timeFunc'
 export default {
   name: "reservationCardDetails",
-  components: {payType},
   data() {
     return {
       customStyle: {
@@ -53,28 +55,49 @@ export default {
         marginTop: '92rpx'
       },
       payModalShow: false,
-      tableData: []
+      tableData: [],
+      info:'',
+      durationTime:'',
+      loadingShow:true
     }
   },
-  onLoad() {
-    console.log();
-    let data = getAllDate('2021-12-25', '2022-01-05');
+  onLoad(options){
+    console.log(JSON.parse(options.info));
+    this.info = JSON.parse(options.info);
+    let data = getAllDate(this.info.startDate, this.info.endDate);
+    let duration = this.differ(this.info.startTime, this.info.endTime);
+    this.durationTime = duration * data.length;
+    let price = this.info.price / duration
     data.map((item)=>{
       this.tableData.push({
         date:item,
         seat: '1',
-        time: '18:00-24:00',
-        duration: '6小时',
-        price: '18元'
+        time: this.info.startTime+' - '+this.info.endTime,
+        duration: duration,
+        price: price+'元'
       })
-    })
+    });
+    setTimeout(()=>{
+      this.loadingShow = false
+    },500)
   },
   methods: {
     payShow() {
-      this.payModalShow = true
+      let data = {
+        openId: this.$u.func.getOpenId(),
+        id:this.info.id,
+      }
+      this.$u.api.seatCardBuy(data).then((res)=>{
+        uni.navigateTo({
+          url: 'paySuccess'
+        });
+      })
     },
-    pay() {
-
+    differ(start, end) {
+      var d1 = new Date("1111/1/1 " + start);
+      var d2 = new Date("1111/1/1 " + end);
+      var gap = Math.abs(d1 - d2) / 1000 / 60 / 60;
+      return gap
     },
   }
 
@@ -85,7 +108,15 @@ export default {
 page {
   background: #F6F6F6;
 }
-
+.loading-box{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
 .card-details {
   padding: 22rpx 30rpx;
 
