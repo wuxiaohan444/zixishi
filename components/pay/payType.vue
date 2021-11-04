@@ -3,8 +3,8 @@
     <u-mask :show="show"  @click="close">
       <view class="warp">
         <view class="rect" @click.stop>
-          <image src="../../static/images/pay/close.png" class="close-icon"></image>
-          <view class="price">¥15.0</view>
+          <image src="../../static/images/pay/close.png" class="close-icon" @click="close"></image>
+          <view class="price">¥{{payInfo.couponMoney}}</view>
           <view class="pay-type">
             <view class="pay-type-item u-flex u-row-between" @click="chooseType(0)">
               <view class="item-left u-flex">
@@ -26,7 +26,7 @@
                 <text class="type-name">余额支付:</text>
               </view>
               <view class="item-right u-flex">
-                <text class="u-font-28 u-black-color">￥25</text>
+                <text class="u-font-28 u-black-color">￥{{user.balance}}</text>
                 <image v-if="payIndex===1" src="../../static/images/pay/choose.png" class="choose-icon"></image>
                 <view class="no-choose" v-else></view>
               </view>
@@ -57,8 +57,6 @@ export default {
   props:['show','user','storeInfo','timeRanges','totalMoney','couponMoney','payInfo'],
   data(){
     return{
-      balanceChoose:false,
-      wxChoose:false,
       payIndex:0,
     }
   },
@@ -70,6 +68,9 @@ export default {
      this.payIndex = number
     },
     pay(){
+      uni.showLoading({
+        title: '加载中'
+      });
       let type='';
       if(this.payIndex==0){
         type = 6
@@ -99,10 +100,11 @@ export default {
         timeRanges:JSON.stringify(this.timeRanges),
         seatDiscount:this.user.seatDiscount
       };
-      console.log(data);
-      // this.$u.api.generateOrder(data).then((res)=>{
-      //   this.confirmOrderPay(res.data.id)
-      // })
+      this.$u.api.generateOrder(data).then((res)=>{
+        this.confirmOrderPay(res.data.id)
+      }).catch((res)=>{
+        uni.hideLoading()
+      })
     },
     confirmOrderPay(id){
       let data={
@@ -110,7 +112,8 @@ export default {
         openId: this.$u.func.getOpenId()
       }
       this.$u.api.confirmOrderPay(data).then((res)=>{
-        this.$emit('pay',type);
+       this.close()
+        uni.hideLoading()
         if(res.code===200){
           uni.navigateTo({
             url:'/pages/pay/paySuccess?orderId='+id
@@ -119,6 +122,9 @@ export default {
           this.$u.toast(res.msg)
         }
       })
+    },
+    close(){
+      this.$emit('pay');
     },
     timeFormat(str) {
       return str.substr(0, 16)

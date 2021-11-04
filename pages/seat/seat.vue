@@ -182,24 +182,38 @@ export default {
       let startDate = beginning[0].bookDate+' '+beginning[0].startTime;
       let endDate = beginning[1].bookDate+' '+beginning[1].endTime;
       uni.setStorageSync('timeRanges',sumData);
-      this.timeRanges = sumData;
       let couponMoney = accMul(this.user.seatDiscount,this.totalMoney);
       let cumulativeMinimumConsumption = this.seatInfo.cumulativeMinimumConsumption;
       if(couponMoney<=cumulativeMinimumConsumption){
         couponMoney = cumulativeMinimumConsumption
       }
+      let timeRanges = []
+      sumData.map((item,index)=>{
+        timeRanges.push({
+          startTime:item.startTime,
+          endTime:item.endTime,
+          unitPrice:item.unitPrice,
+          totalPrice:item.totalPrice,
+          status:item.status,
+          bookDate:item.bookDate,
+          startDate:item.startDate,
+          endDate:item.endDate,
+          index:index+1
+        })
+      })
+      this.timeRanges = timeRanges;
       this.payInfo={
         startDate,
         endDate,
+        couponMoney,
         roomId:this.roomId,
         seatId:this.seatId,
-        couponMoney,
         totalMoney:this.totalMoney
       }
-      // this.payModalShow = true;
-      uni.navigateTo({
-        url: `/pages/order/pay/pay?startDate=${startDate}&endDate=${endDate}&totalMoney=${this.totalMoney}`
-      })
+      this.payModalShow = true;
+      // uni.navigateTo({
+      //   url: `/pages/order/pay/pay?startDate=${startDate}&endDate=${endDate}&totalMoney=${this.totalMoney}`
+      // })
     },
     // 提交券码
     submitCode() {
