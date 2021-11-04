@@ -79,17 +79,22 @@
         </view>
       </view>
     </u-popup>
+   <!--    支付-->
+    <pay-type :show="payModalShow" :storeInfo="storeInfo" :user="user" :timeRanges="timeRanges" @close="payModalShow=false" :payInfo="payInfo" @pay="pay"></pay-type>
   </view>
 </template>
 
 <script>
 import {getWeek, behindDate, getBusiness} from '../../utils/timeFunc'
-import {allTimeInt, allTimeHalf} from '../../static/data/allTime'
+import payType from "../../components/pay/payType";
+import {accMul, Subtr} from "../../utils/calculate";
 
 export default {
   name: "seat",
+  components: {payType},
   data() {
     return {
+      payModalShow:false,
       content: ['请与12:11前抵达自习室扫描入座'],
       payIndex: 0,
       timeData: [
@@ -128,7 +133,11 @@ export default {
       chargeSetId: '',
       storeInfo: '',
       loadingShow: true,
-      totalMoney:0
+      totalMoney:0,
+      user:'',
+      timeRanges:'',
+      payInfo:'',
+      seatInfo:''
     }
   },
   onLoad(options) {
@@ -137,6 +146,8 @@ export default {
       this.storeInfo = data;
       this.createDept = data.id;
     }
+    this.user = uni.getStorageSync('userInfo');
+    this.seatInfo = uni.getStorageSync('seatInfo');
     this.seatId = options.seatId;
     this.roomId = options.roomId;
     this.chargeSetId = options.chargeSetId;
@@ -171,6 +182,21 @@ export default {
       let startDate = beginning[0].bookDate+' '+beginning[0].startTime;
       let endDate = beginning[1].bookDate+' '+beginning[1].endTime;
       uni.setStorageSync('timeRanges',sumData);
+      this.timeRanges = sumData;
+      let couponMoney = accMul(this.user.seatDiscount,this.totalMoney);
+      let cumulativeMinimumConsumption = this.seatInfo.cumulativeMinimumConsumption;
+      if(couponMoney<=cumulativeMinimumConsumption){
+        couponMoney = cumulativeMinimumConsumption
+      }
+      this.payInfo={
+        startDate,
+        endDate,
+        roomId:this.roomId,
+        seatId:this.seatId,
+        couponMoney,
+        totalMoney:this.totalMoney
+      }
+      // this.payModalShow = true;
       uni.navigateTo({
         url: `/pages/order/pay/pay?startDate=${startDate}&endDate=${endDate}&totalMoney=${this.totalMoney}`
       })
@@ -196,9 +222,6 @@ export default {
     },
     chooseTime(index) {
       this.timeIndex = index;
-    },
-    format(str) {
-      return str.substr(0, 5)
     },
     // 选择时间段
     chooseTimeQuantum: function (index, item) {
@@ -370,6 +393,12 @@ export default {
           item.choose = false;
         })
       })
+    },
+    pay(){
+      this.payModalShow = false;
+    },
+    format(str) {
+      return str.substr(0, 5)
     },
   }
 }

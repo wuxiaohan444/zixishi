@@ -11,7 +11,7 @@
         </view>
         <view class="times">
           <view class="u-font-24"></view>
-          <view class="use u-font-23">去使用</view>
+<!--          <view class="use u-font-23">去使用</view>-->
         </view>
       </view>
       <u-loadmore :status="status"/>
@@ -25,7 +25,7 @@
         </view>
         <view class="times">
           <view class="u-font-24">剩余：{{toHourMinute(item.surplusHours)}}</view>
-          <view class="use u-font-23">去使用</view>
+          <view class="use u-font-23" @click.stop="skipStore">去使用</view>
         </view>
       </view>
       <u-loadmore :status="status"/>
@@ -155,6 +155,11 @@ export default {
     },
     toHourMinute(minutes){
       return toHourMinute(minutes)
+    },
+    skipStore(){
+      uni.switchTab({
+        url: '../home/homePage'
+      });
     }
   }
 }

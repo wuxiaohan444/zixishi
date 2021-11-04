@@ -17,12 +17,12 @@
     <view class="line"></view>
     <view class="reserve-item u-flex u-row-between">
       <text class="left">预订位置:</text>
-      <text class="right">{{orderInfo.roomName}}-{{orderInfo.seatName}}</text>
+      <text class="right">{{orderInfo.roomName?orderInfo.roomName:''}}-{{orderInfo.seatName?orderInfo.seatName:''}}</text>
     </view>
     <view class="line"></view>
     <view class="reserve-item u-flex u-row-between">
       <text class="left">预订时间:</text>
-      <text class="right">{{orderInfo.startDate}}至{{orderInfo.endDate}}</text>
+      <text class="right">{{orderInfo.startDate?orderInfo.startDate:''}}至{{orderInfo.endDate?orderInfo.endDate:''}}</text>
     </view>
     <view class="line"></view>
     <view class="operation u-flex u-row-between">

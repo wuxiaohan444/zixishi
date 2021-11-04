@@ -5,16 +5,16 @@
 			<view class="time">2021-10-11 16:00:00 - 2021-11-11 16:00:00</view>
 		</view>
 		<view class="doc">
-			<view class="doc-item">
-				<view>
-					<image src="../../../static/images/meituan/meituan.png"></image>
-					<image src="../../../static/images/meituan/meituan.png"></image>
-				</view>
-				<view>
-					<text class="u-font-36">去验券</text>
-					<image class="arrow" src="../../../static/images/arrow.png"></image>
-				</view>
-			</view>
+<!--			<view class="doc-item">-->
+<!--				<view>-->
+<!--					<image src="../../../static/images/meituan/meituan.png"></image>-->
+<!--					<image src="../../../static/images/meituan/meituan.png"></image>-->
+<!--				</view>-->
+<!--				<view>-->
+<!--					<text class="u-font-36">去验券</text>-->
+<!--					<image class="arrow" src="../../../static/images/arrow.png"></image>-->
+<!--				</view>-->
+<!--			</view>-->
 			<view class="doc-item" @click="toTimeCard">
 				<view style="display: flex;align-items: center;">
 					<u-radio-group class="radio" v-model="value">
@@ -43,7 +43,7 @@
 		},
 		methods: {
 			radioChange(){
-				
+
 			},
 			toTimeCard(){
 				uni.navigateTo({
@@ -72,16 +72,16 @@ page{
 			margin-top: 30rpx;
 		}
 	}
-	
+
 	.doc-item{
 		background-color: #FFFFFF;
 		display: flex;
-		justify-content: space-between;	
+		justify-content: space-between;
 		align-items: center;
 		height: 120rpx;
 		padding: 0 30rpx;
 		margin-bottom: 20rpx;
-		
+
 		image{
 			width: 70rpx;
 			height: 70rpx;

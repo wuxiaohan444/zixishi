@@ -106,9 +106,10 @@ import {accMul,Subtr} from '../../../utils/calculate'
     },
 		methods: {
 			useTimeCard(){
-				uni.navigateTo({
-					url:'/pages/seat/choice_card/choice_card'
-				})
+				// uni.navigateTo({
+				// 	url:'/pages/seat/choice_card/choice_card'
+				// })
+        this.play(6)
 			},
       play(index){
         let data={

@@ -9,17 +9,29 @@
             <view class="pay-type-item u-flex u-row-between" @click="chooseType(0)">
               <view class="item-left u-flex">
                 <view class="pay-icon u-flex u-col-center u-row-center">
+                  <image src="../../static/images/pay/card.png"></image>
+                </view>
+                <text class="type-name">时长卡支付:</text>
+              </view>
+              <view class="item-right u-flex">
+                <image v-if="payIndex===0" src="../../static/images/pay/choose.png" class="choose-icon"></image>
+                <view class="no-choose" v-else></view>
+              </view>
+            </view>
+            <view class="pay-type-item u-flex u-row-between" @click="chooseType(1)">
+              <view class="item-left u-flex">
+                <view class="pay-icon u-flex u-col-center u-row-center">
                   <image src="../../static/images/pay/banlce.png"></image>
                 </view>
                 <text class="type-name">余额支付:</text>
               </view>
               <view class="item-right u-flex">
                 <text class="u-font-28 u-black-color">￥25</text>
-                <view class="no-choose" v-if="!balanceChoose"></view>
-                <image v-if="balanceChoose" src="../../static/images/pay/choose.png" class="choose-icon"></image>
+                <image v-if="payIndex===1" src="../../static/images/pay/choose.png" class="choose-icon"></image>
+                <view class="no-choose" v-else></view>
               </view>
             </view>
-            <view class="pay-type-item u-flex u-row-between" @click="chooseType(1)">
+            <view class="pay-type-item u-flex u-row-between" @click="chooseType(2)">
               <view class="item-left u-flex">
                 <view class="pay-icon u-flex u-col-center u-row-center">
                   <image src="../../static/images/pay/wx.png"></image>
@@ -27,8 +39,8 @@
                 <text class="type-name">微信支付:</text>
               </view>
               <view class="item-right u-flex">
-                <view class="no-choose" v-if="!wxChoose"></view>
-                <image v-if="wxChoose" src="../../static/images/pay/choose.png" class="choose-icon"></image>
+                <image v-if="payIndex===2" src="../../static/images/pay/choose.png" class="choose-icon"></image>
+                <view class="no-choose" v-else></view>
               </view>
             </view>
           </view>
@@ -42,11 +54,12 @@
 <script>
 export default {
   name: "payType",
-  props:['show'],
+  props:['show','user','storeInfo','timeRanges','totalMoney','couponMoney','payInfo'],
   data(){
     return{
       balanceChoose:false,
       wxChoose:false,
+      payIndex:0,
     }
   },
   methods:{
@@ -54,17 +67,62 @@ export default {
       this.$emit('close')
     },
     chooseType(number){
-      if(number===0){
-        this.balanceChoose=!this.balanceChoose;
-      }
-      if(number===1){
-        this.wxChoose=!this.wxChoose;
-      }
+     this.payIndex = number
     },
     pay(){
-      console.log(1);
-      this.$emit('pay')
-    }
+      let type='';
+      if(this.payIndex==0){
+        type = 6
+      }
+      if(this.payIndex==1){
+        type = 7
+      }
+      if(this.payIndex==2){
+        type = 2
+      }
+      this.payModalShow = false;
+      let data={
+        tenantId:this.storeInfo.tenantId,
+        userName:this.user.memberName,
+        mobilePhone:this.user.phone,
+        memberId:this.user.id,
+        memberLevel:this.user.memberLevelId,
+        storeId:this.storeInfo.id,
+        roomId:this.payInfo.roomId,
+        seatId:this.payInfo.seatId,
+        startDate:this.timeFormat(this.payInfo.startDate),
+        endDate:this.timeFormat(this.payInfo.endDate),
+        amount:this.payInfo.totalMoney,
+        actualPayment:this.payInfo.couponMoney,
+        payType:type,
+        cardType:0,
+        timeRanges:JSON.stringify(this.timeRanges),
+        seatDiscount:this.user.seatDiscount
+      };
+      console.log(data);
+      // this.$u.api.generateOrder(data).then((res)=>{
+      //   this.confirmOrderPay(res.data.id)
+      // })
+    },
+    confirmOrderPay(id){
+      let data={
+        id:id,
+        openId: this.$u.func.getOpenId()
+      }
+      this.$u.api.confirmOrderPay(data).then((res)=>{
+        this.$emit('pay',type);
+        if(res.code===200){
+          uni.navigateTo({
+            url:'/pages/pay/paySuccess?orderId='+id
+          })
+        }else{
+          this.$u.toast(res.msg)
+        }
+      })
+    },
+    timeFormat(str) {
+      return str.substr(0, 16)
+    },
   }
 }
 </script>
@@ -77,7 +135,7 @@ export default {
   height: 100%;
   .rect {
     width: 588rpx;
-    height: 597rpx;
+    height: 660rpx;
     background: #FFFFFF;
     border-radius: 13rpx;
     .close-icon{
