@@ -3,14 +3,14 @@
     <u-tabs :list="list" :is-scroll="false" :current="current" @change="change" active-color="#2487FF"
             :bar-style="barStyle"></u-tabs>
     <view class="card-box" v-show="current==0">
-      <view class="card-list" @click="toDetails('2')" v-for="(item,index) in customerData" :key="index">
+      <view class="card-list" v-for="(item,index) in customerData" :key="index">
         <text class="tag u-font-23">{{item.storeName}}</text>
         <view class="info">
-          <view class="u-font-32 u-bold">{{item.seatCardName}}</view>
+          <view class="u-font-32 u-bold">{{item.durationCardName}}</view>
           <view class="u-font-24 data">{{item.expDate}}到期</view>
         </view>
         <view class="times">
-          <view class="u-font-24"></view>
+          <view class="u-font-24">剩余：{{toHourMinute(item.surplusHours)}}</view>
 <!--          <view class="use u-font-23">去使用</view>-->
         </view>
       </view>
@@ -86,7 +86,8 @@ export default {
         openId: this.$u.func.getOpenId(),
         current: this.page,
         size: this.size,
-        tenantId: this.tenantId
+        tenantId: this.tenantId,
+        cardType:0
       }
       this.$u.api.myCardTimeList(data).then((res) => {
         if (this.page > 1) {
@@ -109,9 +110,10 @@ export default {
         openId: this.$u.func.getOpenId(),
         current: this.page,
         size: this.size,
-        tenantId: this.tenantId
+        tenantId: this.tenantId,
+        cardType:1
       }
-      this.$u.api.myCardCustomerList(data).then((res) => {
+      this.$u.api.myCardTimeList(data).then((res) => {
         if (this.page > 1) {
           this.customerData = this.customerData.concat(res.data.records);
         } else {

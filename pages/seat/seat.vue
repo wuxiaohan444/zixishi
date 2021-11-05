@@ -10,7 +10,7 @@
       </view>
     </view>
     <!--    通知-->
-    <u-notice-bar mode="horizontal" :list="content" bg-color="#FCF8E3"></u-notice-bar>
+<!--    <u-notice-bar mode="horizontal" :list="content" bg-color="#FCF8E3"></u-notice-bar>-->
     <!--    时间-->
     <view class="seat-time-box u-flex u-flex-wrap" v-show="timeIndex===0">
       <view :class="[item.choose?'seat-time-item active':'seat-time-item',item.status===0?'disabled':'']" v-for="(item,index) in today" :key="index"
@@ -71,11 +71,11 @@
         </view>
         <view class="u-flex u-row-between">
           <view class="u-black-color u-font-28">验券数量</view>
-          <u-number-box v-model="ticketNumber" @change="valChange"></u-number-box>
+          <u-number-box v-model="ticketNumber" @change="valChange" :min="minNumber" :max="maxNumber"></u-number-box>
         </view>
         <view class="u-flex u-row-between">
           <view class="my-btn">取消</view>
-          <view class="my-btn active">确认验券</view>
+          <view class="my-btn active" @click="affirmCoupons">确认验券</view>
         </view>
       </view>
     </u-popup>
@@ -137,7 +137,10 @@ export default {
       user:'',
       timeRanges:'',
       payInfo:'',
-      seatInfo:''
+      seatInfo:'',
+      maxNumber:1,
+      minNumber:1,
+      roomInfo:{}
     }
   },
   onLoad(options) {
@@ -146,12 +149,16 @@ export default {
       this.storeInfo = data;
       this.createDept = data.id;
     }
+    if (uni.getStorageSync('roomInfo')) {
+      let data = uni.getStorageSync('roomInfo');
+      this.roomInfo = data;
+    }
     this.user = uni.getStorageSync('userInfo');
     this.seatInfo = uni.getStorageSync('seatInfo');
     this.seatId = options.seatId;
     this.roomId = options.roomId;
     this.chargeSetId = options.chargeSetId;
-    this.seatTimeList()
+    this.seatTimeList();
   },
   methods: {
     choosePay(index, orderId) {
@@ -217,8 +224,35 @@ export default {
     },
     // 提交券码
     submitCode() {
-      this.oneShow = false;
-      this.twoShow = true;
+      let data = {
+        storeId:this.storeInfo.id,
+        receiptCode:this.demalCode,
+      }
+      this.$u.api.prepareMeituan(data).then((res)=>{
+        if(res.code===200){
+          console.log(res.data);
+          this.oneShow = false;
+          this.twoShow = true;
+        }else{
+          this.$u.toast(res.msg)
+        }
+      })
+    },
+    // 确认验券
+    affirmCoupons(){
+      let data = {
+        storeId:this.storeInfo.id,
+        receiptCode:this.demalCode,
+        count:this.ticketNumber,
+        phone:this.user.phone
+      }
+      this.$u.api.MeituanConsume(data).then((res)=>{
+        if(res.code===200){
+          console.log(res.data);
+        }else{
+          this.$u.toast(res.msg)
+        }
+      })
     },
     valChange() {
 
@@ -228,8 +262,7 @@ export default {
       // 允许从相机和相册扫码
       uni.scanCode({
         success: function (res) {
-          let result = res.result;
-          console.log(result);
+          that.demalCode = res.result;
           that.submitCode()
         }
       });

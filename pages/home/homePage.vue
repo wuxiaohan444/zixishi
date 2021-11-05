@@ -97,13 +97,24 @@ export default {
       roomList: [],
       seatList: [],
       loadingShow: true,
-      parentName:''
+      parentName:'',
     }
   },
   onShow() {
+    uni.removeStorageSync('seatInfo');
+    uni.removeStorageSync('roomInfo');
     if (uni.getStorageSync('storeInfo')) {
       this.storeInfo = uni.getStorageSync('storeInfo');
       this.parentName = uni.getStorageSync('parentName');
+      let list =[];
+     let data = this.storeInfo.pictures.split(',')
+      data.map((item)=>{
+        list.push({
+          image: this.$imageUrl+item,
+          title: '轮播'
+        })
+      })
+      console.log(list);
       this.getRoomList();
     }else{
       this.changeStore()
@@ -117,7 +128,8 @@ export default {
         if(arr.length > 0){
           this.roomList = res.data;
           this.loadingShow = false;
-          this.getSeatList(this.roomList[0].id)
+          this.getSeatList(this.roomList[0].id);
+          uni.setStorageSync('roomInfo', this.roomList[0]);
         }else{
           this.changeStore()
         }
@@ -132,7 +144,8 @@ export default {
     },
     change(index) {
       this.current = index;
-      this.getSeatList(this.roomList[index].id)
+      this.getSeatList(this.roomList[index].id);
+      uni.setStorageSync('roomInfo', this.roomList[index]);
     },
     changeStore() {
       uni.navigateTo({

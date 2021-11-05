@@ -11,11 +11,11 @@
           </view>
         </view>
         <view class="list-botton">
-          <view class="u-font-28" v-if="item.orderStatus==4">开大门</view>
-          <view class="u-font-28" v-if="item.orderStatus==1">开房间门</view>
+<!--          <view class="u-font-28" v-if="item.orderStatus==4">开大门</view>-->
+          <view class="u-font-28" v-if="item.orderStatus==1" @click="openDoor(item)">开房间门</view>
           <view class="u-font-28 consumption" v-if="item.orderStatus==1" @click="startConsume(item.id)">开始消费</view>
           <view class="u-font-28 consumption" @click="presaleorderRenew(item.id)" v-if="item.orderStatus==4">续费</view>
-          <view class="u-font-28 over" @click="over(item.id)" v-if="item.orderStatus==4">结束消费</view>
+          <view class="u-font-28 over" @click="over(item)" v-if="item.orderStatus==4">结束消费</view>
         </view>
       </view>
 
@@ -73,6 +73,8 @@ export default {
       reserveData: [],
       preOrderId:'',
       noData:false,
+      storeInfo:"",
+      itemInfo:'',
     }
   },
   onShow(){
@@ -84,6 +86,7 @@ export default {
     }
     if (uni.getStorageSync('storeInfo')) {
       let data = uni.getStorageSync('storeInfo');
+      this.storeInfo = data
       this.tenantId = data.tenantId;
     }
     this.getList();
@@ -104,9 +107,10 @@ export default {
     change(index) {
       this.current = index;
     },
-    over(id) {
+    over(item) {
       this.popupTipStatus = true;
-      this.preOrderId=id;
+      this.preOrderId = item.id;
+      this.itemInfo = item
     },
     confirm() {
       this.finishConsume()
@@ -151,8 +155,45 @@ export default {
         if (res.code == 200) {
           this.popupTipStatus = false;
           this.getList();
+          this.closeDoor()
         } else {
           this.$u.toast(res.msg)
+        }
+      })
+    },
+    closeDoor(){
+      let data={
+        storeId:this.itemInfo.storeId,
+        seatId:this.itemInfo.seatId,
+        value:0,
+      };
+      this.$u.api.writeResourceDevice(data).then((res)=>{
+        if(res.code===200){
+          this.$u.toast('操作成功');
+        }else {
+          this.$u.toast(res.msg)
+        }
+      }).catch((res)=>{
+
+      })
+    },
+    openDoor(item){
+      let data = {
+        storeId:item.storeId,
+        seatId:item.seatId,
+        value:1,
+      }
+      this.$u.api.writeResourceDevice(data).then((res)=>{
+        if(res.code===200){
+            this.$u.toast('操作成功');
+          }else {
+            this.$u.toast(res.msg)
+          }
+      }).catch((res)=>{
+        if(res.data.code==0){
+          this.$u.toast('操作成功');
+        }else{
+          this.$u.toast('操作失败');
         }
       })
     }

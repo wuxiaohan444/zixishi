@@ -115,9 +115,13 @@ export default {
        this.close()
         uni.hideLoading()
         if(res.code===200){
-          uni.navigateTo({
-            url:'/pages/pay/paySuccess?orderId='+id
-          })
+          if(this.payIndex==2){
+            this.payMent()
+          }else{
+            uni.navigateTo({
+              url:'/pages/pay/paySuccess?orderId='+id
+            })
+          }
         }else{
           this.$u.toast(res.msg)
         }
@@ -129,6 +133,25 @@ export default {
     timeFormat(str) {
       return str.substr(0, 16)
     },
+    payMent(){
+      let that = this;
+      uni.requestPayment({
+        provider: 'wxpay',
+        timeStamp: String(Date.now()),
+        nonceStr: 'A1B2C3D4E5',
+        package: 'prepay_id=wx20180101abcdefg',
+        signType: 'MD5',
+        paySign: '',
+        success: function (res) {
+          uni.navigateTo({
+            url:'/pages/pay/paySuccess?orderId='+id
+          })
+        },
+        fail: function (err) {
+          console.log('fail:' + JSON.stringify(err));
+        }
+      });
+    }
   }
 }
 </script>

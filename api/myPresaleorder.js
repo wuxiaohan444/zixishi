@@ -36,9 +36,19 @@ const finishConsume = (params) => {
     })
 }
 
+// 控制设备
+const writeResourceDevice = (params) => {
+    return http.request({
+        url: '/aqara/writeResourceDevice',
+        method: 'post',
+        data: params
+    })
+}
+
 export default {
     myPresaleorderList,
     presaleorderRenew,
     startSpending,
-    finishConsume
+    finishConsume,
+    writeResourceDevice
 }

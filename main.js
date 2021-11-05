@@ -27,5 +27,5 @@ Vue.use(httpInstall, app)
 // 公共函数
 import globalFunc from '@/utils/func.js'
 Vue.use(globalFunc, app);
-// uni.setStorageSync('openId', '1');
+Vue.prototype.$imageUrl='192.168';//图片基础路径
 app.$mount()

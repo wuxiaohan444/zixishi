@@ -85,11 +85,14 @@ export default {
         openId: this.$u.func.getOpenId()
       };
       this.$u.api.userInfo(data).then((res) => {
-        console.log(res.data);
         this.info = res.data;
+        if (this.info.balance){
+          this.info.balance =  Number(this.info.balance).toFixed(2)
+          console.log(this.info.balance);
+        }
         uni.setStorageSync('userInfo', this.info);
       }).catch((res)=>{
-        console.log('没登陆');
+
       })
     },
     myNavigator(link) {

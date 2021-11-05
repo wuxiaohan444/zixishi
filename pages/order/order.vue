@@ -22,7 +22,7 @@
                   <view class="right u-font-26" v-if="item.orderStatus==3">已取消</view>
                 </view>
                 <view class="center">
-                  <image src="https://cdn.uviewui.com/uview/swiper/3.jpg"></image>
+                  <image src="https://cdn.uviewui.com/uview/swiper/3.jpg" mode="aspectFill"></image>
                   <view class="info">
                     <view class="title u-font-26 u-black-color">{{item.roomName}}/{{item.seatName}}</view>
                     <view class="">下单时间:{{item.orderTime}}</view>
