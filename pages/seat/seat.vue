@@ -60,10 +60,10 @@
     <u-popup v-model="twoShow" mode="bottom" height="582" border-radius="19" :closeable="true">
       <view class="ticket-box">
         <view class="ticket-item u-flex">
-          <view class="ticket-item_left">【天庆店】</view>
+          <view class="ticket-item_left">时长卡</view>
           <view class="ticket-item_middle">
-            <text class="u-bold u-black-color">3小时读书体验卡</text>
-            <text class="number">（1张券）</text>
+            <text class="u-bold u-black-color">{{meiTuanForm.deal_title}}</text>
+            <text class="number">（{{meiTuanForm.count}}张券）</text>
           </view>
           <view class="ticket-item_right">
             立即体验
@@ -140,6 +140,7 @@ export default {
       seatInfo:'',
       maxNumber:1,
       minNumber:1,
+      meiTuanForm:{},
       roomInfo:{}
     }
   },
@@ -229,12 +230,23 @@ export default {
         receiptCode:this.demalCode,
       }
       this.$u.api.prepareMeituan(data).then((res)=>{
+        console.log(res);
         if(res.code===200){
-          console.log(res.data);
+          this.meiTuanForm = res.data;
           this.oneShow = false;
           this.twoShow = true;
         }else{
           this.$u.toast(res.msg)
+        }
+      }).catch((res)=>{
+        console.log(res);
+        if(res.data.code==200){
+          this.meiTuanForm = res.data.data;
+          this.maxNumber = this.meiTuanForm.count
+          this.oneShow = false;
+          this.twoShow = true;
+        }else{
+          this.$u.toast(res.data.msg)
         }
       })
     },
@@ -251,6 +263,15 @@ export default {
           console.log(res.data);
         }else{
           this.$u.toast(res.msg)
+        }
+      }).catch((res)=>{
+        console.log(res);
+        if(res.data.code==200){
+          this.oneShow = false;
+          this.twoShow = false;
+          this.$u.toast('兑换时长卡成功')
+        }else{
+          this.$u.toast(res.data.msg)
         }
       })
     },

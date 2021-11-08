@@ -98,7 +98,7 @@ export default {
         payType:type,
         cardType:0,
         timeRanges:JSON.stringify(this.timeRanges),
-        seatDiscount:this.user.seatDiscount
+        seatDiscount:this.user.seatDiscount?this.user.seatDiscount:0
       };
       this.$u.api.generateOrder(data).then((res)=>{
         this.confirmOrderPay(res.data.id)
