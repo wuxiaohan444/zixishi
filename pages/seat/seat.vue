@@ -186,6 +186,10 @@ export default {
       });
       let sumData = [];
       sumData= sumData.concat(today).concat(tomorrow).concat(acquired);
+      if(sumData.length===0){
+        this.$u.toast('请选择预定时间')
+        return false
+      }
       let beginning =[sumData[0],sumData[sumData.length-1]];
       let startDate = beginning[0].bookDate+' '+beginning[0].startTime;
       let endDate = beginning[1].bookDate+' '+beginning[1].endTime;

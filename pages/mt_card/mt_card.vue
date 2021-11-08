@@ -3,8 +3,10 @@
 		<view class="card-box">
 			<image src="/static/images/meituan/meituan.png"></image>
 			<view class="content">
-				<u-input :border="true" :height="92" placeholder-style="color: #A1A3A6" type="text" v-model="demalCode"  placeholder="输入美团券码验券" />
-				<image src="/static/images/personal/scan.png" @tap.stop="scan($event)"></image>
+        <view class="demalCode-box u-flex u-row-between">
+          <u-input v-model="demalCode" placeholder="请输入美团券码" style="width: 90%"/>
+          <u-icon name="scan" size="36" @click="scan"></u-icon>
+        </view>
 			</view>
 			<u-button :custom-style="customStyle" shape="circle" type="primary" @click="submitCode">提交</u-button>
 		</view>
@@ -80,21 +82,22 @@
           count:this.ticketNumber,
           phone:this.user.phone
         }
-        this.$u.api.MeituanConsume(data).then((res)=>{
-          if(res.code===200){
-            console.log(res.data);
-          }else{
-            this.$u.toast(res.msg)
-          }
-        }).catch((res)=>{
-          console.log(res);
-          if(res.data.code==200){
-            this.twoShow = false;
-            this.$u.toast('兑换时长卡成功')
-          }else{
-            this.$u.toast(res.data.msg)
-          }
-        })
+        console.log(data);
+        // this.$u.api.MeituanConsume(data).then((res)=>{
+        //   if(res.code===200){
+        //     console.log(res.data);
+        //   }else{
+        //     this.$u.toast(res.msg)
+        //   }
+        // }).catch((res)=>{
+        //   console.log(res);
+        //   if(res.data.code==200){
+        //     this.twoShow = false;
+        //     this.$u.toast('兑换时长卡成功')
+        //   }else{
+        //     this.$u.toast(res.data.msg)
+        //   }
+        // })
       },
       // 提交券码
       submitCode() {
@@ -129,6 +132,12 @@
 </script>
 
 <style scoped lang="scss">
+.demalCode-box {
+  border: 1px solid #EEEFF1;
+  border-radius: 6rpx;
+  margin: 0 30rpx;
+  padding: 0 20rpx;
+}
 .card-box{
 	padding: 0 30rpx;
 	margin-top: 156rpx;
