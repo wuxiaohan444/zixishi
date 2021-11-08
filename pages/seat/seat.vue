@@ -234,7 +234,6 @@ export default {
         receiptCode:this.demalCode,
       }
       this.$u.api.prepareMeituan(data).then((res)=>{
-        console.log(res);
         if(res.code===200){
           this.meiTuanForm = res.data;
           this.oneShow = false;
