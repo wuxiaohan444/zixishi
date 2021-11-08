@@ -82,7 +82,7 @@ export default {
         type = 2
       }
       this.payModalShow = false;
-      let data={
+      let data = {
         tenantId:this.storeInfo.tenantId,
         userName:this.user.memberName,
         mobilePhone:this.user.phone,
