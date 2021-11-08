@@ -73,7 +73,13 @@ export default {
       })
     },
     change(item){
-      this.$u.api.changeStore({id:item.id}).then((res)=>{
+      if(!this.$u.func.getOpenId()){
+        uni.navigateTo({
+          url:'../login/login'
+        });
+        return false;
+      }
+      this.$u.api.changeStore({id:item.id, openId: this.$u.func.getOpenId()}).then((res)=>{
         if(res.code==200){
           uni.setStorageSync('storeInfo', item);
           uni.setStorageSync('parentName', item.parentName);
