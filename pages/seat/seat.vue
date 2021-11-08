@@ -260,7 +260,7 @@ export default {
         storeId:this.storeInfo.id,
         receiptCode:this.demalCode,
         count:this.ticketNumber,
-        phone:this.user.phone
+        memberId:this.user.id
       }
       this.$u.api.MeituanConsume(data).then((res)=>{
         if(res.code===200){

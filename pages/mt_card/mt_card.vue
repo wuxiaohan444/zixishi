@@ -56,6 +56,7 @@
     onLoad(){
       this.storeInfo = uni.getStorageSync('storeInfo');
       this.user = uni.getStorageSync('userInfo');
+      console.log(this.user.id);
     },
 		methods: {
       affirmCoupons(){
@@ -80,24 +81,24 @@
           storeId:this.storeInfo.id,
           receiptCode:this.demalCode,
           count:this.ticketNumber,
-          phone:this.user.phone
+          memberId:this.user.id
         }
         console.log(data);
-        // this.$u.api.MeituanConsume(data).then((res)=>{
-        //   if(res.code===200){
-        //     console.log(res.data);
-        //   }else{
-        //     this.$u.toast(res.msg)
-        //   }
-        // }).catch((res)=>{
-        //   console.log(res);
-        //   if(res.data.code==200){
-        //     this.twoShow = false;
-        //     this.$u.toast('兑换时长卡成功')
-        //   }else{
-        //     this.$u.toast(res.data.msg)
-        //   }
-        // })
+        this.$u.api.MeituanConsume(data).then((res)=>{
+          if(res.code===200){
+            console.log(res.data);
+          }else{
+            this.$u.toast(res.msg)
+          }
+        }).catch((res)=>{
+          console.log(res);
+          if(res.data.code==200){
+            this.twoShow = false;
+            this.$u.toast('兑换时长卡成功')
+          }else{
+            this.$u.toast(res.data.msg)
+          }
+        })
       },
       // 提交券码
       submitCode() {
