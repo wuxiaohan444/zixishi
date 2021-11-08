@@ -107,7 +107,7 @@ export default {
       })
     },
     confirmOrderPay(id){
-      let data={
+      let data = {
         id:id,
         openId: this.$u.func.getOpenId()
       }
